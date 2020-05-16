@@ -4,7 +4,7 @@
     <title>基于Hexo和NexT的博客搭建</title>
     <url>/2020/05/13/%E5%9F%BA%E4%BA%8EHexo%E5%92%8CNexT%E7%9A%84%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<h1 id="官方文档地址"><a href="#官方文档地址" class="headerlink" title="官方文档地址"></a>官方文档地址</h1><p><a href="https://hexo.io/zh-cn/" target="_blank" rel="noopener">Hexo官网</a></p>
-<p><a href="http://theme-next.iissnan.com/getting-started.html" target="_blank" rel="noopener">NextT中文文档</a></p>
+<p><a href="http://theme-next.iissnan.com/getting-started.html" target="_blank" rel="noopener">NexT中文文档</a></p>
 <p><a href="https://theme-next.js.org/docs/" target="_blank" rel="noopener">NexT英文文档</a></p>
 <h1 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h1><ul>
 <li><p>Node.js <a href="https://nodejs.org/en/" target="_blank" rel="noopener">v12.16.3</a></p>
