@@ -443,5 +443,18 @@
 
   
 
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    new Valine(Object.assign({
+      el         : '#valine-comments',
+      path       : location.pathname,
+    }, {"enable":true,"appId":"mMYlmXk0uIoNnOnvCApkjHSL-gzGzoHsz","appKey":"r09vC2BzfhUfyWS6IBiPSSjI","notify":false,"verify":false,"placeholder":"无需注册，支持Markdown格式","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"language":null,"visitor":false,"comment_count":true,"recordIP":false,"serverURLs":null}
+    ));
+  }, window.Valine);
+});
+</script>
+
 </body>
 </html>
