@@ -1420,7 +1420,7 @@ pre code {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #42b6e5;
+  background: #6ffffb;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -1570,7 +1570,7 @@ pre code {
   white-space: nowrap;
 }
 .post-toc .nav .nav-child {
-  display: none;
+  display: block;
 }
 .post-toc .nav .active > .nav-child {
   display: block;
