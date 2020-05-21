@@ -22,23 +22,23 @@
     var CONFIG = {"hostname":"zystrivego.gitee.io","root":"/","scheme":"Pisces","version":"8.0.0-rc.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="版本 Centos版本：6.10  tracker和storage使用相同的安装包，下载地址：http:&#x2F;&#x2F;sourceforge.net&#x2F;projects&#x2F;FastDFS&#x2F; 或https:&#x2F;&#x2F;github.com&#x2F;happyfish100&#x2F;fastdfs（推荐） 本教程使用：https:&#x2F;&#x2F;github.com&#x2F;happyfish100&#x2F;fastdfs  版本V6.06 FastDFS安装环境">
+  <meta name="description" content="单机安装版">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Fastdfs安装说明">
 <meta property="og:url" content="https://zystrivego.gitee.io/2020/05/09/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E/index.html">
 <meta property="og:site_name" content="zystrivego">
-<meta property="og:description" content="版本 Centos版本：6.10  tracker和storage使用相同的安装包，下载地址：http:&#x2F;&#x2F;sourceforge.net&#x2F;projects&#x2F;FastDFS&#x2F; 或https:&#x2F;&#x2F;github.com&#x2F;happyfish100&#x2F;fastdfs（推荐） 本教程使用：https:&#x2F;&#x2F;github.com&#x2F;happyfish100&#x2F;fastdfs  版本V6.06 FastDFS安装环境">
+<meta property="og:description" content="单机安装版">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://zystrivego.gitee.io/2020/05/09/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E%5C%E5%91%BD%E4%BB%A4%E5%B7%A5%E5%85%B7.png">
+<meta property="og:image" content="https://zystrivego.gitee.io/2020/05/09/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E/%E5%91%BD%E4%BB%A4%E5%B7%A5%E5%85%B7.png">
 <meta property="og:image" content="https://zystrivego.gitee.io/2020/05/09/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E/nginx-module.png">
 <meta property="og:image" content="https://zystrivego.gitee.io/2020/05/09/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E/fdfs%E7%9B%AE%E5%BD%95.png">
 <meta property="og:image" content="https://zystrivego.gitee.io/2020/05/09/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E/monitor.png">
 <meta property="article:published_time" content="2020-05-08T20:22:31.000Z">
-<meta property="article:modified_time" content="2020-05-21T20:24:18.110Z">
+<meta property="article:modified_time" content="2020-05-21T20:39:24.848Z">
 <meta property="article:author" content="zhangyu">
 <meta property="article:tag" content="Fastdfs">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://zystrivego.gitee.io/2020/05/09/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E%5C%E5%91%BD%E4%BB%A4%E5%B7%A5%E5%85%B7.png">
+<meta name="twitter:image" content="https://zystrivego.gitee.io/2020/05/09/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E/%E5%91%BD%E4%BB%A4%E5%B7%A5%E5%85%B7.png">
 
 <link rel="canonical" href="https://zystrivego.gitee.io/2020/05/09/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E/">
 
@@ -245,7 +245,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-05-22 04:24:18" itemprop="dateModified" datetime="2020-05-22T04:24:18+08:00">2020-05-22</time>
+                <time title="修改时间：2020-05-22 04:39:24" itemprop="dateModified" datetime="2020-05-22T04:39:24+08:00">2020-05-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -282,7 +282,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h2><blockquote>
+        <blockquote>
+<p>单机安装版</p>
+</blockquote>
+<a id="more"></a>
+
+<h2 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h2><blockquote>
 <p>Centos版本：6.10</p>
 </blockquote>
 <p>tracker和storage使用相同的安装包，下载地址：<a href="http://sourceforge.net/projects/FastDFS/" target="_blank" rel="noopener">http://sourceforge.net/projects/FastDFS/</a> 或<a href="https://github.com/happyfish100/fastdfs（推荐）" target="_blank" rel="noopener">https://github.com/happyfish100/fastdfs（推荐）</a></p>
@@ -308,9 +313,8 @@
 <p>配置文件<br>/etc/fdfs/http.conf<br>/etc/fdfs/tracker.conf<br>/etc/fdfs/client.conf</p>
 <p>/etc/fdfs/storage.conf<br>/etc/fdfs/mime.types<br>/etc/fdfs/storage_ids.conf</p>
 <p>命令工具在 /usr/bin/ 目录下：</p>
-<img src>
+<img src="/2020/05/09/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E/命令工具.png" style="zoom: 150%;">
 
-<p><img src="/2020/05/09/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E%5C%E5%91%BD%E4%BB%A4%E5%B7%A5%E5%85%B7.png" alt="在这里插入图片描述"></p>
 <h2 id="nginx安装-源码编译安装"><a href="#nginx安装-源码编译安装" class="headerlink" title="nginx安装(源码编译安装)"></a>nginx安装(源码编译安装)</h2><p>版本：1.16.1</p>
 <p>此处nginx用于storage服务，解决同步延时问题和提供http的访问</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget http://nginx.org/download/nginx-1.16.1.tar.gz <span class="comment">#下载nginx压缩包</span></span><br><span class="line">tar -zxvf nginx-1.16.1.tar.gz <span class="comment">#解压</span></span><br><span class="line"><span class="built_in">cd</span> nginx-1.16.1/</span><br></pre></td></tr></table></figure>

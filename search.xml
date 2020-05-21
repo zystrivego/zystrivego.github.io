@@ -526,7 +526,12 @@ logstash-*
   <entry>
     <title>Fastdfs安装说明</title>
     <url>/2020/05/09/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E/</url>
-    <content><![CDATA[<h2 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h2><blockquote>
+    <content><![CDATA[<blockquote>
+<p>单机安装版</p>
+</blockquote>
+<a id="more"></a>
+
+<h2 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h2><blockquote>
 <p>Centos版本：6.10</p>
 </blockquote>
 <p>tracker和storage使用相同的安装包，下载地址：<a href="http://sourceforge.net/projects/FastDFS/" target="_blank" rel="noopener">http://sourceforge.net/projects/FastDFS/</a> 或<a href="https://github.com/happyfish100/fastdfs（推荐）" target="_blank" rel="noopener">https://github.com/happyfish100/fastdfs（推荐）</a></p>
@@ -552,9 +557,8 @@ logstash-*
 <p>配置文件<br>/etc/fdfs/http.conf<br>/etc/fdfs/tracker.conf<br>/etc/fdfs/client.conf</p>
 <p>/etc/fdfs/storage.conf<br>/etc/fdfs/mime.types<br>/etc/fdfs/storage_ids.conf</p>
 <p>命令工具在 /usr/bin/ 目录下：</p>
-<img src>
+<img src="/2020/05/09/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E/命令工具.png" style="zoom: 150%;">
 
-<p><img src="/2020/05/09/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E%5C%E5%91%BD%E4%BB%A4%E5%B7%A5%E5%85%B7.png" alt="在这里插入图片描述"></p>
 <h2 id="nginx安装-源码编译安装"><a href="#nginx安装-源码编译安装" class="headerlink" title="nginx安装(源码编译安装)"></a>nginx安装(源码编译安装)</h2><p>版本：1.16.1</p>
 <p>此处nginx用于storage服务，解决同步延时问题和提供http的访问</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget http://nginx.org/download/nginx-1.16.1.tar.gz <span class="comment">#下载nginx压缩包</span></span><br><span class="line">tar -zxvf nginx-1.16.1.tar.gz <span class="comment">#解压</span></span><br><span class="line"><span class="built_in">cd</span> nginx-1.16.1/</span><br></pre></td></tr></table></figure>
@@ -665,11 +669,14 @@ logstash-*
   <entry>
     <title>Centos7安装PostgreSQL10</title>
     <url>/2020/05/09/Centos7%E5%AE%89%E8%A3%85PostgreSQL10/</url>
-    <content><![CDATA[<h1 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h1><h2 id="centos"><a href="#centos" class="headerlink" title="centos"></a>centos</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@alpha ~]<span class="comment"># cat /etc/centos-release</span></span><br><span class="line">CentOS Linux release 7.8.2003 (Core)</span><br></pre></td></tr></table></figure>
+    <content><![CDATA[<blockquote>
+<p>多看官方文档</p>
+</blockquote>
+<a id="more"></a>
+
+<h1 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h1><h2 id="centos"><a href="#centos" class="headerlink" title="centos"></a>centos</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@alpha ~]<span class="comment"># cat /etc/centos-release</span></span><br><span class="line">CentOS Linux release 7.8.2003 (Core)</span><br></pre></td></tr></table></figure>
 
 <h2 id="pgsql"><a href="#pgsql" class="headerlink" title="pgsql"></a>pgsql</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@alpha ~]<span class="comment"># psql --version</span></span><br><span class="line">psql (PostgreSQL) 10.12</span><br></pre></td></tr></table></figure>
-
-<a id="more"></a>
 
 <h1 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h1><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p><a href="https://www.postgresql.org/download/linux/redhat/" target="_blank" rel="noopener">官网地址</a><br><img src="https://img-blog.csdnimg.cn/202005090252156.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5c3RyaXZlZ28=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><h3 id="切换用户"><a href="#切换用户" class="headerlink" title="切换用户"></a>切换用户</h3><blockquote>
