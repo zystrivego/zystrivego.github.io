@@ -427,7 +427,10 @@
   <entry>
     <title>软件测试了解</title>
     <url>/2020/05/12/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95%E4%BA%86%E8%A7%A3/</url>
-    <content><![CDATA[<p><a href="https://blog.csdn.net/sinat_41392571/article/details/81514521" target="_blank" rel="noopener">软件测试工作基本流程</a><br>我的简单了解：</p>
+    <content><![CDATA[<p><a href="https://blog.csdn.net/sinat_41392571/article/details/81514521" target="_blank" rel="noopener">软件测试工作基本流程</a></p>
+<a id="more"></a>
+
+<p>我的简单了解：</p>
 <ol>
 <li>流程：编写测试计划-测试用例-执行测试用例-跟踪bug-回归bug<br>工具：性能测试工具jmeter</li>
 <li>单元测试一般是由开发完成的，测试人员主要负责三个部分：功能测试，性能测试，自动化测试</li>

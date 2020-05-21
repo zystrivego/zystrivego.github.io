@@ -97,17 +97,13 @@
     <link href="https://zystrivego.gitee.io/2020/05/12/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95%E4%BA%86%E8%A7%A3/"/>
     <id>https://zystrivego.gitee.io/2020/05/12/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95%E4%BA%86%E8%A7%A3/</id>
     <published>2020-05-12T02:12:58.000Z</published>
-    <updated>2020-05-21T09:44:06.708Z</updated>
+    <updated>2020-05-21T20:46:14.826Z</updated>
     
-    <content type="html"><![CDATA[<p><a href="https://blog.csdn.net/sinat_41392571/article/details/81514521" target="_blank" rel="noopener">软件测试工作基本流程</a><br>我的简单了解：</p><ol><li>流程：编写测试计划-测试用例-执行测试用例-跟踪bug-回归bug<br>工具：性能测试工具jmeter</li><li>单元测试一般是由开发完成的，测试人员主要负责三个部分：功能测试，性能测试，自动化测试</li><li>自动化测试也分接口自动化，ui自动化等，接口自动化是可以用jmeter做的，ui自动化用的selenium</li></ol>]]></content>
+    <content type="html"><![CDATA[<p><a href="https://blog.csdn.net/sinat_41392571/article/details/81514521" target="_blank" rel="noopener">软件测试工作基本流程</a></p><a id="more"></a><p>我的简单了解：</p><ol><li>流程：编写测试计划-测试用例-执行测试用例-跟踪bug-回归bug<br>工具：性能测试工具jmeter</li><li>单元测试一般是由开发完成的，测试人员主要负责三个部分：功能测试，性能测试，自动化测试</li><li>自动化测试也分接口自动化，ui自动化等，接口自动化是可以用jmeter做的，ui自动化用的selenium</li></ol>]]></content>
     
     <summary type="html">
     
-      
-      
-        &lt;p&gt;&lt;a href=&quot;https://blog.csdn.net/sinat_41392571/article/details/81514521&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;软件测试工作基本流程&lt;/a&gt;&lt;br&gt;我的简单了解：&lt;/p&gt;
-&lt;ol&gt;
-      
+      &lt;p&gt;&lt;a href=&quot;https://blog.csdn.net/sinat_41392571/article/details/81514521&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;软件测试工作基本流程&lt;/a&gt;&lt;/p&gt;
     
     </summary>
     
