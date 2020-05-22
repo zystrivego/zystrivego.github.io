@@ -1,6 +1,369 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Centos7安装PostgreSQL10</title>
+    <url>/2020/05/09/Centos7%E5%AE%89%E8%A3%85PostgreSQL10/</url>
+    <content><![CDATA[<blockquote class="blockquote-center">
+            <i class="fa fa-quote-left"></i>
+            <p>多看官方文档</p>
+
+            <i class="fa fa-quote-right"></i>
+          </blockquote>
+
+<a id="more"></a>
+
+<h1 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h1><h2 id="centos"><a href="#centos" class="headerlink" title="centos"></a>centos</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@alpha ~]<span class="comment"># cat /etc/centos-release</span></span><br><span class="line">CentOS Linux release 7.8.2003 (Core)</span><br></pre></td></tr></table></figure>
+
+<h2 id="pgsql"><a href="#pgsql" class="headerlink" title="pgsql"></a>pgsql</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@alpha ~]<span class="comment"># psql --version</span></span><br><span class="line">psql (PostgreSQL) 10.12</span><br></pre></td></tr></table></figure>
+
+<h1 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h1><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p><a href="https://www.postgresql.org/download/linux/redhat/" target="_blank" rel="noopener">官网地址</a><br><img src="https://img-blog.csdnimg.cn/202005090252156.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5c3RyaXZlZ28=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><h3 id="切换用户"><a href="#切换用户" class="headerlink" title="切换用户"></a>切换用户</h3><blockquote>
+<p>默认已经创建了postgres用户</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@alpha ~]<span class="comment"># su - postgres</span></span><br><span class="line">Last login: Sat May  9 01:36:14 CST 2020 on pts/1</span><br><span class="line">-bash-4.2$</span><br></pre></td></tr></table></figure>
+
+<h3 id="修改密码"><a href="#修改密码" class="headerlink" title="修改密码"></a>修改密码</h3><blockquote>
+<p>善用帮助文档</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">-bash-4.2$ psql</span><br><span class="line">psql (10.12)</span><br><span class="line">Type <span class="string">"help"</span> <span class="keyword">for</span> <span class="built_in">help</span>.</span><br><span class="line"></span><br><span class="line">postgres=<span class="comment"># help</span></span><br><span class="line">You are using psql, the <span class="built_in">command</span>-line interface to PostgreSQL.</span><br><span class="line">Type:  \copyright <span class="keyword">for</span> distribution terms</span><br><span class="line">       \h <span class="keyword">for</span> <span class="built_in">help</span> with SQL commands</span><br><span class="line">       \? <span class="keyword">for</span> <span class="built_in">help</span> with psql commands</span><br><span class="line">       \g or terminate with semicolon to execute query</span><br><span class="line">       \q to quit</span><br><span class="line">postgres=<span class="comment"># \?</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">postgres=<span class="comment"># \password postgres</span></span><br><span class="line">Enter new password:</span><br><span class="line">Enter it again:</span><br><span class="line">postgres-<span class="comment"># \q</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="修改客户端认证配置文件"><a href="#修改客户端认证配置文件" class="headerlink" title="修改客户端认证配置文件"></a>修改客户端认证配置文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vi /var/lib/pgsql/10/data/pg_hba.conf</span><br></pre></td></tr></table></figure>
+
+<p>最后面加上下面这行</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">host    all             all             0.0.0.0/0               md5</span><br></pre></td></tr></table></figure>
+
+<h3 id="修改pg配置文件"><a href="#修改pg配置文件" class="headerlink" title="修改pg配置文件"></a>修改pg配置文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vi /var/lib/pgsql/10/data/postgresql.conf</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># - Connection Settings -</span></span><br><span class="line"></span><br><span class="line">listen_addresses = <span class="string">'*'</span>                  <span class="comment"># what IP address(es) to listen on;</span></span><br><span class="line">                                        <span class="comment"># comma-separated list of addresses;</span></span><br><span class="line">                                        <span class="comment"># defaults to 'localhost'; use '*' for all</span></span><br><span class="line">                                        <span class="comment"># (change requires restart)</span></span><br><span class="line">port = 5432                             <span class="comment"># (change requires restart)</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="重启pgsql"><a href="#重启pgsql" class="headerlink" title="重启pgsql"></a>重启pgsql</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl restart postgresql-10</span><br></pre></td></tr></table></figure>
+
+<h3 id="防火墙设置"><a href="#防火墙设置" class="headerlink" title="防火墙设置"></a>防火墙设置</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"> <span class="comment">#开机启用防火墙</span></span><br><span class="line">systemctl <span class="built_in">enable</span> firewalld</span><br><span class="line"></span><br><span class="line"> <span class="comment">#开启防火墙</span></span><br><span class="line">systemctl start firewalld</span><br><span class="line"></span><br><span class="line"><span class="comment">#开放postgresql服务</span></span><br><span class="line">firewall-cmd --add-service=postgresql --permanent </span><br><span class="line"></span><br><span class="line"><span class="comment">#添加端口</span></span><br><span class="line">firewall-cmd --zone=public --add-port=5432/tcp --permanent </span><br><span class="line"></span><br><span class="line"><span class="comment">#重载防火墙</span></span><br><span class="line">firewall-cmd --reload  </span><br><span class="line"></span><br><span class="line"><span class="comment">#查看占用端口</span></span><br><span class="line">firewall-cmd --list-ports</span><br></pre></td></tr></table></figure>
+
+<h2 id="测试navicat连接"><a href="#测试navicat连接" class="headerlink" title="测试navicat连接"></a>测试navicat连接</h2><p><img src="https://img-blog.csdnimg.cn/20200509034959771.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5c3RyaXZlZ28=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>PostgreSQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ELK安装整合SpringBoot</title>
+    <url>/2020/05/09/ELK%E5%AE%89%E8%A3%85%E6%95%B4%E5%90%88SpringBoot/</url>
+    <content><![CDATA[<blockquote>
+<p>ELK是 elasticsearch + logstash + kibana 的简称。这套组合类似于MVC模型，其中logstash是controller层，数据首先传给它，它负责将数据进行过滤和格式化；elasticsearch是model层，负责数据的存储，建立搜索索引；kibana是view层，负责数据的展示。</p>
+</blockquote>
+<a id="more"></a>
+
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>系统：centos 6.10<br>软件版本：tar包安装<br>elasticsearch-6.3.1<br>logstash-6.3.1<br>kibana-6.3.1</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>直接tar -zxvf 解压缩即可<br>演示安装在/opt 下</p>
+<h2 id="Elasticsearch"><a href="#Elasticsearch" class="headerlink" title="Elasticsearch"></a>Elasticsearch</h2><h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>主要配置文件/etc/elasticsearch/elasticsearch.yml，修改如下内容</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Use a descriptive name for your cluster:</span></span><br><span class="line">cluster.name: tisco_es</span><br><span class="line"><span class="comment">#bootstrap.memory_lock: true 针对低版本centos的</span></span><br><span class="line">bootstrap.system_call_filter: <span class="literal">false</span></span><br><span class="line"><span class="comment"># Set the bind address to a specific IP (IPv4 or IPv6):</span></span><br><span class="line">network.host: 0.0.0.0</span><br><span class="line"><span class="comment"># Set a custom port for HTTP:</span></span><br><span class="line">http.port: 9200</span><br></pre></td></tr></table></figure>
+
+<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><p>命令目录：cd /opt/elasticsearch-6.3.1/bin/<br>./elasticsearch -d 后台启动<br>curl <a href="http://172.17.171.228:9200/" target="_blank" rel="noopener">http://172.17.171.228:9200/</a><br>如果有类似如下的输出则是正常启动了<br><img src="https://img-blog.csdnimg.cn/20200515201040693.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5c3RyaXZlZ28=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="logstash"><a href="#logstash" class="headerlink" title="logstash"></a>logstash</h2><h3 id="配置-1"><a href="#配置-1" class="headerlink" title="配置"></a>配置</h3><p>/opt/logstash-6.3.1/ 下新建一个文件名为 logstash.conf，然后写入以下配置：<br><img src="https://img-blog.csdnimg.cn/20200509042727128.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5c3RyaXZlZ28=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="启动-1"><a href="#启动-1" class="headerlink" title="启动"></a>启动</h3><p>安装目录下：<br>nohup ./bin/logstash -f ./logstash.conf &amp;<br>查看启动日志：<br>/opt/logstash-6.3.1/logs/<br>查看端口：<br><img src="https://img-blog.csdnimg.cn/20200509042829698.png" alt="在这里插入图片描述"><br>9600为程序端口，4560为监听端口</p>
+<h2 id="kibana"><a href="#kibana" class="headerlink" title="kibana"></a>kibana</h2><h3 id="配置-2"><a href="#配置-2" class="headerlink" title="配置"></a>配置</h3><p>文件：<br>/opt/kibana-6.3.1-linux-x86_64/config/ kibana.yml<br>修改内容：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Kibana is served by a back end server. This setting specifies the port to use.</span></span><br><span class="line">server.port: 5601</span><br><span class="line">server.host: <span class="string">"0.0.0.0"</span> <span class="comment">#监听任意地址</span></span><br><span class="line"><span class="comment"># The URL of the Elasticsearch instance to use for all your queries.</span></span><br><span class="line">elasticsearch.url: http://172.17.171.228:9200</span><br></pre></td></tr></table></figure>
+
+<h3 id="启动-2"><a href="#启动-2" class="headerlink" title="启动"></a>启动</h3><p>/opt/kibana-6.3.1-linux-x86_64/bin/kibana</p>
+<p>访问网站：<br><a href="http://172.17.171.228:5601" target="_blank" rel="noopener">http://172.17.171.228:5601</a></p>
+
+
+<img src = "ELK安装整合SpringBoot\kibana首页.png"/>
+
+<h2 id="整合spring-项目"><a href="#整合spring-项目" class="headerlink" title="整合spring 项目"></a>整合spring 项目</h2><p>添加依赖：<br><img src="https://img-blog.csdnimg.cn/20200509043225295.png" alt="在这里插入图片描述"><br>logback配置文件：<br><img src="https://img-blog.csdnimg.cn/20200509043238852.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5c3RyaXZlZ28=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="演示"><a href="#演示" class="headerlink" title="演示"></a>演示</h2><p>Kibana管理界面创建Kinaba Index Patterns：</p>
+<img src="/2020/05/09/ELK%E5%AE%89%E8%A3%85%E6%95%B4%E5%90%88SpringBoot/indexPattern.png" class="">
+<p>在Index pattern里输入我们在logstash配置文件logstash.conf里output.index指定的值<br>logstash-*</p>
+<img src="/2020/05/09/ELK%E5%AE%89%E8%A3%85%E6%95%B4%E5%90%88SpringBoot/createIndex.png" class="">
+<p>点击Next Step，在下拉框里选择@timestamp：</p>
+<img src="/2020/05/09/ELK%E5%AE%89%E8%A3%85%E6%95%B4%E5%90%88SpringBoot/timestamp.png" class="">
+<p>最后点击Create Index Pattern按钮完成创建<br>在Kibana里搜索相应的logback日志：</p>
+<img src="/2020/05/09/ELK%E5%AE%89%E8%A3%85%E6%95%B4%E5%90%88SpringBoot/log.png" class="">]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>SpringBoot</tag>
+        <tag>ELK</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Fastdfs安装说明</title>
+    <url>/2020/05/09/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E/</url>
+    <content><![CDATA[<blockquote class="blockquote-center">
+            <i class="fa fa-quote-left"></i>
+            <p>单机安装版</p>
+
+            <i class="fa fa-quote-right"></i>
+          </blockquote>
+
+<a id="more"></a>
+
+<h2 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h2><blockquote>
+<p>Centos版本：6.10</p>
+</blockquote>
+<p>tracker和storage使用相同的安装包，下载地址：<a href="http://sourceforge.net/projects/FastDFS/" target="_blank" rel="noopener">http://sourceforge.net/projects/FastDFS/</a> 或<a href="https://github.com/happyfish100/fastdfs（推荐）" target="_blank" rel="noopener">https://github.com/happyfish100/fastdfs（推荐）</a></p>
+<p>本教程使用：<br><a href="https://github.com/happyfish100/fastdfs" target="_blank" rel="noopener">https://github.com/happyfish100/fastdfs</a>  版本V6.06</p>
+<h2 id="FastDFS安装环境"><a href="#FastDFS安装环境" class="headerlink" title="FastDFS安装环境"></a>FastDFS安装环境</h2><p> FastDFS是C语言开发，建议在linux上运行，centos7.x</p>
+<p>安装FastDFS需要先将官网下载的源码进行编译，编译依赖gcc环境，如果没有gcc环境，需要安装gcc：yum install gcc-c++</p>
+<h2 id="安装libevent"><a href="#安装libevent" class="headerlink" title="安装libevent"></a>安装libevent</h2><p>FastDFS依赖libevent库，需要安装：</p>
+<p><code>yum -y install libevent</code></p>
+<h2 id="安装libfastcommon"><a href="#安装libfastcommon" class="headerlink" title="安装libfastcommon"></a>安装libfastcommon</h2><blockquote>
+<p>  libfastcommon是FastDFS官方提供的，libfastcommon包含了FastDFS运行所需要的一些基础库。</p>
+</blockquote>
+<p>到软件包目录下载libfastcommon</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/happyfish100/libfastcommon.git --depth 1</span><br><span class="line"><span class="built_in">cd</span> libfastcommon/</span><br><span class="line">./make.sh &amp;&amp; ./make.sh install <span class="comment">#编译安装</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+<h2 id="fastdfs安装（源码编译安装）"><a href="#fastdfs安装（源码编译安装）" class="headerlink" title="fastdfs安装（源码编译安装）"></a>fastdfs安装（源码编译安装）</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ../ <span class="comment">#返回上一级目录</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/happyfish100/fastdfs.git --depth 1</span><br><span class="line"><span class="built_in">cd</span> fastdfs/</span><br><span class="line">./make.sh &amp;&amp; ./make.sh install <span class="comment">#编译安装</span></span><br></pre></td></tr></table></figure>
+
+
+<p>默认安装方式安装后的相应文件与目录：</p>
+<p>服务脚本：<br>/etc/init.d/fdfs_storaged<br>/etc/init.d/fdfs_trackerd</p>
+<p>配置文件<br>/etc/fdfs/http.conf<br>/etc/fdfs/tracker.conf<br>/etc/fdfs/client.conf</p>
+<p>/etc/fdfs/storage.conf<br>/etc/fdfs/mime.types<br>/etc/fdfs/storage_ids.conf</p>
+<p>命令工具在 /usr/bin/ 目录下：</p>
+<img src="/2020/05/09/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E/%E5%91%BD%E4%BB%A4%E5%B7%A5%E5%85%B7.png" class="">
+
+<h2 id="nginx安装-源码编译安装"><a href="#nginx安装-源码编译安装" class="headerlink" title="nginx安装(源码编译安装)"></a>nginx安装(源码编译安装)</h2><p>版本：1.16.1</p>
+<p>此处nginx用于storage服务，解决同步延时问题和提供http的访问</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget http://nginx.org/download/nginx-1.16.1.tar.gz <span class="comment">#下载nginx压缩包</span></span><br><span class="line">tar -zxvf nginx-1.16.1.tar.gz <span class="comment">#解压</span></span><br><span class="line"><span class="built_in">cd</span> nginx-1.16.1/</span><br></pre></td></tr></table></figure>
+
+
+<p>#使用默认配置nginx</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># ./configure</span></span><br></pre></td></tr></table></figure>
+
+<p>#编译</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># make</span></span><br></pre></td></tr></table></figure>
+
+<p>#安装</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># make install</span></span><br></pre></td></tr></table></figure>
+
+
+<p>nginx常用目录：<br>安装目录：/usr/local/nginx/<br>配置文件路径：/usr/local/nginx/conf/nginx.conf<br>日志路径： /usr/local/nginx/logs/</p>
+<p>查看nginx的版本及模块：<br><code>/usr/local/nginx/sbin/nginx -V</code> </p>
+<h2 id="安装配置fastdfs-nginx-module模块"><a href="#安装配置fastdfs-nginx-module模块" class="headerlink" title="安装配置fastdfs-nginx-module模块"></a>安装配置fastdfs-nginx-module模块</h2><p>版本：1.22</p>
+<p>#下载地址： <a href="https://codeload.github.com/happyfish100/fastdfs-nginx-module/tar.gz/V1.22" target="_blank" rel="noopener">https://codeload.github.com/happyfish100/fastdfs-nginx-module/tar.gz/V1.22</a></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># tar -zxvf  fastdfs-nginx-module-1.22.tar.gz</span></span><br></pre></td></tr></table></figure>
+
+<p>编辑 fastdfs-nginx-module-1.22/src/config 文件</p>
+<img src="/2020/05/09/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E/nginx-module.png" class="">
+
+<p>改变的文件内容<br><code>ngx_module_incs=&quot;/usr/include/fastdfs /usr/include/fastcommon/&quot;</code><br><code>CORE_INCS=&quot;$CORE_INCS /usr/include/fastdfs /usr/include/fastcommon/&quot;</code></p>
+<p>配置nginx，添加fastdfs-nginx-module 模块：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先停掉nginx服务 如果没有配置为服务 则使用 </span></span><br><span class="line">/usr/<span class="built_in">local</span>/nginx/sbin/nginx -s stop</span><br></pre></td></tr></table></figure>
+
+<p>#进入nginx源码目录</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/src/nginx-1.16.1/</span><br></pre></td></tr></table></figure>
+
+
+
+<p>#添加fastdfs-nginx-module 模块</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@localhost nginx-1.16.1]<span class="comment">#./configure  --add-module=/opt/fastdfs-nginx-module-1.22/src/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#重新编译安装nginx</span></span><br><span class="line"></span><br><span class="line">[root@localhost nginx-1.16.1]<span class="comment"># make</span></span><br><span class="line"></span><br><span class="line">[root@localhost nginx-1.16.1]<span class="comment"># make install</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>#验证是否加载fastdfs-nginx-module模块是否 ，有如下标记部分表示成功</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/usr/<span class="built_in">local</span>/nginx/sbin/nginx -V</span><br></pre></td></tr></table></figure>
+
+<p>nginx version: nginx/1.16.1</p>
+<p>built by gcc 4.4.7 20120313 (Red Hat 4.4.7-23) (GCC)</p>
+<p><code>configure arguments: --add-module=/opt/fastdfs-nginx-module-1.22/src/</code></p>
+<p>复制 fastdfs-nginx-module 源码中的配置文件 mod_fastdfs.conf 到/etc/fdfs 目录， 并修改</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># cp /usr/local/src/fastdfs-nginx-module-1.22/src/mod_fastdfs.conf  /etc/fdfs/</span></span><br></pre></td></tr></table></figure>
+
+<p>修改如下配置，其它默认</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tracker_server=192.168.0.200:22122</span><br><span class="line"></span><br><span class="line">group_name=group1</span><br><span class="line"></span><br><span class="line">url_have_group_name = <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">store_path0=/home/fastdf</span><br></pre></td></tr></table></figure>
+
+<p>s</p>
+<h2 id="tracker配置"><a href="#tracker配置" class="headerlink" title="tracker配置"></a>tracker配置</h2><p>安装成功后进入/etc/fdfs目录：</p>
+<img src="/2020/05/09/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E/fdfs%E7%9B%AE%E5%BD%95.png" class="">
+
+
+<p>修改tracker.conf</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim tracker.conf</span><br><span class="line"><span class="comment">#需要修改的内容如下</span></span><br><span class="line">port=22122  <span class="comment"># tracker服务器端口（默认22122,一般不修改）</span></span><br><span class="line">base_path=/home/fastdfs/  <span class="comment"># 存储日志和数据的根目录，可根据实际路径替换</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+<h2 id="storage配置"><a href="#storage配置" class="headerlink" title="storage配置"></a>storage配置</h2><p>进入/etc/fdfs目录：</p>
+<p>vim storage.conf<br>#需要修改的内容如下</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">group_name = group1 此存储服务器属于的组名</span><br><span class="line">port=23000  <span class="comment"># storage服务端口（默认23000,一般不修改）</span></span><br><span class="line">base_path=/home/fastdfs/   <span class="comment"># 数据和日志文件存储根目录，可根据实际路径替换</span></span><br><span class="line">store_path0 = /home/fastdfs  <span class="comment"># 第一个存储目录，可根据实际路径替换（默认值是base_path,推荐修改）</span></span><br><span class="line">tracker_server= 172.17.171.228:22122  <span class="comment"># tracker服务器IP和端口(根据实际ip替换)</span></span><br><span class="line">http.server_port=8888  <span class="comment"># http访问文件的端口(默认8888,看情况修改,和nginx中保持一致</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="client配置"><a href="#client配置" class="headerlink" title="client配置"></a>client配置</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /etc/fdfs/client.conf</span><br><span class="line"><span class="comment">#需要修改的内容如下</span></span><br><span class="line">base_path = /home/fastdfs <span class="comment">#与storage中的一致</span></span><br><span class="line">tracker_server = 172.17.171.228:22122    <span class="comment">#tracker服务器IP和端口</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+<h2 id="nginx配置"><a href="#nginx配置" class="headerlink" title="nginx配置"></a>nginx配置</h2><p>#配置nginx.config<br>vim /usr/local/nginx/conf/nginx.conf<br>#修改如下红色配置,在server中添加location配置</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen       8888;</span><br><span class="line">    server_name  172.17.171.228;</span><br><span class="line">    location ~/group[0-9]/ &#123;</span><br><span class="line">        ngx_fastdfs_module;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><p><strong>Tracker命令  [start | stop | restart]</strong></p>
+<p>/usr/bin/fdfs_trackerd /etc/fdfs/tracker.conf restart</p>
+<p><strong>storage命令[start | stop | restart]</strong></p>
+<p>/usr/bin/fdfs_storaged /etc/fdfs/storage.conf restart</p>
+<p><strong>Nginx命令stop, quit, reopen, reload</strong></p>
+<p>/usr/local/nginx/sbin/nginx -s reload</p>
+<p>监测启动情况查看</p>
+<p>/usr/bin/fdfs_monitor /etc/fdfs/storage.conf</p>
+<img src="/2020/05/09/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E/monitor.png" class="">
+
+<p> 查看日志</p>
+<p>tail -n10 /home/fastdfs/logs/trackerd.log   #base_path对应的目录下logs</p>
+<p>tail -n10 /home/fastdfs/logs/storaged.log   #base_path对应的目录下logs</p>
+<p>#如果日志显示有错误信息，需要根据信息来查找错误原因</p>
+<p>设置开机自动启动。</p>
+<p>[root@tracker FastDFS]# vim /etc/rc.d/rc.local</p>
+<p>将运行命令行添加进文件：</p>
+<p>/usr/bin/fdfs_trackerd /etc/fdfs/tracker.conf restart</p>
+<p>/usr/bin/fdfs_storaged /etc/fdfs/storage.conf restart</p>
+<p>/usr/local/nginx/sbin/nginx -s reload</p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>#测试上传比如nginx-1.16.1.tar.gz文件,返回ID表示成功 如：group1/M00/00/00/xx.tar.gz<br>/usr/bin/fdfs_upload_file /etc/fdfs/client.conf /usr/local/src/nginx-1.16.1.tar.gz<br>#测试下载，用外部浏览器访问刚才已传过的文件,引用返回的ID<br><a href="http://xxx:8888/group1/M00/00/00/xxx.tar.gz" target="_blank" rel="noopener">http://xxx:8888/group1/M00/00/00/xxx.tar.gz</a></p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>Fastdfs</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Maven</title>
+    <url>/2020/05/20/Maven/</url>
+    <content><![CDATA[<blockquote>
+<p>Apache Maven is a software project management and comprehension tool. Based on the concept of a project object model (POM), Maven can manage a project’s build, reporting and documentation from a central piece of information.</p>
+</blockquote>
+<a id="more"></a>
+
+<h1 id="镜像和库"><a href="#镜像和库" class="headerlink" title="镜像和库"></a>镜像和库</h1><h2 id="参考地址"><a href="#参考地址" class="headerlink" title="参考地址"></a>参考地址</h2><h3 id="Maven仓库理解和优先级"><a href="#Maven仓库理解和优先级" class="headerlink" title="Maven仓库理解和优先级"></a><a href="https://swenfang.github.io/2018/06/03/Maven-Priority/" target="_blank" rel="noopener">Maven仓库理解和优先级</a></h3><h3 id="Settings-Reference"><a href="#Settings-Reference" class="headerlink" title="Settings Reference"></a><a href="http://maven.apache.org/settings.html" target="_blank" rel="noopener">Settings Reference</a></h3><h3 id="POM-Reference"><a href="#POM-Reference" class="headerlink" title="POM Reference"></a><a href="http://maven.apache.org/pom.html" target="_blank" rel="noopener">POM Reference</a></h3><h3 id="Using-Mirrors-for-Repositories"><a href="#Using-Mirrors-for-Repositories" class="headerlink" title="Using Mirrors for Repositories"></a><a href="http://maven.apache.org/guides/mini/guide-mirror-settings.html" target="_blank" rel="noopener">Using Mirrors for Repositories</a></h3><h3 id="Introduction-to-Repositories"><a href="#Introduction-to-Repositories" class="headerlink" title="Introduction to Repositories"></a><a href="http://maven.apache.org/guides/introduction/introduction-to-repositories.html" target="_blank" rel="noopener">Introduction to Repositories</a></h3><h3 id="Repository-Manager"><a href="#Repository-Manager" class="headerlink" title="Repository Manager"></a><a href="http://maven.apache.org/repository-management.html" target="_blank" rel="noopener">Repository Manager</a></h3><h2 id="使用镜像的理由"><a href="#使用镜像的理由" class="headerlink" title="使用镜像的理由"></a>使用镜像的理由</h2><ol>
+<li>加速拉取</li>
+<li>使用自己的库</li>
+<li>私服需要</li>
+</ol>
+<h2 id="mirrorOf的使用"><a href="#mirrorOf的使用" class="headerlink" title="mirrorOf的使用"></a>mirrorOf的使用</h2><blockquote>
+<p>镜像是为一个或一组特定的仓库服务的</p>
+</blockquote>
+<p>Examples:</p>
+<ul>
+<li><code>*</code> = everything</li>
+<li><code>external:*</code> = everything not on the localhost and not file based.</li>
+<li><code>repo,repo1</code> = repo or repo1</li>
+<li><code>*,!repo1</code> = everything except repo1</li>
+</ul>
+<p><code>*</code>号一般是公司私服仓库组使用比较好，如果配置多个镜像，maven会先精确匹配，再根据通配符匹配优先声明的</p>
+<h2 id="repository的使用"><a href="#repository的使用" class="headerlink" title="repository的使用"></a>repository的使用</h2><blockquote>
+<p>maven 仓库的优先级：本地仓库 &gt; 私服（profile）&gt; 远程仓库（repository）</p>
+</blockquote>
+<ol>
+<li><p>当项目声明一个本地存储库中不存在的依赖项(或者对于 SNAPSHOT，当远程存储库包含一个更新的存储库时)，远程下载就会被触发， 默认情况下，Maven 将从中央存储库下载。</p>
+</li>
+<li><p>个性化的库最好在项目里的pom.xml里指定。</p>
+</li>
+</ol>
+<h2 id="公共代理库（镜像）"><a href="#公共代理库（镜像）" class="headerlink" title="公共代理库（镜像）"></a>公共代理库（镜像）</h2><h3 id="阿里云"><a href="#阿里云" class="headerlink" title="阿里云"></a><a href="https://help.aliyun.com/document_detail/102512.html" target="_blank" rel="noopener">阿里云</a></h3><h2 id="maven手动安装jar包"><a href="#maven手动安装jar包" class="headerlink" title="maven手动安装jar包"></a>maven手动安装jar包</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mvn install:install-file -DgroupId= -DartifactId= -Dversion= -Dpackaging=jar -Dfile=</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>工具</category>
+      </categories>
+      <tags>
+        <tag>maven</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Tips</title>
+    <url>/2019/08/15/Tips/</url>
+    <content><![CDATA[<blockquote class="blockquote-center">
+            <i class="fa fa-quote-left"></i>
+            <p>单条备忘，大杂烩</p>
+
+            <i class="fa fa-quote-right"></i>
+          </blockquote>
+
+<a id="more"></a>
+
+<h1 id="typora搜索引擎"><a href="#typora搜索引擎" class="headerlink" title="typora搜索引擎"></a>typora搜索引擎</h1><p>偏好设置➡打开高级设置➡<code>conf.user.json</code></p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">"searchService": [</span><br><span class="line">    ["Search with baidu", "http://www.baidu.com.cn/s?wd=%s"],</span><br><span class="line">    ["Search with Bing", "https://bing.com/search?q=%s"],</span><br><span class="line">    [<span class="string">"Search with Google"</span>, <span class="string">"https://google.com/search?q=%s"</span>]</span><br><span class="line">  ]</span><br></pre></td></tr></table></figure>
+
+<h1 id="文件批量重命名"><a href="#文件批量重命名" class="headerlink" title="文件批量重命名"></a>文件批量重命名</h1><blockquote>
+<p>有时网上下载的资源，层级目录特别多，找东西很不方便，写个小程序，递归的把某一目录下的所有文件重命名(之间的父级目录下划线相连)</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> util;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.commons.io.FileUtils;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.util.Iterator;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 递归的把某一目录下的所有文件重命名(之间的父级目录下划线相连)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RenameFileByDir</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        File file = <span class="keyword">new</span> File(<span class="string">"D:\\CS\\牛逼的面试辅导视频"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取根目录下所有文件对象</span></span><br><span class="line">        File[] files = file.listFiles();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(files!=<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; files.length; i++) &#123;</span><br><span class="line">                String path = files[i].getAbsolutePath();</span><br><span class="line">                <span class="keyword">int</span> len = path.length();</span><br><span class="line">                <span class="comment">//如果文件是目录则递归遍历</span></span><br><span class="line">                <span class="keyword">if</span> (files[i].isDirectory())&#123;</span><br><span class="line">                    Iterator&lt;File&gt; fileIterator = FileUtils.iterateFiles(files[i], <span class="keyword">null</span>, <span class="keyword">true</span>);</span><br><span class="line">                    <span class="keyword">while</span> (fileIterator.hasNext())&#123;</span><br><span class="line">                        File next = fileIterator.next();</span><br><span class="line">                        <span class="keyword">if</span>(!next.isDirectory())&#123;</span><br><span class="line">                            String absolutePath = next.getAbsolutePath();</span><br><span class="line">                            String subString = absolutePath.substring(len);</span><br><span class="line">                            String replacedString = subString.replace(<span class="string">'\\'</span>, <span class="string">'_'</span>);</span><br><span class="line">                            String newPath = path+replacedString;</span><br><span class="line">                            next.renameTo(<span class="keyword">new</span> File(newPath));</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="ping-win10主机超时"><a href="#ping-win10主机超时" class="headerlink" title="ping win10主机超时"></a>ping win10主机超时</h1><img src="/2019/08/15/Tips/pingWin10timeout.png" class="">
+
+<h1 id="IDEA运行工程报找不到程序包和符号"><a href="#IDEA运行工程报找不到程序包和符号" class="headerlink" title="IDEA运行工程报找不到程序包和符号"></a>IDEA运行工程报找不到程序包和符号</h1><blockquote>
+<p>IntelliJ IDEA 2020.1.1 (Ultimate Edition)</p>
+</blockquote>
+<p>解决方法：注释掉settings.xml的本地仓库，idea手动重写仓库地址或者就用默认地址</p>
+<img src="/2019/08/15/Tips/mavenSettings.png" class="">
+
+<img src="/2019/08/15/Tips/ideaMaven.png" class="">]]></content>
+      <categories>
+        <category>misc</category>
+      </categories>
+      <tags>
+        <tag>tips</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>VMware的网络模式和NAT下centos7配置静态ip</title>
+    <url>/2020/05/11/VMware%E7%9A%84%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F%E5%92%8CNAT%E4%B8%8Bcentos7%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81ip/</url>
+    <content><![CDATA[<blockquote class="blockquote-center">
+            <i class="fa fa-quote-left"></i>
+            <p>我这个是新装的虚拟机，其实要改的东西不多，关键对新手可能很多概念不清楚，所以要多看多练</p>
+
+            <i class="fa fa-quote-right"></i>
+          </blockquote>
+
+<a id="more"></a>
+
+<h1 id="配置网络连接"><a href="#配置网络连接" class="headerlink" title="配置网络连接"></a><a href="https://docs.vmware.com/cn/VMware-Workstation-Pro/15.0/com.vmware.ws.using.doc/GUID-0CE1AE01-7E79-41BB-9EA8-4F839BE40E1A.html" target="_blank" rel="noopener">配置网络连接</a></h1><p>我的理解：</p>
+<ol>
+<li><p>Host-only: 虚拟机连不上外网，只能和宿主机沟通</p>
+</li>
+<li><p>NAT: 自己学习用这种模式最好，可以通过宿主机连外网，wifi没网也能和宿主机沟通，设置静态ip后，电脑从公司带到家里也不用换ip了，宿主机下的各虚拟机能够互通，就是和其它宿主机互通要通过端口转发的方式<img src="https://img-blog.csdnimg.cn/20200511010138144.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5c3RyaXZlZ28=,size_16,color_FFFFFF,t_70" alt="端口转发"></p>
+</li>
+<li><p>桥接模式：虚拟机就相当于局域网内一台独立的主机，ip和主机是一个网段的，互通很方便，缺点就是没wifi和主机无法沟通，而且换了地方ip就跟着变，所以如果不是固定地点没必要设置静态ip</p>
+<h1 id="nat设置静态ip"><a href="#nat设置静态ip" class="headerlink" title="nat设置静态ip"></a>nat设置静态ip</h1></li>
+</ol>
+<blockquote>
+<p>CentOS Linux release 7.8.2003 (Core)</p>
+</blockquote>
+<h2 id="ens33修改"><a href="#ens33修改" class="headerlink" title="ens33修改"></a>ens33修改</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">vi &#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;ifcfg-ens33</span><br></pre></td></tr></table></figure>
+
+<p>这里的DNS1其实是指VMnet8的网关</p>
+<img src="/2020/05/11/VMware%E7%9A%84%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F%E5%92%8CNAT%E4%B8%8Bcentos7%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81ip/ens33%E8%AE%BE%E7%BD%AE.png" class="">
+
+<h2 id="network修改"><a href="#network修改" class="headerlink" title="network修改"></a>network修改</h2><p><code>vi /etc/sysconfig/network</code></p>
+<p>这里不改会ping不通主机</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Created by anaconda</span></span><br><span class="line">NETWORKING=yes</span><br><span class="line">HOSTNAME=alpha</span><br><span class="line">GATEWAY=192.168.178.2   <span class="comment"># 这个是网关,根据自己的设置修改</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="重启网络"><a href="#重启网络" class="headerlink" title="重启网络"></a>重启网络</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">service network restart</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>VMware</tag>
+        <tag>NAT</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>基于Hexo和NexT的博客搭建</title>
     <url>/2020/05/13/%E5%9F%BA%E4%BA%8EHexo%E5%92%8CNexT%E7%9A%84%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<blockquote class="blockquote-center">
@@ -147,6 +510,8 @@
 <figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">post_asset_folder:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
 
 <p>使用Hexo内置标签：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% asset_img slug [title] %&#125;</span><br></pre></td></tr></table></figure>
+
 <h3 id="如何设置「阅读全文」"><a href="#如何设置「阅读全文」" class="headerlink" title="如何设置「阅读全文」"></a>如何设置「阅读全文」</h3><p>在首页显示一篇文章的部分内容，并提供一个链接跳转到全文页面是一个常见的需求。 NexT 提供2种方式来控制文章在首页的显示方式。 也就是说，在首页显示文章的摘录并显示 <strong>阅读全文</strong> 按钮，可以通过以下方法：</p>
 <ol>
 <li>在文章中使用 <code>&lt;!-- more --&gt;</code> 手动进行截断，Hexo 提供的方式 <strong>推荐</strong></li>
@@ -362,6 +727,32 @@
       </tags>
   </entry>
   <entry>
+    <title>软件测试了解</title>
+    <url>/2020/05/12/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95%E4%BA%86%E8%A7%A3/</url>
+    <content><![CDATA[<blockquote class="blockquote-center">
+            <i class="fa fa-quote-left"></i>
+            <p><a href="https://blog.csdn.net/sinat_41392571/article/details/81514521" target="_blank" rel="noopener">软件测试工作基本流程</a></p>
+
+            <i class="fa fa-quote-right"></i>
+          </blockquote>
+
+<a id="more"></a>
+
+<p>我的简单了解：</p>
+<ol>
+<li>流程：编写测试计划-测试用例-执行测试用例-跟踪bug-回归bug<br>工具：性能测试工具jmeter</li>
+<li>单元测试一般是由开发完成的，测试人员主要负责三个部分：功能测试，性能测试，自动化测试</li>
+<li>自动化测试也分接口自动化，ui自动化等，接口自动化是可以用jmeter做的，ui自动化用的selenium</li>
+</ol>
+]]></content>
+      <categories>
+        <category>misc</category>
+      </categories>
+      <tags>
+        <tag>测试</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>键盘折腾史</title>
     <url>/2020/05/22/%E9%94%AE%E7%9B%98%E6%8A%98%E8%85%BE%E5%8F%B2/</url>
     <content><![CDATA[<img src="/2020/05/22/%E9%94%AE%E7%9B%98%E6%8A%98%E8%85%BE%E5%8F%B2/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200522022330.jpg" class="">
@@ -402,395 +793,6 @@
       </categories>
       <tags>
         <tag>键盘</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Maven</title>
-    <url>/2020/05/20/Maven/</url>
-    <content><![CDATA[<blockquote>
-<p>Apache Maven is a software project management and comprehension tool. Based on the concept of a project object model (POM), Maven can manage a project’s build, reporting and documentation from a central piece of information.</p>
-</blockquote>
-<a id="more"></a>
-
-<h1 id="镜像和库"><a href="#镜像和库" class="headerlink" title="镜像和库"></a>镜像和库</h1><h2 id="参考地址"><a href="#参考地址" class="headerlink" title="参考地址"></a>参考地址</h2><h3 id="Maven仓库理解和优先级"><a href="#Maven仓库理解和优先级" class="headerlink" title="Maven仓库理解和优先级"></a><a href="https://swenfang.github.io/2018/06/03/Maven-Priority/" target="_blank" rel="noopener">Maven仓库理解和优先级</a></h3><h3 id="Settings-Reference"><a href="#Settings-Reference" class="headerlink" title="Settings Reference"></a><a href="http://maven.apache.org/settings.html" target="_blank" rel="noopener">Settings Reference</a></h3><h3 id="POM-Reference"><a href="#POM-Reference" class="headerlink" title="POM Reference"></a><a href="http://maven.apache.org/pom.html" target="_blank" rel="noopener">POM Reference</a></h3><h3 id="Using-Mirrors-for-Repositories"><a href="#Using-Mirrors-for-Repositories" class="headerlink" title="Using Mirrors for Repositories"></a><a href="http://maven.apache.org/guides/mini/guide-mirror-settings.html" target="_blank" rel="noopener">Using Mirrors for Repositories</a></h3><h3 id="Introduction-to-Repositories"><a href="#Introduction-to-Repositories" class="headerlink" title="Introduction to Repositories"></a><a href="http://maven.apache.org/guides/introduction/introduction-to-repositories.html" target="_blank" rel="noopener">Introduction to Repositories</a></h3><h3 id="Repository-Manager"><a href="#Repository-Manager" class="headerlink" title="Repository Manager"></a><a href="http://maven.apache.org/repository-management.html" target="_blank" rel="noopener">Repository Manager</a></h3><h2 id="使用镜像的理由"><a href="#使用镜像的理由" class="headerlink" title="使用镜像的理由"></a>使用镜像的理由</h2><ol>
-<li>加速拉取</li>
-<li>使用自己的库</li>
-<li>私服需要</li>
-</ol>
-<h2 id="mirrorOf的使用"><a href="#mirrorOf的使用" class="headerlink" title="mirrorOf的使用"></a>mirrorOf的使用</h2><blockquote>
-<p>镜像是为一个或一组特定的仓库服务的</p>
-</blockquote>
-<p>Examples:</p>
-<ul>
-<li><code>*</code> = everything</li>
-<li><code>external:*</code> = everything not on the localhost and not file based.</li>
-<li><code>repo,repo1</code> = repo or repo1</li>
-<li><code>*,!repo1</code> = everything except repo1</li>
-</ul>
-<p><code>*</code>号一般是公司私服仓库组使用比较好，如果配置多个镜像，maven会先精确匹配，再根据通配符匹配优先声明的</p>
-<h2 id="repository的使用"><a href="#repository的使用" class="headerlink" title="repository的使用"></a>repository的使用</h2><blockquote>
-<p>maven 仓库的优先级：本地仓库 &gt; 私服（profile）&gt; 远程仓库（repository）</p>
-</blockquote>
-<ol>
-<li><p>当项目声明一个本地存储库中不存在的依赖项(或者对于 SNAPSHOT，当远程存储库包含一个更新的存储库时)，远程下载就会被触发， 默认情况下，Maven 将从中央存储库下载。</p>
-</li>
-<li><p>个性化的库最好在项目里的pom.xml里指定。</p>
-</li>
-</ol>
-<h2 id="公共代理库（镜像）"><a href="#公共代理库（镜像）" class="headerlink" title="公共代理库（镜像）"></a>公共代理库（镜像）</h2><h3 id="阿里云"><a href="#阿里云" class="headerlink" title="阿里云"></a><a href="https://help.aliyun.com/document_detail/102512.html" target="_blank" rel="noopener">阿里云</a></h3><h2 id="maven手动安装jar包"><a href="#maven手动安装jar包" class="headerlink" title="maven手动安装jar包"></a>maven手动安装jar包</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mvn install:install-file -DgroupId= -DartifactId= -Dversion= -Dpackaging=jar -Dfile=</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>工具</category>
-      </categories>
-      <tags>
-        <tag>maven</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>软件测试了解</title>
-    <url>/2020/05/12/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95%E4%BA%86%E8%A7%A3/</url>
-    <content><![CDATA[<blockquote class="blockquote-center">
-            <i class="fa fa-quote-left"></i>
-            <p><a href="https://blog.csdn.net/sinat_41392571/article/details/81514521" target="_blank" rel="noopener">软件测试工作基本流程</a></p>
-
-            <i class="fa fa-quote-right"></i>
-          </blockquote>
-
-<a id="more"></a>
-
-<p>我的简单了解：</p>
-<ol>
-<li>流程：编写测试计划-测试用例-执行测试用例-跟踪bug-回归bug<br>工具：性能测试工具jmeter</li>
-<li>单元测试一般是由开发完成的，测试人员主要负责三个部分：功能测试，性能测试，自动化测试</li>
-<li>自动化测试也分接口自动化，ui自动化等，接口自动化是可以用jmeter做的，ui自动化用的selenium</li>
-</ol>
-]]></content>
-      <categories>
-        <category>misc</category>
-      </categories>
-      <tags>
-        <tag>测试</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>VMware的网络模式和NAT下centos7配置静态ip</title>
-    <url>/2020/05/11/VMware%E7%9A%84%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F%E5%92%8CNAT%E4%B8%8Bcentos7%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81ip/</url>
-    <content><![CDATA[<blockquote class="blockquote-center">
-            <i class="fa fa-quote-left"></i>
-            <p>我这个是新装的虚拟机，其实要改的东西不多，关键对新手可能很多概念不清楚，所以要多看多练</p>
-
-            <i class="fa fa-quote-right"></i>
-          </blockquote>
-
-<a id="more"></a>
-
-<h1 id="配置网络连接"><a href="#配置网络连接" class="headerlink" title="配置网络连接"></a><a href="https://docs.vmware.com/cn/VMware-Workstation-Pro/15.0/com.vmware.ws.using.doc/GUID-0CE1AE01-7E79-41BB-9EA8-4F839BE40E1A.html" target="_blank" rel="noopener">配置网络连接</a></h1><p>我的理解：</p>
-<ol>
-<li><p>Host-only: 虚拟机连不上外网，只能和宿主机沟通</p>
-</li>
-<li><p>NAT: 自己学习用这种模式最好，可以通过宿主机连外网，wifi没网也能和宿主机沟通，设置静态ip后，电脑从公司带到家里也不用换ip了，宿主机下的各虚拟机能够互通，就是和其它宿主机互通要通过端口转发的方式<img src="https://img-blog.csdnimg.cn/20200511010138144.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5c3RyaXZlZ28=,size_16,color_FFFFFF,t_70" alt="端口转发"></p>
-</li>
-<li><p>桥接模式：虚拟机就相当于局域网内一台独立的主机，ip和主机是一个网段的，互通很方便，缺点就是没wifi和主机无法沟通，而且换了地方ip就跟着变，所以如果不是固定地点没必要设置静态ip</p>
-<h1 id="nat设置静态ip"><a href="#nat设置静态ip" class="headerlink" title="nat设置静态ip"></a>nat设置静态ip</h1></li>
-</ol>
-<blockquote>
-<p>CentOS Linux release 7.8.2003 (Core)</p>
-</blockquote>
-<h2 id="ens33修改"><a href="#ens33修改" class="headerlink" title="ens33修改"></a>ens33修改</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">vi &#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;ifcfg-ens33</span><br></pre></td></tr></table></figure>
-
-<p>这里的DNS1其实是指VMnet8的网关</p>
-<img src="/2020/05/11/VMware%E7%9A%84%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F%E5%92%8CNAT%E4%B8%8Bcentos7%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81ip/ens33%E8%AE%BE%E7%BD%AE.png" class="">
-
-<h2 id="network修改"><a href="#network修改" class="headerlink" title="network修改"></a>network修改</h2><p><code>vi /etc/sysconfig/network</code></p>
-<p>这里不改会ping不通主机</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Created by anaconda</span></span><br><span class="line">NETWORKING=yes</span><br><span class="line">HOSTNAME=alpha</span><br><span class="line">GATEWAY=192.168.178.2   <span class="comment"># 这个是网关,根据自己的设置修改</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="重启网络"><a href="#重启网络" class="headerlink" title="重启网络"></a>重启网络</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">service network restart</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>VMware</tag>
-        <tag>NAT</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ELK安装整合SpringBoot</title>
-    <url>/2020/05/09/ELK%E5%AE%89%E8%A3%85%E6%95%B4%E5%90%88SpringBoot/</url>
-    <content><![CDATA[<blockquote>
-<p>ELK是 elasticsearch + logstash + kibana 的简称。这套组合类似于MVC模型，其中logstash是controller层，数据首先传给它，它负责将数据进行过滤和格式化；elasticsearch是model层，负责数据的存储，建立搜索索引；kibana是view层，负责数据的展示。</p>
-</blockquote>
-<a id="more"></a>
-
-<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>系统：centos 6.10<br>软件版本：tar包安装<br>elasticsearch-6.3.1<br>logstash-6.3.1<br>kibana-6.3.1</p>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>直接tar -zxvf 解压缩即可<br>演示安装在/opt 下</p>
-<h2 id="Elasticsearch"><a href="#Elasticsearch" class="headerlink" title="Elasticsearch"></a>Elasticsearch</h2><h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>主要配置文件/etc/elasticsearch/elasticsearch.yml，修改如下内容</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Use a descriptive name for your cluster:</span></span><br><span class="line">cluster.name: tisco_es</span><br><span class="line"><span class="comment">#bootstrap.memory_lock: true 针对低版本centos的</span></span><br><span class="line">bootstrap.system_call_filter: <span class="literal">false</span></span><br><span class="line"><span class="comment"># Set the bind address to a specific IP (IPv4 or IPv6):</span></span><br><span class="line">network.host: 0.0.0.0</span><br><span class="line"><span class="comment"># Set a custom port for HTTP:</span></span><br><span class="line">http.port: 9200</span><br></pre></td></tr></table></figure>
-
-<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><p>命令目录：cd /opt/elasticsearch-6.3.1/bin/<br>./elasticsearch -d 后台启动<br>curl <a href="http://172.17.171.228:9200/" target="_blank" rel="noopener">http://172.17.171.228:9200/</a><br>如果有类似如下的输出则是正常启动了<br><img src="https://img-blog.csdnimg.cn/20200515201040693.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5c3RyaXZlZ28=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<h2 id="logstash"><a href="#logstash" class="headerlink" title="logstash"></a>logstash</h2><h3 id="配置-1"><a href="#配置-1" class="headerlink" title="配置"></a>配置</h3><p>/opt/logstash-6.3.1/ 下新建一个文件名为 logstash.conf，然后写入以下配置：<br><img src="https://img-blog.csdnimg.cn/20200509042727128.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5c3RyaXZlZ28=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<h3 id="启动-1"><a href="#启动-1" class="headerlink" title="启动"></a>启动</h3><p>安装目录下：<br>nohup ./bin/logstash -f ./logstash.conf &amp;<br>查看启动日志：<br>/opt/logstash-6.3.1/logs/<br>查看端口：<br><img src="https://img-blog.csdnimg.cn/20200509042829698.png" alt="在这里插入图片描述"><br>9600为程序端口，4560为监听端口</p>
-<h2 id="kibana"><a href="#kibana" class="headerlink" title="kibana"></a>kibana</h2><h3 id="配置-2"><a href="#配置-2" class="headerlink" title="配置"></a>配置</h3><p>文件：<br>/opt/kibana-6.3.1-linux-x86_64/config/ kibana.yml<br>修改内容：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Kibana is served by a back end server. This setting specifies the port to use.</span></span><br><span class="line">server.port: 5601</span><br><span class="line">server.host: <span class="string">"0.0.0.0"</span> <span class="comment">#监听任意地址</span></span><br><span class="line"><span class="comment"># The URL of the Elasticsearch instance to use for all your queries.</span></span><br><span class="line">elasticsearch.url: http://172.17.171.228:9200</span><br></pre></td></tr></table></figure>
-
-<h3 id="启动-2"><a href="#启动-2" class="headerlink" title="启动"></a>启动</h3><p>/opt/kibana-6.3.1-linux-x86_64/bin/kibana</p>
-<p>访问网站：<br><a href="http://172.17.171.228:5601" target="_blank" rel="noopener">http://172.17.171.228:5601</a></p>
-
-
-<img src = "ELK安装整合SpringBoot\kibana首页.png"/>
-
-<h2 id="整合spring-项目"><a href="#整合spring-项目" class="headerlink" title="整合spring 项目"></a>整合spring 项目</h2><p>添加依赖：<br><img src="https://img-blog.csdnimg.cn/20200509043225295.png" alt="在这里插入图片描述"><br>logback配置文件：<br><img src="https://img-blog.csdnimg.cn/20200509043238852.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5c3RyaXZlZ28=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<h2 id="演示"><a href="#演示" class="headerlink" title="演示"></a>演示</h2><p>Kibana管理界面创建Kinaba Index Patterns：</p>
-<img src="/2020/05/09/ELK%E5%AE%89%E8%A3%85%E6%95%B4%E5%90%88SpringBoot/indexPattern.png" class="">
-<p>在Index pattern里输入我们在logstash配置文件logstash.conf里output.index指定的值<br>logstash-*</p>
-<img src="/2020/05/09/ELK%E5%AE%89%E8%A3%85%E6%95%B4%E5%90%88SpringBoot/createIndex.png" class="">
-<p>点击Next Step，在下拉框里选择@timestamp：</p>
-<img src="/2020/05/09/ELK%E5%AE%89%E8%A3%85%E6%95%B4%E5%90%88SpringBoot/timestamp.png" class="">
-<p>最后点击Create Index Pattern按钮完成创建<br>在Kibana里搜索相应的logback日志：</p>
-<img src="/2020/05/09/ELK%E5%AE%89%E8%A3%85%E6%95%B4%E5%90%88SpringBoot/log.png" class="">]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>SpringBoot</tag>
-        <tag>ELK</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Fastdfs安装说明</title>
-    <url>/2020/05/09/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E/</url>
-    <content><![CDATA[<blockquote class="blockquote-center">
-            <i class="fa fa-quote-left"></i>
-            <p>单机安装版</p>
-
-            <i class="fa fa-quote-right"></i>
-          </blockquote>
-
-<a id="more"></a>
-
-<h2 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h2><blockquote>
-<p>Centos版本：6.10</p>
-</blockquote>
-<p>tracker和storage使用相同的安装包，下载地址：<a href="http://sourceforge.net/projects/FastDFS/" target="_blank" rel="noopener">http://sourceforge.net/projects/FastDFS/</a> 或<a href="https://github.com/happyfish100/fastdfs（推荐）" target="_blank" rel="noopener">https://github.com/happyfish100/fastdfs（推荐）</a></p>
-<p>本教程使用：<br><a href="https://github.com/happyfish100/fastdfs" target="_blank" rel="noopener">https://github.com/happyfish100/fastdfs</a>  版本V6.06</p>
-<h2 id="FastDFS安装环境"><a href="#FastDFS安装环境" class="headerlink" title="FastDFS安装环境"></a>FastDFS安装环境</h2><p> FastDFS是C语言开发，建议在linux上运行，centos7.x</p>
-<p>安装FastDFS需要先将官网下载的源码进行编译，编译依赖gcc环境，如果没有gcc环境，需要安装gcc：yum install gcc-c++</p>
-<h2 id="安装libevent"><a href="#安装libevent" class="headerlink" title="安装libevent"></a>安装libevent</h2><p>FastDFS依赖libevent库，需要安装：</p>
-<p><code>yum -y install libevent</code></p>
-<h2 id="安装libfastcommon"><a href="#安装libfastcommon" class="headerlink" title="安装libfastcommon"></a>安装libfastcommon</h2><blockquote>
-<p>  libfastcommon是FastDFS官方提供的，libfastcommon包含了FastDFS运行所需要的一些基础库。</p>
-</blockquote>
-<p>到软件包目录下载libfastcommon</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/happyfish100/libfastcommon.git --depth 1</span><br><span class="line"><span class="built_in">cd</span> libfastcommon/</span><br><span class="line">./make.sh &amp;&amp; ./make.sh install <span class="comment">#编译安装</span></span><br></pre></td></tr></table></figure>
-
-
-
-
-<h2 id="fastdfs安装（源码编译安装）"><a href="#fastdfs安装（源码编译安装）" class="headerlink" title="fastdfs安装（源码编译安装）"></a>fastdfs安装（源码编译安装）</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ../ <span class="comment">#返回上一级目录</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/happyfish100/fastdfs.git --depth 1</span><br><span class="line"><span class="built_in">cd</span> fastdfs/</span><br><span class="line">./make.sh &amp;&amp; ./make.sh install <span class="comment">#编译安装</span></span><br></pre></td></tr></table></figure>
-
-
-<p>默认安装方式安装后的相应文件与目录：</p>
-<p>服务脚本：<br>/etc/init.d/fdfs_storaged<br>/etc/init.d/fdfs_trackerd</p>
-<p>配置文件<br>/etc/fdfs/http.conf<br>/etc/fdfs/tracker.conf<br>/etc/fdfs/client.conf</p>
-<p>/etc/fdfs/storage.conf<br>/etc/fdfs/mime.types<br>/etc/fdfs/storage_ids.conf</p>
-<p>命令工具在 /usr/bin/ 目录下：</p>
-<img src="/2020/05/09/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E/%E5%91%BD%E4%BB%A4%E5%B7%A5%E5%85%B7.png" class="">
-
-<h2 id="nginx安装-源码编译安装"><a href="#nginx安装-源码编译安装" class="headerlink" title="nginx安装(源码编译安装)"></a>nginx安装(源码编译安装)</h2><p>版本：1.16.1</p>
-<p>此处nginx用于storage服务，解决同步延时问题和提供http的访问</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget http://nginx.org/download/nginx-1.16.1.tar.gz <span class="comment">#下载nginx压缩包</span></span><br><span class="line">tar -zxvf nginx-1.16.1.tar.gz <span class="comment">#解压</span></span><br><span class="line"><span class="built_in">cd</span> nginx-1.16.1/</span><br></pre></td></tr></table></figure>
-
-
-<p>#使用默认配置nginx</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># ./configure</span></span><br></pre></td></tr></table></figure>
-
-<p>#编译</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># make</span></span><br></pre></td></tr></table></figure>
-
-<p>#安装</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># make install</span></span><br></pre></td></tr></table></figure>
-
-
-<p>nginx常用目录：<br>安装目录：/usr/local/nginx/<br>配置文件路径：/usr/local/nginx/conf/nginx.conf<br>日志路径： /usr/local/nginx/logs/</p>
-<p>查看nginx的版本及模块：<br><code>/usr/local/nginx/sbin/nginx -V</code> </p>
-<h2 id="安装配置fastdfs-nginx-module模块"><a href="#安装配置fastdfs-nginx-module模块" class="headerlink" title="安装配置fastdfs-nginx-module模块"></a>安装配置fastdfs-nginx-module模块</h2><p>版本：1.22</p>
-<p>#下载地址： <a href="https://codeload.github.com/happyfish100/fastdfs-nginx-module/tar.gz/V1.22" target="_blank" rel="noopener">https://codeload.github.com/happyfish100/fastdfs-nginx-module/tar.gz/V1.22</a></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># tar -zxvf  fastdfs-nginx-module-1.22.tar.gz</span></span><br></pre></td></tr></table></figure>
-
-<p>编辑 fastdfs-nginx-module-1.22/src/config 文件</p>
-<img src="/2020/05/09/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E/nginx-module.png" class="">
-
-<p>改变的文件内容<br><code>ngx_module_incs=&quot;/usr/include/fastdfs /usr/include/fastcommon/&quot;</code><br><code>CORE_INCS=&quot;$CORE_INCS /usr/include/fastdfs /usr/include/fastcommon/&quot;</code></p>
-<p>配置nginx，添加fastdfs-nginx-module 模块：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 先停掉nginx服务 如果没有配置为服务 则使用 </span></span><br><span class="line">/usr/<span class="built_in">local</span>/nginx/sbin/nginx -s stop</span><br></pre></td></tr></table></figure>
-
-<p>#进入nginx源码目录</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/src/nginx-1.16.1/</span><br></pre></td></tr></table></figure>
-
-
-
-<p>#添加fastdfs-nginx-module 模块</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@localhost nginx-1.16.1]<span class="comment">#./configure  --add-module=/opt/fastdfs-nginx-module-1.22/src/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#重新编译安装nginx</span></span><br><span class="line"></span><br><span class="line">[root@localhost nginx-1.16.1]<span class="comment"># make</span></span><br><span class="line"></span><br><span class="line">[root@localhost nginx-1.16.1]<span class="comment"># make install</span></span><br></pre></td></tr></table></figure>
-
-
-
-<p>#验证是否加载fastdfs-nginx-module模块是否 ，有如下标记部分表示成功</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/usr/<span class="built_in">local</span>/nginx/sbin/nginx -V</span><br></pre></td></tr></table></figure>
-
-<p>nginx version: nginx/1.16.1</p>
-<p>built by gcc 4.4.7 20120313 (Red Hat 4.4.7-23) (GCC)</p>
-<p><code>configure arguments: --add-module=/opt/fastdfs-nginx-module-1.22/src/</code></p>
-<p>复制 fastdfs-nginx-module 源码中的配置文件 mod_fastdfs.conf 到/etc/fdfs 目录， 并修改</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># cp /usr/local/src/fastdfs-nginx-module-1.22/src/mod_fastdfs.conf  /etc/fdfs/</span></span><br></pre></td></tr></table></figure>
-
-<p>修改如下配置，其它默认</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tracker_server=192.168.0.200:22122</span><br><span class="line"></span><br><span class="line">group_name=group1</span><br><span class="line"></span><br><span class="line">url_have_group_name = <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">store_path0=/home/fastdf</span><br></pre></td></tr></table></figure>
-
-<p>s</p>
-<h2 id="tracker配置"><a href="#tracker配置" class="headerlink" title="tracker配置"></a>tracker配置</h2><p>安装成功后进入/etc/fdfs目录：</p>
-<img src="/2020/05/09/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E/fdfs%E7%9B%AE%E5%BD%95.png" class="">
-
-
-<p>修改tracker.conf</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim tracker.conf</span><br><span class="line"><span class="comment">#需要修改的内容如下</span></span><br><span class="line">port=22122  <span class="comment"># tracker服务器端口（默认22122,一般不修改）</span></span><br><span class="line">base_path=/home/fastdfs/  <span class="comment"># 存储日志和数据的根目录，可根据实际路径替换</span></span><br></pre></td></tr></table></figure>
-
-
-
-
-<h2 id="storage配置"><a href="#storage配置" class="headerlink" title="storage配置"></a>storage配置</h2><p>进入/etc/fdfs目录：</p>
-<p>vim storage.conf<br>#需要修改的内容如下</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">group_name = group1 此存储服务器属于的组名</span><br><span class="line">port=23000  <span class="comment"># storage服务端口（默认23000,一般不修改）</span></span><br><span class="line">base_path=/home/fastdfs/   <span class="comment"># 数据和日志文件存储根目录，可根据实际路径替换</span></span><br><span class="line">store_path0 = /home/fastdfs  <span class="comment"># 第一个存储目录，可根据实际路径替换（默认值是base_path,推荐修改）</span></span><br><span class="line">tracker_server= 172.17.171.228:22122  <span class="comment"># tracker服务器IP和端口(根据实际ip替换)</span></span><br><span class="line">http.server_port=8888  <span class="comment"># http访问文件的端口(默认8888,看情况修改,和nginx中保持一致</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="client配置"><a href="#client配置" class="headerlink" title="client配置"></a>client配置</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /etc/fdfs/client.conf</span><br><span class="line"><span class="comment">#需要修改的内容如下</span></span><br><span class="line">base_path = /home/fastdfs <span class="comment">#与storage中的一致</span></span><br><span class="line">tracker_server = 172.17.171.228:22122    <span class="comment">#tracker服务器IP和端口</span></span><br></pre></td></tr></table></figure>
-
-
-
-
-<h2 id="nginx配置"><a href="#nginx配置" class="headerlink" title="nginx配置"></a>nginx配置</h2><p>#配置nginx.config<br>vim /usr/local/nginx/conf/nginx.conf<br>#修改如下红色配置,在server中添加location配置</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen       8888;</span><br><span class="line">    server_name  172.17.171.228;</span><br><span class="line">    location ~/group[0-9]/ &#123;</span><br><span class="line">        ngx_fastdfs_module;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-<h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><p><strong>Tracker命令  [start | stop | restart]</strong></p>
-<p>/usr/bin/fdfs_trackerd /etc/fdfs/tracker.conf restart</p>
-<p><strong>storage命令[start | stop | restart]</strong></p>
-<p>/usr/bin/fdfs_storaged /etc/fdfs/storage.conf restart</p>
-<p><strong>Nginx命令stop, quit, reopen, reload</strong></p>
-<p>/usr/local/nginx/sbin/nginx -s reload</p>
-<p>监测启动情况查看</p>
-<p>/usr/bin/fdfs_monitor /etc/fdfs/storage.conf</p>
-<img src="/2020/05/09/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E/monitor.png" class="">
-
-<p> 查看日志</p>
-<p>tail -n10 /home/fastdfs/logs/trackerd.log   #base_path对应的目录下logs</p>
-<p>tail -n10 /home/fastdfs/logs/storaged.log   #base_path对应的目录下logs</p>
-<p>#如果日志显示有错误信息，需要根据信息来查找错误原因</p>
-<p>设置开机自动启动。</p>
-<p>[root@tracker FastDFS]# vim /etc/rc.d/rc.local</p>
-<p>将运行命令行添加进文件：</p>
-<p>/usr/bin/fdfs_trackerd /etc/fdfs/tracker.conf restart</p>
-<p>/usr/bin/fdfs_storaged /etc/fdfs/storage.conf restart</p>
-<p>/usr/local/nginx/sbin/nginx -s reload</p>
-<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>#测试上传比如nginx-1.16.1.tar.gz文件,返回ID表示成功 如：group1/M00/00/00/xx.tar.gz<br>/usr/bin/fdfs_upload_file /etc/fdfs/client.conf /usr/local/src/nginx-1.16.1.tar.gz<br>#测试下载，用外部浏览器访问刚才已传过的文件,引用返回的ID<br><a href="http://xxx:8888/group1/M00/00/00/xxx.tar.gz" target="_blank" rel="noopener">http://xxx:8888/group1/M00/00/00/xxx.tar.gz</a></p>
-]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>Fastdfs</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Centos7安装PostgreSQL10</title>
-    <url>/2020/05/09/Centos7%E5%AE%89%E8%A3%85PostgreSQL10/</url>
-    <content><![CDATA[<blockquote class="blockquote-center">
-            <i class="fa fa-quote-left"></i>
-            <p>多看官方文档</p>
-
-            <i class="fa fa-quote-right"></i>
-          </blockquote>
-
-<a id="more"></a>
-
-<h1 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h1><h2 id="centos"><a href="#centos" class="headerlink" title="centos"></a>centos</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@alpha ~]<span class="comment"># cat /etc/centos-release</span></span><br><span class="line">CentOS Linux release 7.8.2003 (Core)</span><br></pre></td></tr></table></figure>
-
-<h2 id="pgsql"><a href="#pgsql" class="headerlink" title="pgsql"></a>pgsql</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@alpha ~]<span class="comment"># psql --version</span></span><br><span class="line">psql (PostgreSQL) 10.12</span><br></pre></td></tr></table></figure>
-
-<h1 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h1><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p><a href="https://www.postgresql.org/download/linux/redhat/" target="_blank" rel="noopener">官网地址</a><br><img src="https://img-blog.csdnimg.cn/202005090252156.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5c3RyaXZlZ28=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><h3 id="切换用户"><a href="#切换用户" class="headerlink" title="切换用户"></a>切换用户</h3><blockquote>
-<p>默认已经创建了postgres用户</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@alpha ~]<span class="comment"># su - postgres</span></span><br><span class="line">Last login: Sat May  9 01:36:14 CST 2020 on pts/1</span><br><span class="line">-bash-4.2$</span><br></pre></td></tr></table></figure>
-
-<h3 id="修改密码"><a href="#修改密码" class="headerlink" title="修改密码"></a>修改密码</h3><blockquote>
-<p>善用帮助文档</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">-bash-4.2$ psql</span><br><span class="line">psql (10.12)</span><br><span class="line">Type <span class="string">"help"</span> <span class="keyword">for</span> <span class="built_in">help</span>.</span><br><span class="line"></span><br><span class="line">postgres=<span class="comment"># help</span></span><br><span class="line">You are using psql, the <span class="built_in">command</span>-line interface to PostgreSQL.</span><br><span class="line">Type:  \copyright <span class="keyword">for</span> distribution terms</span><br><span class="line">       \h <span class="keyword">for</span> <span class="built_in">help</span> with SQL commands</span><br><span class="line">       \? <span class="keyword">for</span> <span class="built_in">help</span> with psql commands</span><br><span class="line">       \g or terminate with semicolon to execute query</span><br><span class="line">       \q to quit</span><br><span class="line">postgres=<span class="comment"># \?</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">postgres=<span class="comment"># \password postgres</span></span><br><span class="line">Enter new password:</span><br><span class="line">Enter it again:</span><br><span class="line">postgres-<span class="comment"># \q</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="修改客户端认证配置文件"><a href="#修改客户端认证配置文件" class="headerlink" title="修改客户端认证配置文件"></a>修改客户端认证配置文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vi /var/lib/pgsql/10/data/pg_hba.conf</span><br></pre></td></tr></table></figure>
-
-<p>最后面加上下面这行</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">host    all             all             0.0.0.0/0               md5</span><br></pre></td></tr></table></figure>
-
-<h3 id="修改pg配置文件"><a href="#修改pg配置文件" class="headerlink" title="修改pg配置文件"></a>修改pg配置文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vi /var/lib/pgsql/10/data/postgresql.conf</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># - Connection Settings -</span></span><br><span class="line"></span><br><span class="line">listen_addresses = <span class="string">'*'</span>                  <span class="comment"># what IP address(es) to listen on;</span></span><br><span class="line">                                        <span class="comment"># comma-separated list of addresses;</span></span><br><span class="line">                                        <span class="comment"># defaults to 'localhost'; use '*' for all</span></span><br><span class="line">                                        <span class="comment"># (change requires restart)</span></span><br><span class="line">port = 5432                             <span class="comment"># (change requires restart)</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="重启pgsql"><a href="#重启pgsql" class="headerlink" title="重启pgsql"></a>重启pgsql</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl restart postgresql-10</span><br></pre></td></tr></table></figure>
-
-<h3 id="防火墙设置"><a href="#防火墙设置" class="headerlink" title="防火墙设置"></a>防火墙设置</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"> <span class="comment">#开机启用防火墙</span></span><br><span class="line">systemctl <span class="built_in">enable</span> firewalld</span><br><span class="line"></span><br><span class="line"> <span class="comment">#开启防火墙</span></span><br><span class="line">systemctl start firewalld</span><br><span class="line"></span><br><span class="line"><span class="comment">#开放postgresql服务</span></span><br><span class="line">firewall-cmd --add-service=postgresql --permanent </span><br><span class="line"></span><br><span class="line"><span class="comment">#添加端口</span></span><br><span class="line">firewall-cmd --zone=public --add-port=5432/tcp --permanent </span><br><span class="line"></span><br><span class="line"><span class="comment">#重载防火墙</span></span><br><span class="line">firewall-cmd --reload  </span><br><span class="line"></span><br><span class="line"><span class="comment">#查看占用端口</span></span><br><span class="line">firewall-cmd --list-ports</span><br></pre></td></tr></table></figure>
-
-<h2 id="测试navicat连接"><a href="#测试navicat连接" class="headerlink" title="测试navicat连接"></a>测试navicat连接</h2><p><img src="https://img-blog.csdnimg.cn/20200509034959771.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5c3RyaXZlZ28=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-      <tags>
-        <tag>PostgreSQL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Tips</title>
-    <url>/2019/08/15/Tips/</url>
-    <content><![CDATA[<blockquote class="blockquote-center">
-            <i class="fa fa-quote-left"></i>
-            <p>单条备忘，大杂烩</p>
-
-            <i class="fa fa-quote-right"></i>
-          </blockquote>
-
-<a id="more"></a>
-
-<h1 id="typora搜索引擎"><a href="#typora搜索引擎" class="headerlink" title="typora搜索引擎"></a>typora搜索引擎</h1><p>偏好设置➡打开高级设置➡<code>conf.user.json</code></p>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line">"searchService": [</span><br><span class="line">    ["Search with baidu", "http://www.baidu.com.cn/s?wd=%s"],</span><br><span class="line">    ["Search with Bing", "https://bing.com/search?q=%s"],</span><br><span class="line">    [<span class="string">"Search with Google"</span>, <span class="string">"https://google.com/search?q=%s"</span>]</span><br><span class="line">  ]</span><br></pre></td></tr></table></figure>
-
-<h1 id="文件批量重命名"><a href="#文件批量重命名" class="headerlink" title="文件批量重命名"></a>文件批量重命名</h1><blockquote>
-<p>有时网上下载的资源，层级目录特别多，找东西很不方便，写个小程序，递归的把某一目录下的所有文件重命名(之间的父级目录下划线相连)</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> util;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.commons.io.FileUtils;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.util.Iterator;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 递归的把某一目录下的所有文件重命名(之间的父级目录下划线相连)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RenameFileByDir</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        File file = <span class="keyword">new</span> File(<span class="string">"D:\\CS\\牛逼的面试辅导视频"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取根目录下所有文件对象</span></span><br><span class="line">        File[] files = file.listFiles();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(files!=<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; files.length; i++) &#123;</span><br><span class="line">                String path = files[i].getAbsolutePath();</span><br><span class="line">                <span class="keyword">int</span> len = path.length();</span><br><span class="line">                <span class="comment">//如果文件是目录则递归遍历</span></span><br><span class="line">                <span class="keyword">if</span> (files[i].isDirectory())&#123;</span><br><span class="line">                    Iterator&lt;File&gt; fileIterator = FileUtils.iterateFiles(files[i], <span class="keyword">null</span>, <span class="keyword">true</span>);</span><br><span class="line">                    <span class="keyword">while</span> (fileIterator.hasNext())&#123;</span><br><span class="line">                        File next = fileIterator.next();</span><br><span class="line">                        <span class="keyword">if</span>(!next.isDirectory())&#123;</span><br><span class="line">                            String absolutePath = next.getAbsolutePath();</span><br><span class="line">                            String subString = absolutePath.substring(len);</span><br><span class="line">                            String replacedString = subString.replace(<span class="string">'\\'</span>, <span class="string">'_'</span>);</span><br><span class="line">                            String newPath = path+replacedString;</span><br><span class="line">                            next.renameTo(<span class="keyword">new</span> File(newPath));</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="ping-win10主机超时"><a href="#ping-win10主机超时" class="headerlink" title="ping win10主机超时"></a>ping win10主机超时</h1><img src="/2019/08/15/Tips/pingWin10timeout.png" class="">
-
-<h1 id="IDEA运行工程报找不到程序包和符号"><a href="#IDEA运行工程报找不到程序包和符号" class="headerlink" title="IDEA运行工程报找不到程序包和符号"></a>IDEA运行工程报找不到程序包和符号</h1><blockquote>
-<p>IntelliJ IDEA 2020.1.1 (Ultimate Edition)</p>
-</blockquote>
-<p>解决方法：注释掉settings.xml的本地仓库，idea手动重写仓库地址或者就用默认地址</p>
-<img src="/2019/08/15/Tips/mavenSettings.png" class="">
-
-<img src="/2019/08/15/Tips/ideaMaven.png" class="">]]></content>
-      <categories>
-        <category>misc</category>
-      </categories>
-      <tags>
-        <tag>tips</tag>
       </tags>
   </entry>
 </search>
