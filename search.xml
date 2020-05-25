@@ -157,8 +157,7 @@
 <blockquote>
 <p>建议使用 <code>&lt;!-- more --&gt;</code>（即第一种方式），除了可以精确控制需要显示的摘录内容以外， 这种方式也可以让 Hexo 中的插件更好的识别。</p>
 </blockquote>
-<h3 id="渲染跳过"><a href="#渲染跳过" class="headerlink" title="渲染跳过"></a>渲染跳过</h3><p>比如404，readme文件</p>
-<p>相关文件可以去<a href="https://gitee.com/zystrivego/zystrivego" target="_blank" rel="noopener">这里</a>找</p>
+<h3 id="渲染跳过"><a href="#渲染跳过" class="headerlink" title="渲染跳过"></a>渲染跳过</h3><p>比如404，README文件</p>
 <p>修改<strong>站点配置文件</strong></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">skip_render:</span><br><span class="line">  - README.md</span><br><span class="line">  - 404.html</span><br></pre></td></tr></table></figure>
 
@@ -393,15 +392,11 @@
 <img src="/2020/05/22/%E9%94%AE%E7%9B%98%E6%8A%98%E8%85%BE%E5%8F%B2/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200522022334.jpg" class="">
 
 <div class="note info">
-            <p>佳达隆定制矮红轴，对应产品 <a href="https://www.keychron.com/products/keychron-k1-wireless-mechanical-keyboard" target="_blank" rel="noopener">keychron k1 v3</a>  </p><img src="/2020/05/22/%E9%94%AE%E7%9B%98%E6%8A%98%E8%85%BE%E5%8F%B2/k1gateron.png" class="">
+            <p>佳达隆定制矮红轴，对应产品 <a href="https://www.keychron.com/products/keychron-k1-wireless-mechanical-keyboard" target="_blank" rel="noopener">keychron k1 v3</a>  </p><p>主输入区非常静音，手感红轴偏薄膜吧，触发很迅速，大键都是用的平衡杆，触感声响各异，可玩性不错，但还是要配掌托，且个人感觉长时间输入还是不如小红点键盘舒服。</p><img src="/2020/05/22/%E9%94%AE%E7%9B%98%E6%8A%98%E8%85%BE%E5%8F%B2/k1gateron.png" class="">
           </div>
 
 
-
-<p>主输入区非常静音，手感红轴偏薄膜吧，大键都是用的平衡杆，触感声响各异，很惊艳，感觉折腾的路到头了，配了个MX 掌托，其实不配也行，这款厚度就20mm左右</p>
-<img src="https://gitee.com/zystrivego/misc/raw/master/quick%20start1.jpg"  alt="quickStart1" />
-
-<img src="https://gitee.com/zystrivego/misc/raw/master/quick%20start2.jpg" alt="quickStart2" />]]></content>
+]]></content>
       <categories>
         <category>外设</category>
       </categories>
