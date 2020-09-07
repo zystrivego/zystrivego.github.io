@@ -1,6 +1,368 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>基于Hexo和NexT的博客搭建</title>
+    <url>/2020/05/13/%E5%9F%BA%E4%BA%8EHexo%E5%92%8CNexT%E7%9A%84%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</url>
+    <content><![CDATA[<blockquote class="blockquote-center">
+            <i class="fa fa-quote-left"></i>
+            <p>主要记录一些要注意的点，因为网上教程版本众多，所以尽量以最新的官方文档为准。</p>
+
+            <i class="fa fa-quote-right"></i>
+          </blockquote>
+
+<a id="more"></a>
+
+<h1 id="官方文档地址"><a href="#官方文档地址" class="headerlink" title="官方文档地址"></a>官方文档地址</h1><p><a href="https://hexo.io/zh-cn/" target="_blank" rel="noopener">Hexo官网</a></p>
+<p><a href="http://theme-next.iissnan.com/getting-started.html" target="_blank" rel="noopener">NexT中文文档</a></p>
+<p><a href="https://theme-next.js.org/docs/" target="_blank" rel="noopener">NexT英文文档</a></p>
+<h1 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h1><ul>
+<li><p>Node.js <a href="https://nodejs.org/en/" target="_blank" rel="noopener">v12.16.3</a></p>
+</li>
+<li><p>hexo: <a href="https://github.com/hexojs/hexo/tree/4.2.1" target="_blank" rel="noopener">4.2.1</a></p>
+</li>
+<li><p>NexT: <a href="https://github.com/next-theme/hexo-theme-next/releases/tag/v8.0.0-rc.2" target="_blank" rel="noopener">v8.0.0-rc.2</a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2014-2017	https:&#x2F;&#x2F;github.com&#x2F;iissnan&#x2F;hexo-theme-next</span><br><span class="line">2018-2019	https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;hexo-theme-next</span><br><span class="line">2020	    https:&#x2F;&#x2F;github.com&#x2F;next-theme&#x2F;hexo-theme-next</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h1 id="Front-matter"><a href="#Front-matter" class="headerlink" title="Front-matter"></a>Front-matter</h1><p>Front-matter 是文件最上方以 <code>---</code> 分隔的区域，用于指定个别文件的变量，举例来说：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: Hello World</span><br><span class="line">date: 2013&#x2F;7&#x2F;13 20:46:25</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+
+<p>以下是预先定义的参数，您可在模板中使用这些参数值并加以利用。</p>
+<table>
+<thead>
+<tr>
+<th align="left">参数</th>
+<th align="left">描述</th>
+<th align="left">默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>layout</code></td>
+<td align="left">布局</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>title</code></td>
+<td align="left">标题</td>
+<td align="left">文章的文件名</td>
+</tr>
+<tr>
+<td align="left"><code>date</code></td>
+<td align="left">建立日期</td>
+<td align="left">文件建立日期</td>
+</tr>
+<tr>
+<td align="left"><code>updated</code></td>
+<td align="left">更新日期</td>
+<td align="left">文件更新日期</td>
+</tr>
+<tr>
+<td align="left"><code>comments</code></td>
+<td align="left">开启文章的评论功能</td>
+<td align="left">true</td>
+</tr>
+<tr>
+<td align="left"><code>tags</code></td>
+<td align="left">标签（不适用于分页）</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>categories</code></td>
+<td align="left">分类（不适用于分页）</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>permalink</code></td>
+<td align="left">覆盖文章网址</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>keywords</code></td>
+<td align="left">仅用于 meta 标签和 Open Graph 的关键词（不推荐使用）</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<h2 id="分类和标签"><a href="#分类和标签" class="headerlink" title="分类和标签"></a>分类和标签</h2><p>只有文章支持分类和标签，您可以在 Front-matter 中设置。在其他系统中，分类和标签听起来很接近，但是在 Hexo 中两者有着明显的差别：分类具有顺序性和层次性，也就是说 <code>Foo, Bar</code> 不等于 <code>Bar, Foo</code>；而标签没有顺序和层次。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">categories:</span><br><span class="line">- Diary</span><br><span class="line">tags:</span><br><span class="line">- PS3</span><br><span class="line">- Games</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>分类方法的分歧</p>
+<p>如果您有过使用 WordPress 的经验，就很容易误解 Hexo 的分类方式。WordPress 支持对一篇文章设置多个分类，而且这些分类可以是同级的，也可以是父子分类。但是 Hexo 不支持指定多个同级分类。下面的指定方法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">categories:</span><br><span class="line">  - Diary</span><br><span class="line">  - Life</span><br></pre></td></tr></table></figure>
+
+<p>会使分类<code>Life</code>成为<code>Diary</code>的子分类，而不是并列分类。因此，有必要为您的文章选择尽可能准确的分类。</p>
+<p>如果你需要为文章添加多个分类，可以尝试以下 list 中的方法。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">categories:</span><br><span class="line">- [Diary, PlayStation]</span><br><span class="line">- [Diary, Games]</span><br><span class="line">- [Life]</span><br></pre></td></tr></table></figure>
+
+<p>此时这篇文章同时包括三个分类： <code>PlayStation</code> 和 <code>Games</code> 分别都是父分类 <code>Diary</code> 的子分类，同时 <code>Life</code> 是一个没有子分类的分类。</p>
+</blockquote>
+<h1 id="搭建要点"><a href="#搭建要点" class="headerlink" title="搭建要点"></a>搭建要点</h1><p>在 Hexo 中有两份主要的配置文件，其名称都是 <code>_config.yml</code>。 其中，一份位于站点根目录下，主要包含 Hexo 本身的配置；另一份位于主题目录下，这份配置由主题作者提供，主要用于配置主题相关的选项。</p>
+<p>为了描述方便，在以下说明中，将前者称为 <strong>站点配置文件</strong>， 后者称为 <strong>主题配置文件</strong>。</p>
+<p>其实主要就是修改这两个文件，有的会需要结合修改部分的描述安装你需要的功能插件。</p>
+<h2 id="菜单栏"><a href="#菜单栏" class="headerlink" title="菜单栏"></a>菜单栏</h2><p>设置分类和标签</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo new page categories</span><br><span class="line">hexo new page tags</span><br></pre></td></tr></table></figure>
+
+<p>分别在Front-matter中设置</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">type: &quot;categories&quot;</span><br><span class="line">type: &quot;tags&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="5款插件"><a href="#5款插件" class="headerlink" title="5款插件"></a>5款插件</h2><blockquote>
+<p> <strong>前4款在站点根目录下安装，后1款在主题根目录下安装</strong></p>
+</blockquote>
+<h3 id="生成RSS"><a href="#生成RSS" class="headerlink" title="生成RSS"></a>生成RSS</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install --save hexo-generator-feed</span><br></pre></td></tr></table></figure>
+
+<p>修改<strong>主题配置文件</strong></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">social:</span></span><br><span class="line">  <span class="attr">RSS:</span> <span class="string">/atom.xml</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-rss</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="文章pinned"><a href="#文章pinned" class="headerlink" title="文章pinned"></a>文章pinned</h3><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">npm</span> <span class="string">uninstall</span> <span class="string">hexo-generator-index</span> <span class="string">--save</span></span><br><span class="line"><span class="string">npm</span> <span class="string">install</span> <span class="string">hexo-generator-index-pin-top</span> <span class="string">--save</span></span><br></pre></td></tr></table></figure>
+
+<p>需要pinned的文章在 <strong>Front-matter</strong> 中加上 <strong>top</strong> 即可，数值越大表示等级越高，越靠前显示</p>
+<p>显示效果需要修改themes\hexo-theme-next\layout_macro\post.njk，在<code>&lt;header class=&quot;post-header&quot;&gt;</code>（我这里是第18行）下插入</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% if post.top %&#125;</span><br><span class="line">    &lt;i class&#x3D;&quot;fa fa-thumbtack&quot;&gt;&lt;&#x2F;i&gt;</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="搜索插件"><a href="#搜索插件" class="headerlink" title="搜索插件"></a>搜索插件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-searchdb --save</span><br></pre></td></tr></table></figure>
+
+<p>编辑 <strong>站点配置文件</strong>，新增以下内容到任意位置：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">search:</span><br><span class="line">  path: search.xml</span><br><span class="line">  field: post</span><br><span class="line">  format: html</span><br><span class="line">  limit: 10000</span><br></pre></td></tr></table></figure>
+
+<p>编辑 <strong>主题配置文件</strong>，启用本地搜索功能：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># Local search</span><br><span class="line">local_search:</span><br><span class="line">  enable: true</span><br></pre></td></tr></table></figure>
+
+<h3 id="部署插件"><a href="#部署插件" class="headerlink" title="部署插件"></a>部署插件</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+
+<p>编辑 <strong>站点配置文件</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># Deployment</span><br><span class="line">## Docs: https:&#x2F;&#x2F;hexo.io&#x2F;docs&#x2F;deployment.html</span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: 你的gitee或github库</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+
+<h3 id="页面加载进度条"><a href="#页面加载进度条" class="headerlink" title="页面加载进度条"></a>页面加载进度条</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;theme-next-pace source&#x2F;lib&#x2F;pace</span><br></pre></td></tr></table></figure>
+
+<p>修改<strong>主题配置文件</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pace:</span><br><span class="line"> enable: true</span><br></pre></td></tr></table></figure>
+
+<h2 id="其它的一些功能"><a href="#其它的一些功能" class="headerlink" title="其它的一些功能"></a>其它的一些功能</h2><p>大部分修改下<strong>主题配置文件</strong>就行了</p>
+<p>下面是修改的部分</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> 这个是突出页脚红心的</span><br><span class="line">   # Icon between year and copyright info.</span><br><span class="line">   icon:</span><br><span class="line">     # Icon name in Font Awesome. See: https:&#x2F;&#x2F;fontawesome.com&#x2F;icons</span><br><span class="line">-    name: fa fa-heart</span><br><span class="line">+    name: fa fa-heartbeat</span><br><span class="line">     # If you want to animate the icon, set it to true.</span><br><span class="line">-    animated: false</span><br><span class="line">+    animated: true</span><br><span class="line">     # Change the color of icon, using Hex Code.</span><br><span class="line">     color: &quot;#ff0000&quot;</span><br><span class="line"> </span><br><span class="line">这个是侧栏显示许可证</span><br><span class="line"> # CC licenses are available in 39 languages, you can find the specific and correct abbreviation you need on https:&#x2F;&#x2F;creativecommons.org</span><br><span class="line"> creative_commons:</span><br><span class="line">   license: by-nc-sa</span><br><span class="line">-  sidebar: false</span><br><span class="line">+  sidebar: true</span><br><span class="line">   post: false</span><br><span class="line">   language:</span><br><span class="line"> </span><br><span class="line">这个是主题风格修改</span><br><span class="line"> # Schemes</span><br><span class="line">-scheme: Muse</span><br><span class="line">+#scheme: Muse</span><br><span class="line"> #scheme: Mist</span><br><span class="line"> #scheme: Pisces</span><br><span class="line">-#scheme: Gemini</span><br><span class="line">+scheme: Gemini</span><br><span class="line"> </span><br><span class="line">这个是菜单栏修改</span><br><span class="line"> menu:</span><br><span class="line">-  #home: &#x2F; || fa fa-home</span><br><span class="line">+  home: &#x2F; || fa fa-home</span><br><span class="line">   #about: &#x2F;about&#x2F; || fa fa-user</span><br><span class="line">-  #tags: &#x2F;tags&#x2F; || fa fa-tags</span><br><span class="line">-  #categories: &#x2F;categories&#x2F; || fa fa-th</span><br><span class="line">-  #archives: &#x2F;archives&#x2F; || fa fa-archive</span><br><span class="line">+  tags: &#x2F;tags&#x2F; || fa fa-tags</span><br><span class="line">+  categories: &#x2F;categories&#x2F; || fa fa-th</span><br><span class="line">+  archives: &#x2F;archives&#x2F; || fa fa-archive</span><br><span class="line">   #schedule: &#x2F;schedule&#x2F; || fa fa-calendar</span><br><span class="line">   #sitemap: &#x2F;sitemap.xml || fa fa-sitemap</span><br><span class="line">   #commonweal: &#x2F;404&#x2F; || fa fa-heartbeat</span><br><span class="line"></span><br><span class="line">这个是头像设置</span><br><span class="line"> # Sidebar Avatar</span><br><span class="line"> avatar:</span><br><span class="line">   # Replace the default image and set the url here.</span><br><span class="line">-  url: #&#x2F;images&#x2F;avatar.gif</span><br><span class="line">+  url: &#x2F;images&#x2F;王也.jpg</span><br><span class="line">   # If true, the avatar will be dispalyed in circle.</span><br><span class="line">   rounded: false</span><br><span class="line">   # If true, the avatar will be rotated with the cursor.</span><br><span class="line"></span><br><span class="line">这个是代码块复制按钮设置</span><br><span class="line">   # Add copy button on codeblock</span><br><span class="line">   copy_button:</span><br><span class="line">-    enable: false</span><br><span class="line">+    enable: true</span><br><span class="line"></span><br><span class="line">这个是滚动百分比设置</span><br><span class="line">   # Scroll percent label in b2t button.</span><br><span class="line">-  scrollpercent: false</span><br><span class="line">+  scrollpercent: true</span><br><span class="line"> </span><br><span class="line"> # Reading progress bar</span><br><span class="line"> reading_progress:</span><br><span class="line">@@ -472,7 +475,7 @@</span><br><span class="line"> baidu_site_verification:</span><br><span class="line"> </span><br><span class="line"> 百度推送，搜索引擎优化</span><br><span class="line"> # Enable baidu push so that the blog will push the url to baidu automatically which is very helpful for SEO.</span><br><span class="line">-baidu_push: false</span><br><span class="line">+baidu_push: true</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">这个是评论系统，适合国内使用</span><br><span class="line"> # Valine</span><br><span class="line"> # For more information: https:&#x2F;&#x2F;valine.js.org, https:&#x2F;&#x2F;github.com&#x2F;xCss&#x2F;Valine</span><br><span class="line"> valine:</span><br><span class="line">-  enable: false</span><br><span class="line">-  appId: # Your leancloud application appid</span><br><span class="line">-  appKey: # Your leancloud application appkey</span><br><span class="line">+  enable: true</span><br><span class="line">+  appId: xxxxxx</span><br><span class="line">+  appKey: xxxxxxx</span><br><span class="line">-  placeholder: Just go go # Comment box placeholder</span><br><span class="line">+  placeholder: 无需注册，支持Markdown格式 # Comment box placeholder</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">搜索引擎优化</span><br><span class="line"> # Google Analytics</span><br><span class="line"> google_analytics:</span><br><span class="line">-  tracking_id: # &lt;app_id&gt;</span><br><span class="line">+  tracking_id: xxxxxx</span><br><span class="line"></span><br><span class="line">搜索引擎优化</span><br><span class="line"> # Baidu Analytics</span><br><span class="line">-baidu_analytics: # &lt;app_id&gt;</span><br><span class="line">+baidu_analytics: xxxxxx</span><br></pre></td></tr></table></figure>
+
+<h3 id="插入图片"><a href="#插入图片" class="headerlink" title="插入图片"></a>插入图片</h3><p>修改 <strong>站点配置文件</strong></p>
+<p>开启<strong>文章资源文件夹</strong></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">post_asset_folder:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<p>使用Hexo内置标签：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% asset_img slug [title] %&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="如何设置「阅读全文」"><a href="#如何设置「阅读全文」" class="headerlink" title="如何设置「阅读全文」"></a>如何设置「阅读全文」</h3><p>在首页显示一篇文章的部分内容，并提供一个链接跳转到全文页面是一个常见的需求。 NexT 提供2种方式来控制文章在首页的显示方式。 也就是说，在首页显示文章的摘录并显示 <strong>阅读全文</strong> 按钮，可以通过以下方法：</p>
+<ol>
+<li>在文章中使用 <code>&lt;!-- more --&gt;</code> 手动进行截断，Hexo 提供的方式 <strong>推荐</strong></li>
+<li>在文章的 <a href="https://hexo.io/docs/front-matter.html" target="_blank" rel="noopener">front-matter</a> 中添加 <code>description</code>，并提供文章摘录</li>
+</ol>
+<blockquote>
+<p>建议使用 <code>&lt;!-- more --&gt;</code>（即第一种方式），除了可以精确控制需要显示的摘录内容以外， 这种方式也可以让 Hexo 中的插件更好的识别。</p>
+</blockquote>
+<h3 id="渲染跳过"><a href="#渲染跳过" class="headerlink" title="渲染跳过"></a>渲染跳过</h3><p>比如404，README文件</p>
+<p>修改<strong>站点配置文件</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">skip_render:</span><br><span class="line">  - README.md</span><br><span class="line">  - 404.html</span><br></pre></td></tr></table></figure>
+
+<h3 id="开源协议怎么选"><a href="#开源协议怎么选" class="headerlink" title="开源协议怎么选"></a>开源协议怎么选</h3><p><a href="https://creativecommons.org/use-remix/cc-licenses/" target="_blank" rel="noopener">Creative Commons Licenses</a></p>
+<p><a href="https://choosealicense.com/" target="_blank" rel="noopener">Choose an open source license</a></p>
+<h3 id="小图标在哪找"><a href="#小图标在哪找" class="headerlink" title="小图标在哪找"></a>小图标在哪找</h3><p>font-awesome:<code>themes\hexo-theme-next\source\lib\font-awesome\css\all.min.css</code></p>
+<p><a href="https://www.iconfont.cn/home/index" target="_blank" rel="noopener">Iconfont-阿里巴巴矢量图标库</a></p>
+<h3 id="增加阿里巴巴矢量图标库"><a href="#增加阿里巴巴矢量图标库" class="headerlink" title="增加阿里巴巴矢量图标库"></a>增加阿里巴巴矢量图标库</h3><p><a href="https://blog.dlzhang.com/posts/32/" target="_blank" rel="noopener">参考地址</a></p>
+<p>站点根目录下添加source\ _data\styles.styl，把iconfont.css文件内容全拷过去即可。</p>
+<p>编辑 <strong>主题配置文件</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> custom_file_path:</span><br><span class="line">-  #style: source&#x2F;_data&#x2F;styles.styl</span><br><span class="line">+  style: source&#x2F;_data&#x2F;styles.styl</span><br><span class="line"></span><br><span class="line">这个是侧栏社交链接和图标设置</span><br><span class="line"> social:</span><br><span class="line">-  #GitHub: https:&#x2F;&#x2F;github.com&#x2F;yourname || fab fa-github</span><br><span class="line">-  #E-Mail: mailto:yourname@gmail.com || fa fa-envelope</span><br><span class="line">+  码云: https:&#x2F;&#x2F;gitee.com&#x2F;zystrivego&#x2F;blog || fab iconfont icon-Ggooglelogo</span><br><span class="line">+  邮箱: mailto:zystrivego@163.com || fa iconfont icon-youxiang</span><br><span class="line">+  音乐: http:&#x2F;&#x2F;music.163.com&#x2F;m&#x2F;user&#x2F;home?id&#x3D;15370305 || fa iconfont icon-netease-cloud-music-line</span><br></pre></td></tr></table></figure>
+
+<h3 id="评论邮件通知"><a href="#评论邮件通知" class="headerlink" title="评论邮件通知"></a>评论邮件通知</h3><p>参考地址：<a href="https://github.com/zhaojun1998/Valine-Admin" target="_blank" rel="noopener">Valine-Admin</a></p>
+<h1 id="官方文档摘录"><a href="#官方文档摘录" class="headerlink" title="官方文档摘录"></a>官方文档摘录</h1><h2 id="不要处理我的文章"><a href="#不要处理我的文章" class="headerlink" title="不要处理我的文章"></a>不要处理我的文章</h2><p>如果你不想你的文章被处理，你可以将 Front-Matter 中的<code>layout:</code> 设为 <code>false</code> 。</p>
+<h2 id="草稿"><a href="#草稿" class="headerlink" title="草稿"></a>草稿</h2><p>刚刚提到了 Hexo 的一种特殊布局：<code>draft</code>，这种布局在建立时会被保存到 <code>source/_drafts</code> 文件夹，您可通过 <code>publish</code> 命令将草稿移动到 <code>source/_posts</code> 文件夹，该命令的使用方式与 <code>new</code> 十分类似，您也可在命令中指定 <code>layout</code> 来指定布局。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo publish [layout] &lt;title&gt;</span><br></pre></td></tr></table></figure>
+
+<p>草稿默认不会显示在页面中，您可在执行时加上 <code>--draft</code> 参数，或是把 <code>render_drafts</code> 参数设为 <code>true</code> 来预览草稿。</p>
+<h2 id="资源文件夹"><a href="#资源文件夹" class="headerlink" title="资源文件夹"></a>资源文件夹</h2><p>资源（Asset）代表 <code>source</code> 文件夹中除了文章以外的所有文件，例如图片、CSS、JS 文件等。比方说，如果你的Hexo项目中只有少量图片，那最简单的方法就是将它们放在 <code>source/images</code> 文件夹中。然后通过类似于 <code>![](/images/image.jpg)</code> 的方法访问它们。</p>
+<h3 id="文章资源文件夹"><a href="#文章资源文件夹" class="headerlink" title="文章资源文件夹"></a>文章资源文件夹</h3><p>对于那些想要更有规律地提供图片和其他资源以及想要将他们的资源分布在各个文章上的人来说，Hexo也提供了更组织化的方式来管理资源。这个稍微有些复杂但是管理资源非常方便的功能可以通过将 <code>config.yml</code> 文件中的 <code>post_asset_folder</code> 选项设为 <code>true</code> 来打开。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">_config.ymlpost_asset_folder: true</span><br></pre></td></tr></table></figure>
+
+<p>当资源文件管理功能打开后，Hexo将会在你每一次通过 <code>hexo new [layout]</code> 命令创建新文章时自动创建一个文件夹。这个资源文件夹将会有与这个文章文件一样的名字。将所有与你的文章有关的资源放在这个关联文件夹中之后，你可以通过相对路径来引用它们，这样你就得到了一个更简单而且方便得多的工作流。</p>
+<h3 id="相对路径引用的标签插件"><a href="#相对路径引用的标签插件" class="headerlink" title="相对路径引用的标签插件"></a>相对路径引用的标签插件</h3><p>通过常规的 markdown 语法和相对路径来引用图片和其它资源可能会导致它们在存档页或者主页上显示不正确。在Hexo 2时代，社区创建了很多插件来解决这个问题。但是，随着Hexo 3 的发布，许多新的标签插件被加入到了核心代码中。这使得你可以更简单地在文章中引用你的资源。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% asset_path slug %&#125;</span><br><span class="line">&#123;% asset_img slug [title] %&#125;</span><br><span class="line">&#123;% asset_link slug [title] %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>比如说：当你打开文章资源文件夹功能后，你把一个 <code>example.jpg</code> 图片放在了你的资源文件夹中，如果通过使用相对路径的常规 markdown 语法 <code>![](/example.jpg)</code> ，它将 <em>不会</em> 出现在首页上。（但是它会在文章中按你期待的方式工作）</p>
+<p>正确的引用图片方式是使用下列的标签插件而不是 markdown ：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% asset_img example.jpg [This is an example image] %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过这种方式，图片将会同时出现在文章和主页以及归档页中。</p>
+<h2 id="指令"><a href="#指令" class="headerlink" title="指令"></a>指令</h2><h3 id="init"><a href="#init" class="headerlink" title="init"></a>init</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo init [folder]</span><br></pre></td></tr></table></figure>
+
+<p>新建一个网站。如果没有设置 <code>folder</code> ，Hexo 默认在目前的文件夹建立网站。</p>
+<h3 id="new"><a href="#new" class="headerlink" title="new"></a>new</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo new [layout] &lt;title&gt;</span><br></pre></td></tr></table></figure>
+
+<p>新建一篇文章。如果没有设置 <code>layout</code> 的话，默认使用 <a href="https://hexo.io/zh-cn/docs/configuration" target="_blank" rel="noopener">_config.yml</a> 中的 <code>default_layout</code> 参数代替。如果标题包含空格的话，请使用引号括起来。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo new &quot;post title with whitespace&quot;</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="left">参数</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>-p</code>, <code>--path</code></td>
+<td align="left">自定义新文章的路径</td>
+</tr>
+<tr>
+<td align="left"><code>-r</code>, <code>--replace</code></td>
+<td align="left">如果存在同名文章，将其替换</td>
+</tr>
+<tr>
+<td align="left"><code>-s</code>, <code>--slug</code></td>
+<td align="left">文章的 Slug，作为新文章的文件名和发布后的 URL</td>
+</tr>
+</tbody></table>
+<p>默认情况下，Hexo 会使用文章的标题来决定文章文件的路径。对于独立页面来说，Hexo 会创建一个以标题为名字的目录，并在目录中放置一个 <code>index.md</code> 文件。你可以使用 <code>--path</code> 参数来覆盖上述行为、自行决定文件的目录：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo new page --path about&#x2F;me &quot;About me&quot;</span><br></pre></td></tr></table></figure>
+
+<p>以上命令会创建一个 <code>source/about/me.md</code> 文件，同时 Front Matter 中的 title 为 <code>&quot;About me&quot;</code></p>
+<p>注意！title 是必须指定的！如果你这么做并不能达到你的目的：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo new page --path about&#x2F;me</span><br></pre></td></tr></table></figure>
+
+<p>此时 Hexo 会创建 <code>source/_posts/about/me.md</code>，同时 <code>me.md</code> 的 Front Matter 中的 title 为 <code>&quot;page&quot;</code>。这是因为在上述命令中，hexo-cli 将 <code>page</code> 视为指定文章的标题、并采用默认的 <code>layout</code>。</p>
+<h3 id="generate"><a href="#generate" class="headerlink" title="generate"></a>generate</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>生成静态文件。</p>
+<table>
+<thead>
+<tr>
+<th align="left">选项</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>-d</code>, <code>--deploy</code></td>
+<td align="left">文件生成后立即部署网站</td>
+</tr>
+<tr>
+<td align="left"><code>-w</code>, <code>--watch</code></td>
+<td align="left">监视文件变动</td>
+</tr>
+<tr>
+<td align="left"><code>-b</code>, <code>--bail</code></td>
+<td align="left">生成过程中如果发生任何未处理的异常则抛出异常</td>
+</tr>
+<tr>
+<td align="left"><code>-f</code>, <code>--force</code></td>
+<td align="left">强制重新生成文件 Hexo 引入了差分机制，如果 <code>public</code> 目录存在，那么 <code>hexo g</code> 只会重新生成改动的文件。 使用该参数的效果接近 <code>hexo clean &amp;&amp; hexo generate</code></td>
+</tr>
+<tr>
+<td align="left"><code>-c</code>, <code>--concurrency</code></td>
+<td align="left">最大同时生成文件的数量，默认无限制</td>
+</tr>
+</tbody></table>
+<p>该命令可以简写为</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo g</span><br></pre></td></tr></table></figure>
+
+<h3 id="publish"><a href="#publish" class="headerlink" title="publish"></a>publish</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo publish [layout] &lt;filename&gt;</span><br></pre></td></tr></table></figure>
+
+<p>发表草稿。</p>
+<h3 id="server"><a href="#server" class="headerlink" title="server"></a>server</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>启动服务器。默认情况下，访问网址为： <code>http://localhost:4000/</code>。</p>
+<table>
+<thead>
+<tr>
+<th align="left">选项</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>-p</code>, <code>--port</code></td>
+<td align="left">重设端口</td>
+</tr>
+<tr>
+<td align="left"><code>-s</code>, <code>--static</code></td>
+<td align="left">只使用静态文件</td>
+</tr>
+<tr>
+<td align="left"><code>-l</code>, <code>--log</code></td>
+<td align="left">启动日记记录，使用覆盖记录格式</td>
+</tr>
+</tbody></table>
+<h3 id="deploy"><a href="#deploy" class="headerlink" title="deploy"></a>deploy</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>部署网站。</p>
+<table>
+<thead>
+<tr>
+<th align="left">参数</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>-g</code>, <code>--generate</code></td>
+<td align="left">部署之前预先生成静态文件</td>
+</tr>
+</tbody></table>
+<p>该命令可以简写为：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo d</span><br></pre></td></tr></table></figure>
+
+<h3 id="render"><a href="#render" class="headerlink" title="render"></a>render</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo render &lt;file1&gt; [file2] ...</span><br></pre></td></tr></table></figure>
+
+<p>渲染文件。</p>
+<table>
+<thead>
+<tr>
+<th align="left">参数</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>-o</code>, <code>--output</code></td>
+<td align="left">设置输出路径</td>
+</tr>
+</tbody></table>
+<h3 id="migrate"><a href="#migrate" class="headerlink" title="migrate"></a>migrate</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo migrate &lt;type&gt;</span><br></pre></td></tr></table></figure>
+
+<p>从其他博客系统 <a href="https://hexo.io/zh-cn/docs/migration" target="_blank" rel="noopener">迁移内容</a>。</p>
+<p>###clean</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo clean</span><br></pre></td></tr></table></figure>
+
+<p>清除缓存文件 (<code>db.json</code>) 和已生成的静态文件 (<code>public</code>)。</p>
+<p>在某些情况（尤其是更换主题后），如果发现您对站点的更改无论如何也不生效，您可能需要运行该命令。</p>
+<h3 id="list"><a href="#list" class="headerlink" title="list"></a>list</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo list &lt;type&gt;</span><br></pre></td></tr></table></figure>
+
+<p>列出网站资料。</p>
+<h3 id="version"><a href="#version" class="headerlink" title="version"></a>version</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo version</span><br></pre></td></tr></table></figure>
+
+<p>显示 Hexo 版本。</p>
+<h3 id="选项"><a href="#选项" class="headerlink" title="选项"></a>选项</h3><h4 id="安全模式"><a href="#安全模式" class="headerlink" title="安全模式"></a>安全模式</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo --safe</span><br></pre></td></tr></table></figure>
+
+<p>在安全模式下，不会载入插件和脚本。当您在安装新插件遭遇问题时，可以尝试以安全模式重新执行。</p>
+<h4 id="调试模式"><a href="#调试模式" class="headerlink" title="调试模式"></a>调试模式</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo --debug</span><br></pre></td></tr></table></figure>
+
+<p>在终端中显示调试信息并记录到 <code>debug.log</code>。当您碰到问题时，可以尝试用调试模式重新执行一次，并 <a href="https://github.com/hexojs/hexo/issues/new" target="_blank" rel="noopener">提交调试信息到 GitHub</a>。</p>
+<h4 id="简洁模式"><a href="#简洁模式" class="headerlink" title="简洁模式"></a>简洁模式</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo --silent</span><br></pre></td></tr></table></figure>
+
+<p>隐藏终端信息。</p>
+<h4 id="自定义配置文件的路径"><a href="#自定义配置文件的路径" class="headerlink" title="自定义配置文件的路径"></a>自定义配置文件的路径</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 使用 custom.yml 代替默认的 _config.yml</span><br><span class="line">$ hexo server --config custom.yml</span><br><span class="line"></span><br><span class="line"># 使用 custom.yml 和 custom2.json，其中 custom2.json 优先级更高</span><br><span class="line">$ hexo generate --config custom.yml,custom2.json,custom3.yml</span><br></pre></td></tr></table></figure>
+
+<p>自定义配置文件的路径，指定这个参数后将不再使用默认的 <code>_config.yml</code>。<br>你可以使用一个 YAML 或 JSON 文件的路径，也可以使用逗号分隔（无空格）的多个 YAML 或 JSON 文件的路径。例如：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 使用 custom.yml 代替默认的 _config.yml</span><br><span class="line">$ hexo server --config custom.yml</span><br><span class="line"></span><br><span class="line"># 使用 custom.yml, custom2.json 和 custom3.yml，其中 custom3.yml 优先级最高，其次是 custom2.json</span><br><span class="line">$ hexo generate --config custom.yml,custom2.json,custom3.yml</span><br></pre></td></tr></table></figure>
+
+<p>当你指定了多个配置文件以后，Hexo 会按顺序将这部分配置文件合并成一个 <code>_multiconfig.yml</code>。如果遇到重复的配置，排在后面的文件的配置会覆盖排在前面的文件的配置。这个原则适用于任意数量、任意深度的 YAML 和 JSON 文件。</p>
+<h4 id="显示草稿"><a href="#显示草稿" class="headerlink" title="显示草稿"></a>显示草稿</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo --draft</span><br></pre></td></tr></table></figure>
+
+<p>显示 <code>source/_drafts</code> 文件夹中的草稿文章。</p>
+<h4 id="自定义-CWD"><a href="#自定义-CWD" class="headerlink" title="自定义 CWD"></a>自定义 CWD</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo --cwd &#x2F;path&#x2F;to&#x2F;cwd</span><br></pre></td></tr></table></figure>
+
+<p>自定义当前工作目录（Current working directory）的路径。</p>
+]]></content>
+      <categories>
+        <category>misc</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>NexT</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>快捷方式</title>
     <url>/2020/06/02/%E5%BF%AB%E6%8D%B7%E6%96%B9%E5%BC%8F/</url>
     <content><![CDATA[<h1 id="其他键盘快捷方式"><a href="#其他键盘快捷方式" class="headerlink" title="其他键盘快捷方式"></a>其他键盘快捷方式</h1><ul>
@@ -1160,6 +1522,40 @@
       </tags>
   </entry>
   <entry>
+    <title>Git</title>
+    <url>/2020/09/08/Git/</url>
+    <content><![CDATA[<p>最近项目用到了代码审查工具Gerrit，push代码时报错（prohibited by Gerrit），只是以前push对应的远端格式是refs/……，现在应该改为refs/for/……，可以idea 安装gerrit插件方便使用。</p>
+<a id="more"></a>
+
+<h1 id="Gerrit"><a href="#Gerrit" class="headerlink" title="Gerrit"></a>Gerrit</h1><p>Gerrit 是一个基于 Git 版本控制的基于 Web 的代码审查工具 。笔者在学习它的过程中发现，要使用好它，第一步就是要理解 Change-Id</p>
+<h2 id="理解-Change-Id"><a href="#理解-Change-Id" class="headerlink" title="理解 Change-Id"></a>理解 Change-Id</h2><p>要理解 Gerrit 的 Change-Id，我们就必须对“一次代码审查任务”有一个定义。通常，我们认为对一次完整的功能实现或 Bug 修复（即一次完整的变更）进行代码审查是合理的。而对一个半成品进行代码审查，得到的结论是不可靠的。因此，一次代码审查任务意味着是对一次变更进行审查。</p>
+<p>Gerrit 使用 Change-Id 来标识一次变更。Change-Id 实际上就是一串字符串，类似这样：<code>Ic8aaa0728a43936cd4c6e1ed590e01ba8f0fbf5b</code></p>
+<p>但是，一次变更通常会伴随多次 Git 提交（Commit），而且每次提交的提交是不同的 Commit Id（提交Id）。Gerrit 如何将多次提交关联到同一个 Change-Id 呢？</p>
+<p>我们需要在每次提交时，将 Change-Id 以规定的格式放在提交消息（Commit message）的Footer 部分中（最后一行）</p>
+<p>Change-Id 为避免与提交 Id 冲突，通常以大写字母<code>I</code>为前缀</p>
+<h2 id="生成-Change-Id"><a href="#生成-Change-Id" class="headerlink" title="生成 Change-Id"></a>生成 Change-Id</h2><p>Change-Id 最好是自动生成，并放到提交消息指定位置，这样才能节约开发者的时间。Gerrit 提供了标准的“commit-msg”钩子来实现。</p>
+<p>Git 提供了4个提交工作流钩子：pre-commit、prepare-commit-msg、commit-msg、post-commit。其中 commit-msg 钩子，会在我们执行 <code>git commit</code> 时被执行。</p>
+<p>本质上，commit-msg 钩子是一段脚本程序，放在 .git/hooks 目录下。commit-msg 脚本可以使用 Shell、Ruby、Python 等语言实现。</p>
+<p>Gerrit 的 commit-msg 钩子直接从 Gerrit 下载：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">## 在项目目录下</span><br><span class="line">curl -Lo .git&#x2F;hooks&#x2F;commit-msg http:&#x2F;&#x2F;&lt;gerrit服务地址&gt;&#x2F;tools&#x2F;hooks&#x2F;commit-msg</span><br><span class="line">chmod u+x .git&#x2F;hooks&#x2F;commit-msg</span><br></pre></td></tr></table></figure>
+
+<p>接下来，在我们执行 <code>git commit</code> 后，再执行 git log 就可以看到 Change-Id 了。</p>
+<p>请注意，第一次 clone 代码到本地时，需要重新安装一次 commit-msg 钩子。因为它并不会被提交到版本库中。</p>
+<p>GitLab 也有类似的 Change-Id</p>
+<p>在 GitLab 中，每个 Issue 都会有一个 Id。它是如何将 Issue Id 与 Commit Id 关联起来的呢？GitLab 的解决方案与 Gerrit 一样。只不过，GitLab 是在提交消息的第一行开始加入 Issue Id，格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;project name&gt;#&lt;Issue Id&gt;: &lt;commit msg&gt;</span><br></pre></td></tr></table></figure>
+
+<h1 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h1><h2 id="合并多次提交"><a href="#合并多次提交" class="headerlink" title="合并多次提交"></a>合并多次提交</h2><p>idea里直接选中某一个提交记录执行interactivity rebase from here</p>
+<p>action是关键，squash操作是合并</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">时间线：</span><br><span class="line">Log 框时间线：是从上到下，越来越早。</span><br><span class="line">弹出框时间线：是从上到下，越来越晚。</span><br><span class="line"></span><br><span class="line">Rebasing Commits框中Action的含义如下：</span><br><span class="line">选择pick操作，git会应用这个补丁，以同样的提交信息（commit message）保存提交</span><br><span class="line">选择reword操作，git会应用这个补丁，但需要重新编辑提交信息</span><br><span class="line">选择edit操作，git会应用这个补丁，但会因为amending而终止</span><br><span class="line">选择squash操作，git会应用这个补丁，但会与之前的提交合并</span><br><span class="line">选择fixup操作，git会应用这个补丁，但会丢掉提交日志</span><br><span class="line">选择exec操作，git会在shell中运行这个命令</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>工具</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SaaS vs PaaS vs IaaS: What’s The Difference and How To Choose</title>
     <url>/2020/05/27/SaaS-vs-PaaS-vs-IaaS-What%E2%80%99s-The-Difference-and-How-To-Choose/</url>
     <content><![CDATA[<p>从小型企业到全球化企业，云计算都是一个热门话题，但它仍然是一个涵盖了许多在线领域的宽泛概念。 当您开始考虑将您的业务转移到云计算时，无论是为了应用程序还是基础设施部署，理解各种云服务的区别和优势比以往任何时候都更为重要。</p>
@@ -1690,374 +2086,20 @@
 </ol>
 <h2 id="公共代理库（镜像）"><a href="#公共代理库（镜像）" class="headerlink" title="公共代理库（镜像）"></a>公共代理库（镜像）</h2><h3 id="阿里云"><a href="#阿里云" class="headerlink" title="阿里云"></a><a href="https://help.aliyun.com/document_detail/102512.html" target="_blank" rel="noopener">阿里云</a></h3><h2 id="maven手动安装jar包"><a href="#maven手动安装jar包" class="headerlink" title="maven手动安装jar包"></a>maven手动安装jar包</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mvn install:install-file -DgroupId= -DartifactId= -Dversion= -Dpackaging=jar -Dfile=</span><br></pre></td></tr></table></figure>
 
+<h1 id="插件"><a href="#插件" class="headerlink" title="插件"></a>插件</h1><h2 id="assembly"><a href="#assembly" class="headerlink" title="assembly"></a><a href="http://maven.apache.org/plugins/maven-assembly-plugin/usage.html" target="_blank" rel="noopener">assembly</a></h2><p>自定义打包的范围，常见于一个运行主模块带其它依赖模块一起打包，方便部署</p>
+<h3 id="基本配置："><a href="#基本配置：" class="headerlink" title="基本配置："></a>基本配置：</h3><p>其中descriptorRef是关键，可自行配置，它决定了如何装配你的程序集</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;project&gt;</span><br><span class="line">  [...]</span><br><span class="line">  &lt;build&gt;</span><br><span class="line">    [...]</span><br><span class="line">    &lt;plugins&gt;</span><br><span class="line">      &lt;plugin&gt;</span><br><span class="line">        &lt;artifactId&gt;maven-assembly-plugin&lt;&#x2F;artifactId&gt;</span><br><span class="line">        &lt;version&gt;3.3.0&lt;&#x2F;version&gt;</span><br><span class="line">        &lt;configuration&gt;</span><br><span class="line">          &lt;descriptorRefs&gt;</span><br><span class="line">            &lt;descriptorRef&gt;jar-with-dependencies&lt;&#x2F;descriptorRef&gt;</span><br><span class="line">          &lt;&#x2F;descriptorRefs&gt;</span><br><span class="line">        &lt;&#x2F;configuration&gt;</span><br><span class="line">        &lt;executions&gt;</span><br><span class="line">          &lt;execution&gt;</span><br><span class="line">            &lt;id&gt;make-assembly&lt;&#x2F;id&gt; &lt;!-- this is used for inheritance merges --&gt;</span><br><span class="line">            &lt;phase&gt;package&lt;&#x2F;phase&gt; &lt;!-- bind to the packaging phase --&gt;</span><br><span class="line">            &lt;goals&gt;</span><br><span class="line">              &lt;goal&gt;single&lt;&#x2F;goal&gt;</span><br><span class="line">            &lt;&#x2F;goals&gt;</span><br><span class="line">          &lt;&#x2F;execution&gt;</span><br><span class="line">        &lt;&#x2F;executions&gt;</span><br><span class="line">      &lt;&#x2F;plugin&gt;</span><br><span class="line">      [...]</span><br><span class="line">&lt;&#x2F;project&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Creating-an-Executable-JAR"><a href="#Creating-an-Executable-JAR" class="headerlink" title="Creating an Executable JAR"></a>Creating an Executable JAR</h3><p>会生成入口文件：META-INF/MANIFEST.MF；</p>
+<p>仅仅jar和war支持archive元素；</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;project&gt;</span><br><span class="line">  [...]</span><br><span class="line">  &lt;build&gt;</span><br><span class="line">    [...]</span><br><span class="line">    &lt;plugins&gt;</span><br><span class="line">      &lt;plugin&gt;</span><br><span class="line">        &lt;artifactId&gt;maven-assembly-plugin&lt;&#x2F;artifactId&gt;</span><br><span class="line">        &lt;version&gt;3.3.0&lt;&#x2F;version&gt;</span><br><span class="line">        &lt;configuration&gt;</span><br><span class="line">          [...]</span><br><span class="line">          &lt;archive&gt;</span><br><span class="line">            &lt;manifest&gt;</span><br><span class="line">              &lt;mainClass&gt;org.sample.App&lt;&#x2F;mainClass&gt;</span><br><span class="line">            &lt;&#x2F;manifest&gt;</span><br><span class="line">          &lt;&#x2F;archive&gt;</span><br><span class="line">        &lt;&#x2F;configuration&gt;</span><br><span class="line">        [...]</span><br><span class="line">      &lt;&#x2F;plugin&gt;</span><br><span class="line">      [...]</span><br><span class="line">&lt;&#x2F;project&gt;</span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
         <category>工具</category>
       </categories>
       <tags>
         <tag>maven</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>基于Hexo和NexT的博客搭建</title>
-    <url>/2020/05/13/%E5%9F%BA%E4%BA%8EHexo%E5%92%8CNexT%E7%9A%84%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</url>
-    <content><![CDATA[<blockquote class="blockquote-center">
-            <i class="fa fa-quote-left"></i>
-            <p>主要记录一些要注意的点，因为网上教程版本众多，所以尽量以最新的官方文档为准。</p>
-
-            <i class="fa fa-quote-right"></i>
-          </blockquote>
-
-<a id="more"></a>
-
-<h1 id="官方文档地址"><a href="#官方文档地址" class="headerlink" title="官方文档地址"></a>官方文档地址</h1><p><a href="https://hexo.io/zh-cn/" target="_blank" rel="noopener">Hexo官网</a></p>
-<p><a href="http://theme-next.iissnan.com/getting-started.html" target="_blank" rel="noopener">NexT中文文档</a></p>
-<p><a href="https://theme-next.js.org/docs/" target="_blank" rel="noopener">NexT英文文档</a></p>
-<h1 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h1><ul>
-<li><p>Node.js <a href="https://nodejs.org/en/" target="_blank" rel="noopener">v12.16.3</a></p>
-</li>
-<li><p>hexo: <a href="https://github.com/hexojs/hexo/tree/4.2.1" target="_blank" rel="noopener">4.2.1</a></p>
-</li>
-<li><p>NexT: <a href="https://github.com/next-theme/hexo-theme-next/releases/tag/v8.0.0-rc.2" target="_blank" rel="noopener">v8.0.0-rc.2</a></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2014-2017	https:&#x2F;&#x2F;github.com&#x2F;iissnan&#x2F;hexo-theme-next</span><br><span class="line">2018-2019	https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;hexo-theme-next</span><br><span class="line">2020	    https:&#x2F;&#x2F;github.com&#x2F;next-theme&#x2F;hexo-theme-next</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h1 id="Front-matter"><a href="#Front-matter" class="headerlink" title="Front-matter"></a>Front-matter</h1><p>Front-matter 是文件最上方以 <code>---</code> 分隔的区域，用于指定个别文件的变量，举例来说：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">title: Hello World</span><br><span class="line">date: 2013&#x2F;7&#x2F;13 20:46:25</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
-
-<p>以下是预先定义的参数，您可在模板中使用这些参数值并加以利用。</p>
-<table>
-<thead>
-<tr>
-<th align="left">参数</th>
-<th align="left">描述</th>
-<th align="left">默认值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><code>layout</code></td>
-<td align="left">布局</td>
-<td align="left"></td>
-</tr>
-<tr>
-<td align="left"><code>title</code></td>
-<td align="left">标题</td>
-<td align="left">文章的文件名</td>
-</tr>
-<tr>
-<td align="left"><code>date</code></td>
-<td align="left">建立日期</td>
-<td align="left">文件建立日期</td>
-</tr>
-<tr>
-<td align="left"><code>updated</code></td>
-<td align="left">更新日期</td>
-<td align="left">文件更新日期</td>
-</tr>
-<tr>
-<td align="left"><code>comments</code></td>
-<td align="left">开启文章的评论功能</td>
-<td align="left">true</td>
-</tr>
-<tr>
-<td align="left"><code>tags</code></td>
-<td align="left">标签（不适用于分页）</td>
-<td align="left"></td>
-</tr>
-<tr>
-<td align="left"><code>categories</code></td>
-<td align="left">分类（不适用于分页）</td>
-<td align="left"></td>
-</tr>
-<tr>
-<td align="left"><code>permalink</code></td>
-<td align="left">覆盖文章网址</td>
-<td align="left"></td>
-</tr>
-<tr>
-<td align="left"><code>keywords</code></td>
-<td align="left">仅用于 meta 标签和 Open Graph 的关键词（不推荐使用）</td>
-<td align="left"></td>
-</tr>
-</tbody></table>
-<h2 id="分类和标签"><a href="#分类和标签" class="headerlink" title="分类和标签"></a>分类和标签</h2><p>只有文章支持分类和标签，您可以在 Front-matter 中设置。在其他系统中，分类和标签听起来很接近，但是在 Hexo 中两者有着明显的差别：分类具有顺序性和层次性，也就是说 <code>Foo, Bar</code> 不等于 <code>Bar, Foo</code>；而标签没有顺序和层次。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">categories:</span><br><span class="line">- Diary</span><br><span class="line">tags:</span><br><span class="line">- PS3</span><br><span class="line">- Games</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>分类方法的分歧</p>
-<p>如果您有过使用 WordPress 的经验，就很容易误解 Hexo 的分类方式。WordPress 支持对一篇文章设置多个分类，而且这些分类可以是同级的，也可以是父子分类。但是 Hexo 不支持指定多个同级分类。下面的指定方法：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">categories:</span><br><span class="line">  - Diary</span><br><span class="line">  - Life</span><br></pre></td></tr></table></figure>
-
-<p>会使分类<code>Life</code>成为<code>Diary</code>的子分类，而不是并列分类。因此，有必要为您的文章选择尽可能准确的分类。</p>
-<p>如果你需要为文章添加多个分类，可以尝试以下 list 中的方法。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">categories:</span><br><span class="line">- [Diary, PlayStation]</span><br><span class="line">- [Diary, Games]</span><br><span class="line">- [Life]</span><br></pre></td></tr></table></figure>
-
-<p>此时这篇文章同时包括三个分类： <code>PlayStation</code> 和 <code>Games</code> 分别都是父分类 <code>Diary</code> 的子分类，同时 <code>Life</code> 是一个没有子分类的分类。</p>
-</blockquote>
-<h1 id="搭建要点"><a href="#搭建要点" class="headerlink" title="搭建要点"></a>搭建要点</h1><p>在 Hexo 中有两份主要的配置文件，其名称都是 <code>_config.yml</code>。 其中，一份位于站点根目录下，主要包含 Hexo 本身的配置；另一份位于主题目录下，这份配置由主题作者提供，主要用于配置主题相关的选项。</p>
-<p>为了描述方便，在以下说明中，将前者称为 <strong>站点配置文件</strong>， 后者称为 <strong>主题配置文件</strong>。</p>
-<p>其实主要就是修改这两个文件，有的会需要结合修改部分的描述安装你需要的功能插件。</p>
-<h2 id="菜单栏"><a href="#菜单栏" class="headerlink" title="菜单栏"></a>菜单栏</h2><p>设置分类和标签</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo new page categories</span><br><span class="line">hexo new page tags</span><br></pre></td></tr></table></figure>
-
-<p>分别在Front-matter中设置</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">type: &quot;categories&quot;</span><br><span class="line">type: &quot;tags&quot;</span><br></pre></td></tr></table></figure>
-
-<h2 id="5款插件"><a href="#5款插件" class="headerlink" title="5款插件"></a>5款插件</h2><blockquote>
-<p> <strong>前4款在站点根目录下安装，后1款在主题根目录下安装</strong></p>
-</blockquote>
-<h3 id="生成RSS"><a href="#生成RSS" class="headerlink" title="生成RSS"></a>生成RSS</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install --save hexo-generator-feed</span><br></pre></td></tr></table></figure>
-
-<p>修改<strong>主题配置文件</strong></p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">social:</span></span><br><span class="line">  <span class="attr">RSS:</span> <span class="string">/atom.xml</span> <span class="string">||</span> <span class="string">fa</span> <span class="string">fa-rss</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="文章pinned"><a href="#文章pinned" class="headerlink" title="文章pinned"></a>文章pinned</h3><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">npm</span> <span class="string">uninstall</span> <span class="string">hexo-generator-index</span> <span class="string">--save</span></span><br><span class="line"><span class="string">npm</span> <span class="string">install</span> <span class="string">hexo-generator-index-pin-top</span> <span class="string">--save</span></span><br></pre></td></tr></table></figure>
-
-<p>需要pinned的文章在 <strong>Front-matter</strong> 中加上 <strong>top</strong> 即可，数值越大表示等级越高，越靠前显示</p>
-<p>显示效果需要修改themes\hexo-theme-next\layout_macro\post.njk，在<code>&lt;header class=&quot;post-header&quot;&gt;</code>（我这里是第18行）下插入</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% if post.top %&#125;</span><br><span class="line">    &lt;i class&#x3D;&quot;fa fa-thumbtack&quot;&gt;&lt;&#x2F;i&gt;</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="搜索插件"><a href="#搜索插件" class="headerlink" title="搜索插件"></a>搜索插件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install hexo-generator-searchdb --save</span><br></pre></td></tr></table></figure>
-
-<p>编辑 <strong>站点配置文件</strong>，新增以下内容到任意位置：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">search:</span><br><span class="line">  path: search.xml</span><br><span class="line">  field: post</span><br><span class="line">  format: html</span><br><span class="line">  limit: 10000</span><br></pre></td></tr></table></figure>
-
-<p>编辑 <strong>主题配置文件</strong>，启用本地搜索功能：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># Local search</span><br><span class="line">local_search:</span><br><span class="line">  enable: true</span><br></pre></td></tr></table></figure>
-
-<h3 id="部署插件"><a href="#部署插件" class="headerlink" title="部署插件"></a>部署插件</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
-
-<p>编辑 <strong>站点配置文件</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># Deployment</span><br><span class="line">## Docs: https:&#x2F;&#x2F;hexo.io&#x2F;docs&#x2F;deployment.html</span><br><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: 你的gitee或github库</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
-
-<h3 id="页面加载进度条"><a href="#页面加载进度条" class="headerlink" title="页面加载进度条"></a>页面加载进度条</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;theme-next&#x2F;theme-next-pace source&#x2F;lib&#x2F;pace</span><br></pre></td></tr></table></figure>
-
-<p>修改<strong>主题配置文件</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pace:</span><br><span class="line"> enable: true</span><br></pre></td></tr></table></figure>
-
-<h2 id="其它的一些功能"><a href="#其它的一些功能" class="headerlink" title="其它的一些功能"></a>其它的一些功能</h2><p>大部分修改下<strong>主题配置文件</strong>就行了</p>
-<p>下面是修改的部分</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> 这个是突出页脚红心的</span><br><span class="line">   # Icon between year and copyright info.</span><br><span class="line">   icon:</span><br><span class="line">     # Icon name in Font Awesome. See: https:&#x2F;&#x2F;fontawesome.com&#x2F;icons</span><br><span class="line">-    name: fa fa-heart</span><br><span class="line">+    name: fa fa-heartbeat</span><br><span class="line">     # If you want to animate the icon, set it to true.</span><br><span class="line">-    animated: false</span><br><span class="line">+    animated: true</span><br><span class="line">     # Change the color of icon, using Hex Code.</span><br><span class="line">     color: &quot;#ff0000&quot;</span><br><span class="line"> </span><br><span class="line">这个是侧栏显示许可证</span><br><span class="line"> # CC licenses are available in 39 languages, you can find the specific and correct abbreviation you need on https:&#x2F;&#x2F;creativecommons.org</span><br><span class="line"> creative_commons:</span><br><span class="line">   license: by-nc-sa</span><br><span class="line">-  sidebar: false</span><br><span class="line">+  sidebar: true</span><br><span class="line">   post: false</span><br><span class="line">   language:</span><br><span class="line"> </span><br><span class="line">这个是主题风格修改</span><br><span class="line"> # Schemes</span><br><span class="line">-scheme: Muse</span><br><span class="line">+#scheme: Muse</span><br><span class="line"> #scheme: Mist</span><br><span class="line"> #scheme: Pisces</span><br><span class="line">-#scheme: Gemini</span><br><span class="line">+scheme: Gemini</span><br><span class="line"> </span><br><span class="line">这个是菜单栏修改</span><br><span class="line"> menu:</span><br><span class="line">-  #home: &#x2F; || fa fa-home</span><br><span class="line">+  home: &#x2F; || fa fa-home</span><br><span class="line">   #about: &#x2F;about&#x2F; || fa fa-user</span><br><span class="line">-  #tags: &#x2F;tags&#x2F; || fa fa-tags</span><br><span class="line">-  #categories: &#x2F;categories&#x2F; || fa fa-th</span><br><span class="line">-  #archives: &#x2F;archives&#x2F; || fa fa-archive</span><br><span class="line">+  tags: &#x2F;tags&#x2F; || fa fa-tags</span><br><span class="line">+  categories: &#x2F;categories&#x2F; || fa fa-th</span><br><span class="line">+  archives: &#x2F;archives&#x2F; || fa fa-archive</span><br><span class="line">   #schedule: &#x2F;schedule&#x2F; || fa fa-calendar</span><br><span class="line">   #sitemap: &#x2F;sitemap.xml || fa fa-sitemap</span><br><span class="line">   #commonweal: &#x2F;404&#x2F; || fa fa-heartbeat</span><br><span class="line"></span><br><span class="line">这个是头像设置</span><br><span class="line"> # Sidebar Avatar</span><br><span class="line"> avatar:</span><br><span class="line">   # Replace the default image and set the url here.</span><br><span class="line">-  url: #&#x2F;images&#x2F;avatar.gif</span><br><span class="line">+  url: &#x2F;images&#x2F;王也.jpg</span><br><span class="line">   # If true, the avatar will be dispalyed in circle.</span><br><span class="line">   rounded: false</span><br><span class="line">   # If true, the avatar will be rotated with the cursor.</span><br><span class="line"></span><br><span class="line">这个是代码块复制按钮设置</span><br><span class="line">   # Add copy button on codeblock</span><br><span class="line">   copy_button:</span><br><span class="line">-    enable: false</span><br><span class="line">+    enable: true</span><br><span class="line"></span><br><span class="line">这个是滚动百分比设置</span><br><span class="line">   # Scroll percent label in b2t button.</span><br><span class="line">-  scrollpercent: false</span><br><span class="line">+  scrollpercent: true</span><br><span class="line"> </span><br><span class="line"> # Reading progress bar</span><br><span class="line"> reading_progress:</span><br><span class="line">@@ -472,7 +475,7 @@</span><br><span class="line"> baidu_site_verification:</span><br><span class="line"> </span><br><span class="line"> 百度推送，搜索引擎优化</span><br><span class="line"> # Enable baidu push so that the blog will push the url to baidu automatically which is very helpful for SEO.</span><br><span class="line">-baidu_push: false</span><br><span class="line">+baidu_push: true</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">这个是评论系统，适合国内使用</span><br><span class="line"> # Valine</span><br><span class="line"> # For more information: https:&#x2F;&#x2F;valine.js.org, https:&#x2F;&#x2F;github.com&#x2F;xCss&#x2F;Valine</span><br><span class="line"> valine:</span><br><span class="line">-  enable: false</span><br><span class="line">-  appId: # Your leancloud application appid</span><br><span class="line">-  appKey: # Your leancloud application appkey</span><br><span class="line">+  enable: true</span><br><span class="line">+  appId: xxxxxx</span><br><span class="line">+  appKey: xxxxxxx</span><br><span class="line">-  placeholder: Just go go # Comment box placeholder</span><br><span class="line">+  placeholder: 无需注册，支持Markdown格式 # Comment box placeholder</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">搜索引擎优化</span><br><span class="line"> # Google Analytics</span><br><span class="line"> google_analytics:</span><br><span class="line">-  tracking_id: # &lt;app_id&gt;</span><br><span class="line">+  tracking_id: xxxxxx</span><br><span class="line"></span><br><span class="line">搜索引擎优化</span><br><span class="line"> # Baidu Analytics</span><br><span class="line">-baidu_analytics: # &lt;app_id&gt;</span><br><span class="line">+baidu_analytics: xxxxxx</span><br></pre></td></tr></table></figure>
-
-<h3 id="插入图片"><a href="#插入图片" class="headerlink" title="插入图片"></a>插入图片</h3><p>修改 <strong>站点配置文件</strong></p>
-<p>开启<strong>文章资源文件夹</strong></p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">post_asset_folder:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-
-<p>使用Hexo内置标签：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% asset_img slug [title] %&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="如何设置「阅读全文」"><a href="#如何设置「阅读全文」" class="headerlink" title="如何设置「阅读全文」"></a>如何设置「阅读全文」</h3><p>在首页显示一篇文章的部分内容，并提供一个链接跳转到全文页面是一个常见的需求。 NexT 提供2种方式来控制文章在首页的显示方式。 也就是说，在首页显示文章的摘录并显示 <strong>阅读全文</strong> 按钮，可以通过以下方法：</p>
-<ol>
-<li>在文章中使用 <code>&lt;!-- more --&gt;</code> 手动进行截断，Hexo 提供的方式 <strong>推荐</strong></li>
-<li>在文章的 <a href="https://hexo.io/docs/front-matter.html" target="_blank" rel="noopener">front-matter</a> 中添加 <code>description</code>，并提供文章摘录</li>
-</ol>
-<blockquote>
-<p>建议使用 <code>&lt;!-- more --&gt;</code>（即第一种方式），除了可以精确控制需要显示的摘录内容以外， 这种方式也可以让 Hexo 中的插件更好的识别。</p>
-</blockquote>
-<h3 id="渲染跳过"><a href="#渲染跳过" class="headerlink" title="渲染跳过"></a>渲染跳过</h3><p>比如404，README文件</p>
-<p>修改<strong>站点配置文件</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">skip_render:</span><br><span class="line">  - README.md</span><br><span class="line">  - 404.html</span><br></pre></td></tr></table></figure>
-
-<h3 id="开源协议怎么选"><a href="#开源协议怎么选" class="headerlink" title="开源协议怎么选"></a>开源协议怎么选</h3><p><a href="https://creativecommons.org/use-remix/cc-licenses/" target="_blank" rel="noopener">Creative Commons Licenses</a></p>
-<p><a href="https://choosealicense.com/" target="_blank" rel="noopener">Choose an open source license</a></p>
-<h3 id="小图标在哪找"><a href="#小图标在哪找" class="headerlink" title="小图标在哪找"></a>小图标在哪找</h3><p>font-awesome:<code>themes\hexo-theme-next\source\lib\font-awesome\css\all.min.css</code></p>
-<p><a href="https://www.iconfont.cn/home/index" target="_blank" rel="noopener">Iconfont-阿里巴巴矢量图标库</a></p>
-<h3 id="增加阿里巴巴矢量图标库"><a href="#增加阿里巴巴矢量图标库" class="headerlink" title="增加阿里巴巴矢量图标库"></a>增加阿里巴巴矢量图标库</h3><p><a href="https://blog.dlzhang.com/posts/32/" target="_blank" rel="noopener">参考地址</a></p>
-<p>站点根目录下添加source\ _data\styles.styl，把iconfont.css文件内容全拷过去即可。</p>
-<p>编辑 <strong>主题配置文件</strong>：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> custom_file_path:</span><br><span class="line">-  #style: source&#x2F;_data&#x2F;styles.styl</span><br><span class="line">+  style: source&#x2F;_data&#x2F;styles.styl</span><br><span class="line"></span><br><span class="line">这个是侧栏社交链接和图标设置</span><br><span class="line"> social:</span><br><span class="line">-  #GitHub: https:&#x2F;&#x2F;github.com&#x2F;yourname || fab fa-github</span><br><span class="line">-  #E-Mail: mailto:yourname@gmail.com || fa fa-envelope</span><br><span class="line">+  码云: https:&#x2F;&#x2F;gitee.com&#x2F;zystrivego&#x2F;blog || fab iconfont icon-Ggooglelogo</span><br><span class="line">+  邮箱: mailto:zystrivego@163.com || fa iconfont icon-youxiang</span><br><span class="line">+  音乐: http:&#x2F;&#x2F;music.163.com&#x2F;m&#x2F;user&#x2F;home?id&#x3D;15370305 || fa iconfont icon-netease-cloud-music-line</span><br></pre></td></tr></table></figure>
-
-<h3 id="评论邮件通知"><a href="#评论邮件通知" class="headerlink" title="评论邮件通知"></a>评论邮件通知</h3><p>参考地址：<a href="https://github.com/zhaojun1998/Valine-Admin" target="_blank" rel="noopener">Valine-Admin</a></p>
-<h1 id="官方文档摘录"><a href="#官方文档摘录" class="headerlink" title="官方文档摘录"></a>官方文档摘录</h1><h2 id="不要处理我的文章"><a href="#不要处理我的文章" class="headerlink" title="不要处理我的文章"></a>不要处理我的文章</h2><p>如果你不想你的文章被处理，你可以将 Front-Matter 中的<code>layout:</code> 设为 <code>false</code> 。</p>
-<h2 id="草稿"><a href="#草稿" class="headerlink" title="草稿"></a>草稿</h2><p>刚刚提到了 Hexo 的一种特殊布局：<code>draft</code>，这种布局在建立时会被保存到 <code>source/_drafts</code> 文件夹，您可通过 <code>publish</code> 命令将草稿移动到 <code>source/_posts</code> 文件夹，该命令的使用方式与 <code>new</code> 十分类似，您也可在命令中指定 <code>layout</code> 来指定布局。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo publish [layout] &lt;title&gt;</span><br></pre></td></tr></table></figure>
-
-<p>草稿默认不会显示在页面中，您可在执行时加上 <code>--draft</code> 参数，或是把 <code>render_drafts</code> 参数设为 <code>true</code> 来预览草稿。</p>
-<h2 id="资源文件夹"><a href="#资源文件夹" class="headerlink" title="资源文件夹"></a>资源文件夹</h2><p>资源（Asset）代表 <code>source</code> 文件夹中除了文章以外的所有文件，例如图片、CSS、JS 文件等。比方说，如果你的Hexo项目中只有少量图片，那最简单的方法就是将它们放在 <code>source/images</code> 文件夹中。然后通过类似于 <code>![](/images/image.jpg)</code> 的方法访问它们。</p>
-<h3 id="文章资源文件夹"><a href="#文章资源文件夹" class="headerlink" title="文章资源文件夹"></a>文章资源文件夹</h3><p>对于那些想要更有规律地提供图片和其他资源以及想要将他们的资源分布在各个文章上的人来说，Hexo也提供了更组织化的方式来管理资源。这个稍微有些复杂但是管理资源非常方便的功能可以通过将 <code>config.yml</code> 文件中的 <code>post_asset_folder</code> 选项设为 <code>true</code> 来打开。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">_config.ymlpost_asset_folder: true</span><br></pre></td></tr></table></figure>
-
-<p>当资源文件管理功能打开后，Hexo将会在你每一次通过 <code>hexo new [layout]</code> 命令创建新文章时自动创建一个文件夹。这个资源文件夹将会有与这个文章文件一样的名字。将所有与你的文章有关的资源放在这个关联文件夹中之后，你可以通过相对路径来引用它们，这样你就得到了一个更简单而且方便得多的工作流。</p>
-<h3 id="相对路径引用的标签插件"><a href="#相对路径引用的标签插件" class="headerlink" title="相对路径引用的标签插件"></a>相对路径引用的标签插件</h3><p>通过常规的 markdown 语法和相对路径来引用图片和其它资源可能会导致它们在存档页或者主页上显示不正确。在Hexo 2时代，社区创建了很多插件来解决这个问题。但是，随着Hexo 3 的发布，许多新的标签插件被加入到了核心代码中。这使得你可以更简单地在文章中引用你的资源。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% asset_path slug %&#125;</span><br><span class="line">&#123;% asset_img slug [title] %&#125;</span><br><span class="line">&#123;% asset_link slug [title] %&#125;</span><br></pre></td></tr></table></figure>
-
-<p>比如说：当你打开文章资源文件夹功能后，你把一个 <code>example.jpg</code> 图片放在了你的资源文件夹中，如果通过使用相对路径的常规 markdown 语法 <code>![](/example.jpg)</code> ，它将 <em>不会</em> 出现在首页上。（但是它会在文章中按你期待的方式工作）</p>
-<p>正确的引用图片方式是使用下列的标签插件而不是 markdown ：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% asset_img example.jpg [This is an example image] %&#125;</span><br></pre></td></tr></table></figure>
-
-<p>通过这种方式，图片将会同时出现在文章和主页以及归档页中。</p>
-<h2 id="指令"><a href="#指令" class="headerlink" title="指令"></a>指令</h2><h3 id="init"><a href="#init" class="headerlink" title="init"></a>init</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo init [folder]</span><br></pre></td></tr></table></figure>
-
-<p>新建一个网站。如果没有设置 <code>folder</code> ，Hexo 默认在目前的文件夹建立网站。</p>
-<h3 id="new"><a href="#new" class="headerlink" title="new"></a>new</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo new [layout] &lt;title&gt;</span><br></pre></td></tr></table></figure>
-
-<p>新建一篇文章。如果没有设置 <code>layout</code> 的话，默认使用 <a href="https://hexo.io/zh-cn/docs/configuration" target="_blank" rel="noopener">_config.yml</a> 中的 <code>default_layout</code> 参数代替。如果标题包含空格的话，请使用引号括起来。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo new &quot;post title with whitespace&quot;</span><br></pre></td></tr></table></figure>
-
-<table>
-<thead>
-<tr>
-<th align="left">参数</th>
-<th align="left">描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><code>-p</code>, <code>--path</code></td>
-<td align="left">自定义新文章的路径</td>
-</tr>
-<tr>
-<td align="left"><code>-r</code>, <code>--replace</code></td>
-<td align="left">如果存在同名文章，将其替换</td>
-</tr>
-<tr>
-<td align="left"><code>-s</code>, <code>--slug</code></td>
-<td align="left">文章的 Slug，作为新文章的文件名和发布后的 URL</td>
-</tr>
-</tbody></table>
-<p>默认情况下，Hexo 会使用文章的标题来决定文章文件的路径。对于独立页面来说，Hexo 会创建一个以标题为名字的目录，并在目录中放置一个 <code>index.md</code> 文件。你可以使用 <code>--path</code> 参数来覆盖上述行为、自行决定文件的目录：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo new page --path about&#x2F;me &quot;About me&quot;</span><br></pre></td></tr></table></figure>
-
-<p>以上命令会创建一个 <code>source/about/me.md</code> 文件，同时 Front Matter 中的 title 为 <code>&quot;About me&quot;</code></p>
-<p>注意！title 是必须指定的！如果你这么做并不能达到你的目的：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hexo new page --path about&#x2F;me</span><br></pre></td></tr></table></figure>
-
-<p>此时 Hexo 会创建 <code>source/_posts/about/me.md</code>，同时 <code>me.md</code> 的 Front Matter 中的 title 为 <code>&quot;page&quot;</code>。这是因为在上述命令中，hexo-cli 将 <code>page</code> 视为指定文章的标题、并采用默认的 <code>layout</code>。</p>
-<h3 id="generate"><a href="#generate" class="headerlink" title="generate"></a>generate</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>生成静态文件。</p>
-<table>
-<thead>
-<tr>
-<th align="left">选项</th>
-<th align="left">描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><code>-d</code>, <code>--deploy</code></td>
-<td align="left">文件生成后立即部署网站</td>
-</tr>
-<tr>
-<td align="left"><code>-w</code>, <code>--watch</code></td>
-<td align="left">监视文件变动</td>
-</tr>
-<tr>
-<td align="left"><code>-b</code>, <code>--bail</code></td>
-<td align="left">生成过程中如果发生任何未处理的异常则抛出异常</td>
-</tr>
-<tr>
-<td align="left"><code>-f</code>, <code>--force</code></td>
-<td align="left">强制重新生成文件 Hexo 引入了差分机制，如果 <code>public</code> 目录存在，那么 <code>hexo g</code> 只会重新生成改动的文件。 使用该参数的效果接近 <code>hexo clean &amp;&amp; hexo generate</code></td>
-</tr>
-<tr>
-<td align="left"><code>-c</code>, <code>--concurrency</code></td>
-<td align="left">最大同时生成文件的数量，默认无限制</td>
-</tr>
-</tbody></table>
-<p>该命令可以简写为</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo g</span><br></pre></td></tr></table></figure>
-
-<h3 id="publish"><a href="#publish" class="headerlink" title="publish"></a>publish</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo publish [layout] &lt;filename&gt;</span><br></pre></td></tr></table></figure>
-
-<p>发表草稿。</p>
-<h3 id="server"><a href="#server" class="headerlink" title="server"></a>server</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>启动服务器。默认情况下，访问网址为： <code>http://localhost:4000/</code>。</p>
-<table>
-<thead>
-<tr>
-<th align="left">选项</th>
-<th align="left">描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><code>-p</code>, <code>--port</code></td>
-<td align="left">重设端口</td>
-</tr>
-<tr>
-<td align="left"><code>-s</code>, <code>--static</code></td>
-<td align="left">只使用静态文件</td>
-</tr>
-<tr>
-<td align="left"><code>-l</code>, <code>--log</code></td>
-<td align="left">启动日记记录，使用覆盖记录格式</td>
-</tr>
-</tbody></table>
-<h3 id="deploy"><a href="#deploy" class="headerlink" title="deploy"></a>deploy</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>部署网站。</p>
-<table>
-<thead>
-<tr>
-<th align="left">参数</th>
-<th align="left">描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><code>-g</code>, <code>--generate</code></td>
-<td align="left">部署之前预先生成静态文件</td>
-</tr>
-</tbody></table>
-<p>该命令可以简写为：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo d</span><br></pre></td></tr></table></figure>
-
-<h3 id="render"><a href="#render" class="headerlink" title="render"></a>render</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo render &lt;file1&gt; [file2] ...</span><br></pre></td></tr></table></figure>
-
-<p>渲染文件。</p>
-<table>
-<thead>
-<tr>
-<th align="left">参数</th>
-<th align="left">描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><code>-o</code>, <code>--output</code></td>
-<td align="left">设置输出路径</td>
-</tr>
-</tbody></table>
-<h3 id="migrate"><a href="#migrate" class="headerlink" title="migrate"></a>migrate</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo migrate &lt;type&gt;</span><br></pre></td></tr></table></figure>
-
-<p>从其他博客系统 <a href="https://hexo.io/zh-cn/docs/migration" target="_blank" rel="noopener">迁移内容</a>。</p>
-<p>###clean</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo clean</span><br></pre></td></tr></table></figure>
-
-<p>清除缓存文件 (<code>db.json</code>) 和已生成的静态文件 (<code>public</code>)。</p>
-<p>在某些情况（尤其是更换主题后），如果发现您对站点的更改无论如何也不生效，您可能需要运行该命令。</p>
-<h3 id="list"><a href="#list" class="headerlink" title="list"></a>list</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo list &lt;type&gt;</span><br></pre></td></tr></table></figure>
-
-<p>列出网站资料。</p>
-<h3 id="version"><a href="#version" class="headerlink" title="version"></a>version</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo version</span><br></pre></td></tr></table></figure>
-
-<p>显示 Hexo 版本。</p>
-<h3 id="选项"><a href="#选项" class="headerlink" title="选项"></a>选项</h3><h4 id="安全模式"><a href="#安全模式" class="headerlink" title="安全模式"></a>安全模式</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo --safe</span><br></pre></td></tr></table></figure>
-
-<p>在安全模式下，不会载入插件和脚本。当您在安装新插件遭遇问题时，可以尝试以安全模式重新执行。</p>
-<h4 id="调试模式"><a href="#调试模式" class="headerlink" title="调试模式"></a>调试模式</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo --debug</span><br></pre></td></tr></table></figure>
-
-<p>在终端中显示调试信息并记录到 <code>debug.log</code>。当您碰到问题时，可以尝试用调试模式重新执行一次，并 <a href="https://github.com/hexojs/hexo/issues/new" target="_blank" rel="noopener">提交调试信息到 GitHub</a>。</p>
-<h4 id="简洁模式"><a href="#简洁模式" class="headerlink" title="简洁模式"></a>简洁模式</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo --silent</span><br></pre></td></tr></table></figure>
-
-<p>隐藏终端信息。</p>
-<h4 id="自定义配置文件的路径"><a href="#自定义配置文件的路径" class="headerlink" title="自定义配置文件的路径"></a>自定义配置文件的路径</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 使用 custom.yml 代替默认的 _config.yml</span><br><span class="line">$ hexo server --config custom.yml</span><br><span class="line"></span><br><span class="line"># 使用 custom.yml 和 custom2.json，其中 custom2.json 优先级更高</span><br><span class="line">$ hexo generate --config custom.yml,custom2.json,custom3.yml</span><br></pre></td></tr></table></figure>
-
-<p>自定义配置文件的路径，指定这个参数后将不再使用默认的 <code>_config.yml</code>。<br>你可以使用一个 YAML 或 JSON 文件的路径，也可以使用逗号分隔（无空格）的多个 YAML 或 JSON 文件的路径。例如：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 使用 custom.yml 代替默认的 _config.yml</span><br><span class="line">$ hexo server --config custom.yml</span><br><span class="line"></span><br><span class="line"># 使用 custom.yml, custom2.json 和 custom3.yml，其中 custom3.yml 优先级最高，其次是 custom2.json</span><br><span class="line">$ hexo generate --config custom.yml,custom2.json,custom3.yml</span><br></pre></td></tr></table></figure>
-
-<p>当你指定了多个配置文件以后，Hexo 会按顺序将这部分配置文件合并成一个 <code>_multiconfig.yml</code>。如果遇到重复的配置，排在后面的文件的配置会覆盖排在前面的文件的配置。这个原则适用于任意数量、任意深度的 YAML 和 JSON 文件。</p>
-<h4 id="显示草稿"><a href="#显示草稿" class="headerlink" title="显示草稿"></a>显示草稿</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo --draft</span><br></pre></td></tr></table></figure>
-
-<p>显示 <code>source/_drafts</code> 文件夹中的草稿文章。</p>
-<h4 id="自定义-CWD"><a href="#自定义-CWD" class="headerlink" title="自定义 CWD"></a>自定义 CWD</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ hexo --cwd &#x2F;path&#x2F;to&#x2F;cwd</span><br></pre></td></tr></table></figure>
-
-<p>自定义当前工作目录（Current working directory）的路径。</p>
-]]></content>
-      <categories>
-        <category>misc</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>NexT</tag>
       </tags>
   </entry>
   <entry>
