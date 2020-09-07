@@ -5,9 +5,9 @@
   
   <link href="/atom.xml" rel="self"/>
   
-  <link href="https://zystrivego.gitee.io/"/>
+  <link href="https://zystrivego.github.io/"/>
   <updated>2020-06-02T07:44:17.918Z</updated>
-  <id>https://zystrivego.gitee.io/</id>
+  <id>https://zystrivego.github.io/</id>
   
   <author>
     <name>zhangyu</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>快捷方式</title>
-    <link href="https://zystrivego.gitee.io/2020/06/02/%E5%BF%AB%E6%8D%B7%E6%96%B9%E5%BC%8F/"/>
-    <id>https://zystrivego.gitee.io/2020/06/02/%E5%BF%AB%E6%8D%B7%E6%96%B9%E5%BC%8F/</id>
+    <link href="https://zystrivego.github.io/2020/06/02/%E5%BF%AB%E6%8D%B7%E6%96%B9%E5%BC%8F/"/>
+    <id>https://zystrivego.github.io/2020/06/02/%E5%BF%AB%E6%8D%B7%E6%96%B9%E5%BC%8F/</id>
     <published>2020-06-02T07:02:02.000Z</published>
     <updated>2020-06-02T07:44:17.918Z</updated>
     
@@ -38,17 +38,17 @@
     </summary>
     
     
-      <category term="工具" scheme="https://zystrivego.gitee.io/categories/%E5%B7%A5%E5%85%B7/"/>
+      <category term="工具" scheme="https://zystrivego.github.io/categories/%E5%B7%A5%E5%85%B7/"/>
     
     
-      <category term="win10" scheme="https://zystrivego.gitee.io/tags/win10/"/>
+      <category term="win10" scheme="https://zystrivego.github.io/tags/win10/"/>
     
   </entry>
   
   <entry>
     <title>高级搜索</title>
-    <link href="https://zystrivego.gitee.io/2020/05/28/%E9%AB%98%E7%BA%A7%E6%90%9C%E7%B4%A2/"/>
-    <id>https://zystrivego.gitee.io/2020/05/28/%E9%AB%98%E7%BA%A7%E6%90%9C%E7%B4%A2/</id>
+    <link href="https://zystrivego.github.io/2020/05/28/%E9%AB%98%E7%BA%A7%E6%90%9C%E7%B4%A2/"/>
+    <id>https://zystrivego.github.io/2020/05/28/%E9%AB%98%E7%BA%A7%E6%90%9C%E7%B4%A2/</id>
     <published>2020-05-28T14:20:10.000Z</published>
     <updated>2020-05-29T07:42:20.931Z</updated>
     
@@ -61,17 +61,17 @@
     </summary>
     
     
-      <category term="工具" scheme="https://zystrivego.gitee.io/categories/%E5%B7%A5%E5%85%B7/"/>
+      <category term="工具" scheme="https://zystrivego.github.io/categories/%E5%B7%A5%E5%85%B7/"/>
     
     
-      <category term="seo" scheme="https://zystrivego.gitee.io/tags/seo/"/>
+      <category term="seo" scheme="https://zystrivego.github.io/tags/seo/"/>
     
   </entry>
   
   <entry>
     <title>SaaS vs PaaS vs IaaS: What’s The Difference and How To Choose</title>
-    <link href="https://zystrivego.gitee.io/2020/05/27/SaaS-vs-PaaS-vs-IaaS-What%E2%80%99s-The-Difference-and-How-To-Choose/"/>
-    <id>https://zystrivego.gitee.io/2020/05/27/SaaS-vs-PaaS-vs-IaaS-What%E2%80%99s-The-Difference-and-How-To-Choose/</id>
+    <link href="https://zystrivego.github.io/2020/05/27/SaaS-vs-PaaS-vs-IaaS-What%E2%80%99s-The-Difference-and-How-To-Choose/"/>
+    <id>https://zystrivego.github.io/2020/05/27/SaaS-vs-PaaS-vs-IaaS-What%E2%80%99s-The-Difference-and-How-To-Choose/</id>
     <published>2020-05-27T03:26:07.000Z</published>
     <updated>2020-05-27T07:27:19.399Z</updated>
     
@@ -84,17 +84,17 @@
     </summary>
     
     
-      <category term="百科" scheme="https://zystrivego.gitee.io/categories/%E7%99%BE%E7%A7%91/"/>
+      <category term="百科" scheme="https://zystrivego.github.io/categories/%E7%99%BE%E7%A7%91/"/>
     
     
-      <category term="aaS" scheme="https://zystrivego.gitee.io/tags/aaS/"/>
+      <category term="aaS" scheme="https://zystrivego.github.io/tags/aaS/"/>
     
   </entry>
   
   <entry>
     <title>docker</title>
-    <link href="https://zystrivego.gitee.io/2020/05/27/docker/"/>
-    <id>https://zystrivego.gitee.io/2020/05/27/docker/</id>
+    <link href="https://zystrivego.github.io/2020/05/27/docker/"/>
+    <id>https://zystrivego.github.io/2020/05/27/docker/</id>
     <published>2020-05-27T02:52:05.000Z</published>
     <updated>2020-05-27T10:15:11.595Z</updated>
     
@@ -109,17 +109,17 @@
     </summary>
     
     
-      <category term="工具" scheme="https://zystrivego.gitee.io/categories/%E5%B7%A5%E5%85%B7/"/>
+      <category term="工具" scheme="https://zystrivego.github.io/categories/%E5%B7%A5%E5%85%B7/"/>
     
     
-      <category term="docker" scheme="https://zystrivego.gitee.io/tags/docker/"/>
+      <category term="docker" scheme="https://zystrivego.github.io/tags/docker/"/>
     
   </entry>
   
   <entry>
     <title>Shiro</title>
-    <link href="https://zystrivego.gitee.io/2020/05/27/Shiro/"/>
-    <id>https://zystrivego.gitee.io/2020/05/27/Shiro/</id>
+    <link href="https://zystrivego.github.io/2020/05/27/Shiro/"/>
+    <id>https://zystrivego.github.io/2020/05/27/Shiro/</id>
     <published>2020-05-27T02:50:55.000Z</published>
     <updated>2020-05-27T02:50:55.727Z</updated>
     
@@ -134,17 +134,17 @@
     </summary>
     
     
-      <category term="框架" scheme="https://zystrivego.gitee.io/categories/%E6%A1%86%E6%9E%B6/"/>
+      <category term="框架" scheme="https://zystrivego.github.io/categories/%E6%A1%86%E6%9E%B6/"/>
     
     
-      <category term="auth" scheme="https://zystrivego.gitee.io/tags/auth/"/>
+      <category term="auth" scheme="https://zystrivego.github.io/tags/auth/"/>
     
   </entry>
   
   <entry>
     <title>键盘折腾史</title>
-    <link href="https://zystrivego.gitee.io/2020/05/22/%E9%94%AE%E7%9B%98%E6%8A%98%E8%85%BE%E5%8F%B2/"/>
-    <id>https://zystrivego.gitee.io/2020/05/22/%E9%94%AE%E7%9B%98%E6%8A%98%E8%85%BE%E5%8F%B2/</id>
+    <link href="https://zystrivego.github.io/2020/05/22/%E9%94%AE%E7%9B%98%E6%8A%98%E8%85%BE%E5%8F%B2/"/>
+    <id>https://zystrivego.github.io/2020/05/22/%E9%94%AE%E7%9B%98%E6%8A%98%E8%85%BE%E5%8F%B2/</id>
     <published>2020-05-21T17:54:26.000Z</published>
     <updated>2020-06-28T11:42:31.346Z</updated>
     
@@ -161,17 +161,17 @@
     </summary>
     
     
-      <category term="外设" scheme="https://zystrivego.gitee.io/categories/%E5%A4%96%E8%AE%BE/"/>
+      <category term="外设" scheme="https://zystrivego.github.io/categories/%E5%A4%96%E8%AE%BE/"/>
     
     
-      <category term="键盘" scheme="https://zystrivego.gitee.io/tags/%E9%94%AE%E7%9B%98/"/>
+      <category term="键盘" scheme="https://zystrivego.github.io/tags/%E9%94%AE%E7%9B%98/"/>
     
   </entry>
   
   <entry>
     <title>Maven</title>
-    <link href="https://zystrivego.gitee.io/2020/05/20/Maven/"/>
-    <id>https://zystrivego.gitee.io/2020/05/20/Maven/</id>
+    <link href="https://zystrivego.github.io/2020/05/20/Maven/"/>
+    <id>https://zystrivego.github.io/2020/05/20/Maven/</id>
     <published>2020-05-20T08:44:15.000Z</published>
     <updated>2020-05-22T18:32:25.067Z</updated>
     
@@ -186,17 +186,17 @@
     </summary>
     
     
-      <category term="工具" scheme="https://zystrivego.gitee.io/categories/%E5%B7%A5%E5%85%B7/"/>
+      <category term="工具" scheme="https://zystrivego.github.io/categories/%E5%B7%A5%E5%85%B7/"/>
     
     
-      <category term="maven" scheme="https://zystrivego.gitee.io/tags/maven/"/>
+      <category term="maven" scheme="https://zystrivego.github.io/tags/maven/"/>
     
   </entry>
   
   <entry>
     <title>基于Hexo和NexT的博客搭建</title>
-    <link href="https://zystrivego.gitee.io/2020/05/13/%E5%9F%BA%E4%BA%8EHexo%E5%92%8CNexT%E7%9A%84%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/"/>
-    <id>https://zystrivego.gitee.io/2020/05/13/%E5%9F%BA%E4%BA%8EHexo%E5%92%8CNexT%E7%9A%84%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</id>
+    <link href="https://zystrivego.github.io/2020/05/13/%E5%9F%BA%E4%BA%8EHexo%E5%92%8CNexT%E7%9A%84%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/"/>
+    <id>https://zystrivego.github.io/2020/05/13/%E5%9F%BA%E4%BA%8EHexo%E5%92%8CNexT%E7%9A%84%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</id>
     <published>2020-05-13T09:57:34.000Z</published>
     <updated>2020-06-02T07:48:03.683Z</updated>
     
@@ -214,19 +214,19 @@
     </summary>
     
     
-      <category term="misc" scheme="https://zystrivego.gitee.io/categories/misc/"/>
+      <category term="misc" scheme="https://zystrivego.github.io/categories/misc/"/>
     
     
-      <category term="Hexo" scheme="https://zystrivego.gitee.io/tags/Hexo/"/>
+      <category term="Hexo" scheme="https://zystrivego.github.io/tags/Hexo/"/>
     
-      <category term="NexT" scheme="https://zystrivego.gitee.io/tags/NexT/"/>
+      <category term="NexT" scheme="https://zystrivego.github.io/tags/NexT/"/>
     
   </entry>
   
   <entry>
     <title>软件测试了解</title>
-    <link href="https://zystrivego.gitee.io/2020/05/12/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95%E4%BA%86%E8%A7%A3/"/>
-    <id>https://zystrivego.gitee.io/2020/05/12/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95%E4%BA%86%E8%A7%A3/</id>
+    <link href="https://zystrivego.github.io/2020/05/12/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95%E4%BA%86%E8%A7%A3/"/>
+    <id>https://zystrivego.github.io/2020/05/12/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95%E4%BA%86%E8%A7%A3/</id>
     <published>2020-05-12T02:12:58.000Z</published>
     <updated>2020-05-22T18:25:52.925Z</updated>
     
@@ -244,17 +244,17 @@
     </summary>
     
     
-      <category term="misc" scheme="https://zystrivego.gitee.io/categories/misc/"/>
+      <category term="misc" scheme="https://zystrivego.github.io/categories/misc/"/>
     
     
-      <category term="测试" scheme="https://zystrivego.gitee.io/tags/%E6%B5%8B%E8%AF%95/"/>
+      <category term="测试" scheme="https://zystrivego.github.io/tags/%E6%B5%8B%E8%AF%95/"/>
     
   </entry>
   
   <entry>
     <title>VMware的网络模式和NAT下centos7配置静态ip</title>
-    <link href="https://zystrivego.gitee.io/2020/05/11/VMware%E7%9A%84%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F%E5%92%8CNAT%E4%B8%8Bcentos7%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81ip/"/>
-    <id>https://zystrivego.gitee.io/2020/05/11/VMware%E7%9A%84%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F%E5%92%8CNAT%E4%B8%8Bcentos7%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81ip/</id>
+    <link href="https://zystrivego.github.io/2020/05/11/VMware%E7%9A%84%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F%E5%92%8CNAT%E4%B8%8Bcentos7%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81ip/"/>
+    <id>https://zystrivego.github.io/2020/05/11/VMware%E7%9A%84%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F%E5%92%8CNAT%E4%B8%8Bcentos7%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81ip/</id>
     <published>2020-05-10T17:41:52.000Z</published>
     <updated>2020-05-22T20:07:38.132Z</updated>
     
@@ -272,19 +272,19 @@
     </summary>
     
     
-      <category term="linux" scheme="https://zystrivego.gitee.io/categories/linux/"/>
+      <category term="linux" scheme="https://zystrivego.github.io/categories/linux/"/>
     
     
-      <category term="VMware" scheme="https://zystrivego.gitee.io/tags/VMware/"/>
+      <category term="VMware" scheme="https://zystrivego.github.io/tags/VMware/"/>
     
-      <category term="NAT" scheme="https://zystrivego.gitee.io/tags/NAT/"/>
+      <category term="NAT" scheme="https://zystrivego.github.io/tags/NAT/"/>
     
   </entry>
   
   <entry>
     <title>ELK安装整合SpringBoot</title>
-    <link href="https://zystrivego.gitee.io/2020/05/09/ELK%E5%AE%89%E8%A3%85%E6%95%B4%E5%90%88SpringBoot/"/>
-    <id>https://zystrivego.gitee.io/2020/05/09/ELK%E5%AE%89%E8%A3%85%E6%95%B4%E5%90%88SpringBoot/</id>
+    <link href="https://zystrivego.github.io/2020/05/09/ELK%E5%AE%89%E8%A3%85%E6%95%B4%E5%90%88SpringBoot/"/>
+    <id>https://zystrivego.github.io/2020/05/09/ELK%E5%AE%89%E8%A3%85%E6%95%B4%E5%90%88SpringBoot/</id>
     <published>2020-05-08T20:45:38.000Z</published>
     <updated>2020-05-23T15:36:32.776Z</updated>
     
@@ -299,19 +299,19 @@
     </summary>
     
     
-      <category term="linux" scheme="https://zystrivego.gitee.io/categories/linux/"/>
+      <category term="linux" scheme="https://zystrivego.github.io/categories/linux/"/>
     
     
-      <category term="SpringBoot" scheme="https://zystrivego.gitee.io/tags/SpringBoot/"/>
+      <category term="SpringBoot" scheme="https://zystrivego.github.io/tags/SpringBoot/"/>
     
-      <category term="ELK" scheme="https://zystrivego.gitee.io/tags/ELK/"/>
+      <category term="ELK" scheme="https://zystrivego.github.io/tags/ELK/"/>
     
   </entry>
   
   <entry>
     <title>Fastdfs安装说明</title>
-    <link href="https://zystrivego.gitee.io/2020/05/09/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E/"/>
-    <id>https://zystrivego.gitee.io/2020/05/09/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E/</id>
+    <link href="https://zystrivego.github.io/2020/05/09/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E/"/>
+    <id>https://zystrivego.github.io/2020/05/09/Fastdfs%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E/</id>
     <published>2020-05-08T20:22:31.000Z</published>
     <updated>2020-05-28T07:25:59.006Z</updated>
     
@@ -329,17 +329,17 @@
     </summary>
     
     
-      <category term="linux" scheme="https://zystrivego.gitee.io/categories/linux/"/>
+      <category term="linux" scheme="https://zystrivego.github.io/categories/linux/"/>
     
     
-      <category term="Fastdfs" scheme="https://zystrivego.gitee.io/tags/Fastdfs/"/>
+      <category term="Fastdfs" scheme="https://zystrivego.github.io/tags/Fastdfs/"/>
     
   </entry>
   
   <entry>
     <title>Centos7安装PostgreSQL10</title>
-    <link href="https://zystrivego.gitee.io/2020/05/09/Centos7%E5%AE%89%E8%A3%85PostgreSQL10/"/>
-    <id>https://zystrivego.gitee.io/2020/05/09/Centos7%E5%AE%89%E8%A3%85PostgreSQL10/</id>
+    <link href="https://zystrivego.github.io/2020/05/09/Centos7%E5%AE%89%E8%A3%85PostgreSQL10/"/>
+    <id>https://zystrivego.github.io/2020/05/09/Centos7%E5%AE%89%E8%A3%85PostgreSQL10/</id>
     <published>2020-05-08T19:50:54.000Z</published>
     <updated>2020-05-22T18:26:30.637Z</updated>
     
@@ -357,17 +357,17 @@
     </summary>
     
     
-      <category term="linux" scheme="https://zystrivego.gitee.io/categories/linux/"/>
+      <category term="linux" scheme="https://zystrivego.github.io/categories/linux/"/>
     
     
-      <category term="PostgreSQL" scheme="https://zystrivego.gitee.io/tags/PostgreSQL/"/>
+      <category term="PostgreSQL" scheme="https://zystrivego.github.io/tags/PostgreSQL/"/>
     
   </entry>
   
   <entry>
     <title>Tips</title>
-    <link href="https://zystrivego.gitee.io/2019/08/15/Tips/"/>
-    <id>https://zystrivego.gitee.io/2019/08/15/Tips/</id>
+    <link href="https://zystrivego.github.io/2019/08/15/Tips/"/>
+    <id>https://zystrivego.github.io/2019/08/15/Tips/</id>
     <published>2019-08-15T14:12:03.000Z</published>
     <updated>2020-05-22T20:07:09.190Z</updated>
     
@@ -385,10 +385,10 @@
     </summary>
     
     
-      <category term="misc" scheme="https://zystrivego.gitee.io/categories/misc/"/>
+      <category term="misc" scheme="https://zystrivego.github.io/categories/misc/"/>
     
     
-      <category term="tips" scheme="https://zystrivego.gitee.io/tags/tips/"/>
+      <category term="tips" scheme="https://zystrivego.github.io/tags/tips/"/>
     
   </entry>
   
