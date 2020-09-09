@@ -1547,7 +1547,26 @@
 
 <h1 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h1><h2 id="合并多次提交"><a href="#合并多次提交" class="headerlink" title="合并多次提交"></a>合并多次提交</h2><p>idea里直接选中某一个提交记录执行interactivity rebase from here</p>
 <p>action是关键，squash操作是合并</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">时间线：</span><br><span class="line">Log 框时间线：是从上到下，越来越早。</span><br><span class="line">弹出框时间线：是从上到下，越来越晚。</span><br><span class="line"></span><br><span class="line">Rebasing Commits框中Action的含义如下：</span><br><span class="line">选择pick操作，git会应用这个补丁，以同样的提交信息（commit message）保存提交</span><br><span class="line">选择reword操作，git会应用这个补丁，但需要重新编辑提交信息</span><br><span class="line">选择edit操作，git会应用这个补丁，但会因为amending而终止</span><br><span class="line">选择squash操作，git会应用这个补丁，但会与之前的提交合并</span><br><span class="line">选择fixup操作，git会应用这个补丁，但会丢掉提交日志</span><br><span class="line">选择exec操作，git会在shell中运行这个命令</span><br></pre></td></tr></table></figure>]]></content>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">时间线：</span><br><span class="line">Log 框时间线：是从上到下，越来越早。</span><br><span class="line">弹出框时间线：是从上到下，越来越晚。</span><br><span class="line"></span><br><span class="line">Rebasing Commits框中Action的含义如下：</span><br><span class="line">选择pick操作，git会应用这个补丁，以同样的提交信息（commit message）保存提交</span><br><span class="line">选择reword操作，git会应用这个补丁，但需要重新编辑提交信息</span><br><span class="line">选择edit操作，git会应用这个补丁，但会因为amending而终止</span><br><span class="line">选择squash操作，git会应用这个补丁，但会与之前的提交合并</span><br><span class="line">选择fixup操作，git会应用这个补丁，但会丢掉提交日志</span><br><span class="line">选择exec操作，git会在shell中运行这个命令</span><br></pre></td></tr></table></figure>
+
+<h2 id="reset和revert"><a href="#reset和revert" class="headerlink" title="reset和revert"></a>reset和revert</h2><ul>
+<li><p><strong>revert</strong>是放弃指定提交的修改，但是会生成一次新的提交，需要填写提交注释，以前的历史记录都在；</p>
+</li>
+<li><p><strong>reset</strong>是指将HEAD指针指到指定提交，历史记录中不会出现放弃的提交记录。</p>
+<ol>
+<li><p>–hard 丢弃本地记录</p>
+</li>
+<li><p>–mix 默认值，unstaged状态</p>
+</li>
+<li><p>–soft add的状态</p>
+</li>
+</ol>
+</li>
+</ul>
+<h2 id="log和reflog"><a href="#log和reflog" class="headerlink" title="log和reflog"></a>log和reflog</h2><p>git log 命令可以显示所有提交过的版本信息，可以加上参数  –pretty=oneline，只会显示版本号和提交时的备注信息</p>
+<p>git reflog 可以查看所有分支的所有操作记录（包括已经被删除的 commit 记录和 reset 的操作）</p>
+<h2 id="恢复误删的提交"><a href="#恢复误删的提交" class="headerlink" title="恢复误删的提交"></a>恢复误删的提交</h2><p>git reflog 找到id，再git reset id</p>
+]]></content>
       <categories>
         <category>工具</category>
       </categories>
