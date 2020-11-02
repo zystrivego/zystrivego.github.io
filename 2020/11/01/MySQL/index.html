@@ -57,7 +57,7 @@
 <meta property="og:image" content="https://zystrivego.github.io/2020/11/01/MySQL/table24.jpg">
 <meta property="og:image" content="https://zystrivego.github.io/2020/11/01/MySQL/table25.jpg">
 <meta property="article:published_time" content="2020-11-01T15:58:07.000Z">
-<meta property="article:modified_time" content="2020-11-01T16:39:25.318Z">
+<meta property="article:modified_time" content="2020-11-02T18:23:49.979Z">
 <meta property="article:author" content="zhangyu">
 <meta property="article:tag" content="sql">
 <meta name="twitter:card" content="summary">
@@ -278,7 +278,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-02 00:39:25" itemprop="dateModified" datetime="2020-11-02T00:39:25+08:00">2020-11-02</time>
+                <time title="修改时间：2020-11-03 02:23:49" itemprop="dateModified" datetime="2020-11-03T02:23:49+08:00">2020-11-03</time>
               </span>
 
           
@@ -515,7 +515,7 @@
 
 <p><strong>当前读：</strong></p>
 <p>读取的是记录数据的最新版本，显示加锁的都是当前读</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select * from account where id&gt;2 lock in share mode;</span><br><span class="line">select * from  account where id&gt;2 for update;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select * from account where id&gt;2 lock in share mode; -- 加的是共享锁</span><br><span class="line">select * from  account where id&gt;2 for update; -- 加的是排他锁</span><br></pre></td></tr></table></figure>
 
 <h4 id="Read-View"><a href="#Read-View" class="headerlink" title="Read View"></a>Read View</h4><ul>
 <li>Read View就是事务执行<strong>快照读</strong>时，产生的读视图。</li>
@@ -555,7 +555,7 @@
 <p><strong>查询2执行分析：</strong></p>
 <ul>
 <li>事务A在执行到SELECT语句时，重新生成一个ReadView，因为事务B（200）在活跃，所以ReadView的m_ids列表内容就是[200]</li>
-<li>由上图undo日志链可得，最新版本的balance为1000，它的事务ID为200，在活跃事务列表里，所以当前事务（事务A）不可见。</li>
+<li>由上图undo日志链可得，最新版本的balance为100，它的事务ID为200，在活跃事务列表里，所以当前事务（事务A）不可见。</li>
 <li>我们继续找下一个版本，balance为100这行记录，事务Id为50，小于活跃事务ID列表最小记录200，所以这个版本可见，因此，查询2的结果，就是返回balance=100这个记录~~</li>
 </ul>
 <p><strong>我们回到事务B，执行提交操作，这时候undo日志链不变</strong></p>
@@ -575,7 +575,7 @@
 <li>事务A在执行到SELECT语句时，重新生成一个ReadView，因为事务B（200）已经提交，不载活跃，所以ReadView的m_ids列表内容就是空的了。</li>
 <li>所以事务A直接读取最新纪录，读取到balance =120这个版本的数据。</li>
 </ul>
-<p>所以，这就是RC存在不可重复读问题的过程啦<del>有不理解的地方可以多读几遍哈</del></p>
+<p>所以，这就是RC存在不可重复读问题的过程啦</p>
 <h3 id="可重复读（Repeatable-Read）解决不可重复读问题的一次分析"><a href="#可重复读（Repeatable-Read）解决不可重复读问题的一次分析" class="headerlink" title="可重复读（Repeatable Read）解决不可重复读问题的一次分析"></a>可重复读（Repeatable Read）解决不可重复读问题的一次分析</h3><p>我们再来分析一波，RR隔离级别是如何解决不可重复读并发问题的吧~</p>
 <p>你可能会觉得两个并发事务的例子太简单了，好的！我们现在来点刺激的，开启三个事务~</p>
 <img src="/2020/11/01/MySQL/table20.jpg" class="">
@@ -642,7 +642,8 @@
 <li>使用间隙锁锁住的是一个区间，而不仅仅是这个区间中的每一条数据。</li>
 <li>间隙锁只阻止其他事务插入到间隙中，他们不阻止其他事务在同一个间隙上获得间隙锁，所以 gap x lock 和 gap s lock 有相同的作用。</li>
 </ul>
-<h4 id="Next-Key-Locks"><a href="#Next-Key-Locks" class="headerlink" title="Next-Key Locks"></a>Next-Key Locks</h4><ul>
+<h4 id="Next-Key-Locks（临键锁）"><a href="#Next-Key-Locks（临键锁）" class="headerlink" title="Next-Key Locks（临键锁）"></a>Next-Key Locks（临键锁）</h4><p>默认情况下，在<strong>RC</strong>级别中使用。在这种情况下，使用Next-Key Locks进行搜索和索引扫描，从而防止幻读。</p>
+<ul>
 <li>Next-key锁是记录锁和间隙锁的组合，它指的是加在某条记录以及这条记录前面间隙上的锁。</li>
 </ul>
 <h3 id="RC级别存在幻读分析"><a href="#RC级别存在幻读分析" class="headerlink" title="RC级别存在幻读分析"></a>RC级别存在幻读分析</h3><p>因为RC是存在幻读问题的，所以我们先切到RC隔离级别，分析一波~</p>
@@ -659,17 +660,17 @@
 
 <ul>
 <li>事务B可以插入id=5的数据，却更新不了id=3的数据，陷入阻塞。证明事务A在执行当前读的时候在id =3和id=4这两条记录上加了锁，但是并没有对 id &gt; 2 这个范围加锁~</li>
-<li>事务B陷入阻塞后，切回事务A执行当前读操作时，死锁出现。因为事务B在 insert 的时候，会在新纪录（id=5）上加锁，所以事务A再次执行当前读，想获取id&gt; 3 的记录，就需要在 id=3,4,5 这3条记录上加锁，但是 id = 5这条记录已经被事务B 锁住了，于是事务A被事务B阻塞，同时事务B还在等待 事务A释放 id = 3上的锁，最终产生了死锁。</li>
+<li>事务B陷入阻塞后，切回事务A执行当前读操作时，死锁出现。因为事务B在 insert 的时候，会在新纪录（id=5）上加锁，所以事务A再次执行当前读，想获取id&gt; 2 的记录，就需要在 id=3,4,5 这3条记录上加锁，但是 id = 5这条记录已经被事务B 锁住了，于是事务A被事务B阻塞，同时事务B还在等待 事务A释放 id = 3上的锁，最终产生了死锁。</li>
 </ul>
 <img src="/2020/11/01/MySQL/table24.jpg" class="">
 
 
 
-<p>因此，我们可以发现，RC隔离级别下，加锁的select, update, delete等语句，使用的是记录锁，其他事务的插入依然可以执行，因此会存在幻读~</p>
+<p>因此，我们可以发现，RC隔离级别下，加锁的select, update, delete等语句，使用的是记录锁，其他事务的插入依然可以执行，因此会存在幻读</p>
 <h3 id="RR-级别解决幻读分析"><a href="#RR-级别解决幻读分析" class="headerlink" title="RR 级别解决幻读分析"></a>RR 级别解决幻读分析</h3><p>因为RR是解决幻读问题的，怎么解决的呢，分析一波吧~</p>
 <p>假设account表有4条数据，RR级别。</p>
 <ul>
-<li><p>开启事务A，执行当前读，查询id&gt;2的所有记录。</p>
+<li><p>开启事务A，执行当前读，查询id&gt;2的所有记录</p>
 </li>
 <li><p>再开启事务B，插入id=5的一条数据。</p>
 <img src="/2020/11/01/MySQL/table25.jpg" class="">
@@ -677,16 +678,7 @@
 <p>可以发现，事务B执行插入操作时，阻塞了~因为事务A在执行select … lock in share mode的时候，不仅在 id = 3,4 这2条记录上加了锁，而且在id &gt; 2 这个范围上也加了间隙锁。</p>
 </li>
 </ul>
-<p>因此，我们可以发现，RR隔离级别下，加锁的select, update, delete等语句，会使用间隙锁+ 临键锁，锁住索引记录之间的范围，避免范围间插入记录，以避免产生幻影行记录。</p>
-<h2 id="参考与感谢"><a href="#参考与感谢" class="headerlink" title="参考与感谢"></a>参考与感谢</h2><ul>
-<li><a href="https://www.aneasystone.com/archives/2017/10/solving-dead-locks-one.html" target="_blank" rel="noopener"> 解决死锁之路 - 学习事务与隔离级别</a></li>
-<li><a href="https://www.jianshu.com/p/4e3edbedb9a8" target="_blank" rel="noopener">五分钟搞清楚MySQL事务隔离级别</a></li>
-<li><a href="https://mp.weixin.qq.com/s/x_7E2R2i27Ci5O7kLQF0UA" target="_blank" rel="noopener">4种事务的隔离级别，InnoDB如何巧妙实现？</a></li>
-<li><a href="https://juejin.im/post/6844903808376504327#heading-6" target="_blank" rel="noopener">MySQL事务隔离级别和MVCC</a></li>
-<li><a href="https://chenjiayang.me/2019/06/22/mysql-innodb-mvcc/" target="_blank" rel="noopener">MySQL InnoDB MVCC 机制的原理及实现</a></li>
-<li><a href="https://www.jianshu.com/p/8845ddca3b23" target="_blank" rel="noopener">MVCC多版本并发控制</a></li>
-</ul>
-<p>作者：Jay_huaxiao<a href="https://github.com/whx123/JavaHome" target="_blank" rel="noopener">面试题</a><br>链接：<a href="https://juejin.im/post/6844904115353436174" target="_blank" rel="noopener">https://juejin.im/post/6844904115353436174</a><br>来源：掘金</p>
+<p>因此，我们可以发现，RR隔离级别下，加锁的select, update, delete等语句，会使用间隙锁+ 临键锁，锁住索引记录之间的范围，避免范围间插入记录，以避免产生幻读。</p>
 
     </div>
 
@@ -768,7 +760,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#事务"><span class="nav-number">1.</span> <span class="nav-text">事务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简述"><span class="nav-number">1.1.</span> <span class="nav-text">简述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是事务？"><span class="nav-number">1.1.1.</span> <span class="nav-text">什么是事务？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事务的四大特性"><span class="nav-number">1.1.2.</span> <span class="nav-text">事务的四大特性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事务并发存在的问题"><span class="nav-number">1.2.</span> <span class="nav-text">事务并发存在的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#脏读（dirty-read）"><span class="nav-number">1.2.1.</span> <span class="nav-text">脏读（dirty read）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不可重复读（unrepeatable-read）"><span class="nav-number">1.2.2.</span> <span class="nav-text">不可重复读（unrepeatable read）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#幻读"><span class="nav-number">1.2.3.</span> <span class="nav-text">幻读</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事务的四大隔离级别实践"><span class="nav-number">1.3.</span> <span class="nav-text">事务的四大隔离级别实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#读未提交（Read-Uncommitted）"><span class="nav-number">1.3.1.</span> <span class="nav-text">读未提交（Read Uncommitted）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#已提交读（READ-COMMITTED）"><span class="nav-number">1.3.2.</span> <span class="nav-text">已提交读（READ COMMITTED）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可重复读（Repeatable-Read）"><span class="nav-number">1.3.3.</span> <span class="nav-text">可重复读（Repeatable Read）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#串行化（Serializable）"><span class="nav-number">1.3.4.</span> <span class="nav-text">串行化（Serializable）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySql隔离级别的实现原理"><span class="nav-number">1.4.</span> <span class="nav-text">MySql隔离级别的实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#读未提交（Read-Uncommitted）-1"><span class="nav-number">1.4.1.</span> <span class="nav-text">读未提交（Read Uncommitted）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#串行化（Serializable"><span class="nav-number">1.4.2.</span> <span class="nav-text">串行化（Serializable)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MVCC的实现原理"><span class="nav-number">1.4.3.</span> <span class="nav-text">MVCC的实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#隐式字段"><span class="nav-number">1.4.3.1.</span> <span class="nav-text">隐式字段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undo日志"><span class="nav-number">1.4.3.2.</span> <span class="nav-text">undo日志</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#快照读-amp-当前读"><span class="nav-number">1.4.3.3.</span> <span class="nav-text">快照读&amp;当前读</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Read-View"><span class="nav-number">1.4.3.4.</span> <span class="nav-text">Read View</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#已提交读（READ-COMMITTED）-存在不可重复读问题的分析历程"><span class="nav-number">1.4.4.</span> <span class="nav-text">已提交读（READ COMMITTED） 存在不可重复读问题的分析历程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可重复读（Repeatable-Read）解决不可重复读问题的一次分析"><span class="nav-number">1.4.5.</span> <span class="nav-text">可重复读（Repeatable Read）解决不可重复读问题的一次分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#锁相关概念补充（附）："><span class="nav-number">1.4.6.</span> <span class="nav-text">锁相关概念补充（附）：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#共享锁与排他锁"><span class="nav-number">1.4.6.1.</span> <span class="nav-text">共享锁与排他锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#记录锁（Record-Locks）"><span class="nav-number">1.4.6.2.</span> <span class="nav-text">记录锁（Record Locks）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#间隙锁（Gap-Locks）"><span class="nav-number">1.4.6.3.</span> <span class="nav-text">间隙锁（Gap Locks）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Next-Key-Locks"><span class="nav-number">1.4.6.4.</span> <span class="nav-text">Next-Key Locks</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RC级别存在幻读分析"><span class="nav-number">1.4.7.</span> <span class="nav-text">RC级别存在幻读分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RR-级别解决幻读分析"><span class="nav-number">1.4.8.</span> <span class="nav-text">RR 级别解决幻读分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考与感谢"><span class="nav-number">1.5.</span> <span class="nav-text">参考与感谢</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#事务"><span class="nav-number">1.</span> <span class="nav-text">事务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简述"><span class="nav-number">1.1.</span> <span class="nav-text">简述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是事务？"><span class="nav-number">1.1.1.</span> <span class="nav-text">什么是事务？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事务的四大特性"><span class="nav-number">1.1.2.</span> <span class="nav-text">事务的四大特性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事务并发存在的问题"><span class="nav-number">1.2.</span> <span class="nav-text">事务并发存在的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#脏读（dirty-read）"><span class="nav-number">1.2.1.</span> <span class="nav-text">脏读（dirty read）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不可重复读（unrepeatable-read）"><span class="nav-number">1.2.2.</span> <span class="nav-text">不可重复读（unrepeatable read）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#幻读"><span class="nav-number">1.2.3.</span> <span class="nav-text">幻读</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事务的四大隔离级别实践"><span class="nav-number">1.3.</span> <span class="nav-text">事务的四大隔离级别实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#读未提交（Read-Uncommitted）"><span class="nav-number">1.3.1.</span> <span class="nav-text">读未提交（Read Uncommitted）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#已提交读（READ-COMMITTED）"><span class="nav-number">1.3.2.</span> <span class="nav-text">已提交读（READ COMMITTED）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可重复读（Repeatable-Read）"><span class="nav-number">1.3.3.</span> <span class="nav-text">可重复读（Repeatable Read）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#串行化（Serializable）"><span class="nav-number">1.3.4.</span> <span class="nav-text">串行化（Serializable）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySql隔离级别的实现原理"><span class="nav-number">1.4.</span> <span class="nav-text">MySql隔离级别的实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#读未提交（Read-Uncommitted）-1"><span class="nav-number">1.4.1.</span> <span class="nav-text">读未提交（Read Uncommitted）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#串行化（Serializable"><span class="nav-number">1.4.2.</span> <span class="nav-text">串行化（Serializable)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MVCC的实现原理"><span class="nav-number">1.4.3.</span> <span class="nav-text">MVCC的实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#隐式字段"><span class="nav-number">1.4.3.1.</span> <span class="nav-text">隐式字段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undo日志"><span class="nav-number">1.4.3.2.</span> <span class="nav-text">undo日志</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#快照读-amp-当前读"><span class="nav-number">1.4.3.3.</span> <span class="nav-text">快照读&amp;当前读</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Read-View"><span class="nav-number">1.4.3.4.</span> <span class="nav-text">Read View</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#已提交读（READ-COMMITTED）-存在不可重复读问题的分析历程"><span class="nav-number">1.4.4.</span> <span class="nav-text">已提交读（READ COMMITTED） 存在不可重复读问题的分析历程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可重复读（Repeatable-Read）解决不可重复读问题的一次分析"><span class="nav-number">1.4.5.</span> <span class="nav-text">可重复读（Repeatable Read）解决不可重复读问题的一次分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#锁相关概念补充（附）："><span class="nav-number">1.4.6.</span> <span class="nav-text">锁相关概念补充（附）：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#共享锁与排他锁"><span class="nav-number">1.4.6.1.</span> <span class="nav-text">共享锁与排他锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#记录锁（Record-Locks）"><span class="nav-number">1.4.6.2.</span> <span class="nav-text">记录锁（Record Locks）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#间隙锁（Gap-Locks）"><span class="nav-number">1.4.6.3.</span> <span class="nav-text">间隙锁（Gap Locks）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Next-Key-Locks（临键锁）"><span class="nav-number">1.4.6.4.</span> <span class="nav-text">Next-Key Locks（临键锁）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RC级别存在幻读分析"><span class="nav-number">1.4.7.</span> <span class="nav-text">RC级别存在幻读分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RR-级别解决幻读分析"><span class="nav-number">1.4.8.</span> <span class="nav-text">RR 级别解决幻读分析</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
