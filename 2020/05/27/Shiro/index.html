@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="zh-CN,default">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zystrivego.github.io","root":"/","scheme":"Pisces","version":"8.0.0-rc.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Apache Shiro™ is a powerful and easy-to-use Java security framework that performs authentication, authorization, cryptography, and session management. With Shiro’s easy-to-understand API,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shiro">
+<meta property="og:url" content="https://zystrivego.github.io/2020/05/27/Shiro/index.html">
+<meta property="og:site_name" content="zystrivego">
+<meta property="og:description" content="Apache Shiro™ is a powerful and easy-to-use Java security framework that performs authentication, authorization, cryptography, and session management. With Shiro’s easy-to-understand API,">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://shiro.apache.org/assets/images/ShiroFeatures.png">
+<meta property="og:image" content="http://shiro.apache.org/assets/images/ShiroBasicArchitecture.png">
+<meta property="og:image" content="http://shiro.apache.org/assets/images/ShiroArchitecture.png">
+<meta property="article:published_time" content="2020-05-27T02:50:55.000Z">
+<meta property="article:modified_time" content="2020-05-27T02:50:55.727Z">
+<meta property="article:author" content="zhangyu">
+<meta property="article:tag" content="auth">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://shiro.apache.org/assets/images/ShiroFeatures.png">
+
+<link rel="canonical" href="https://zystrivego.github.io/2020/05/27/Shiro/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Shiro | zystrivego</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-166280277-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-166280277-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?d80a08decb023081a8512483b9302992";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="zystrivego" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">zystrivego</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zystrivego.github.io/2020/05/27/Shiro/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/%E7%8E%8B%E4%B9%9F.jpg">
+      <meta itemprop="name" content="zhangyu">
+      <meta itemprop="description" content="The world is your oyster">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zystrivego">
+    </span>
+      <header class="post-header">
+        
+        <h1 class="post-title" itemprop="name headline">
+          Shiro
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-05-27 10:50:55" itemprop="dateCreated datePublished" datetime="2020-05-27T10:50:55+08:00">2020-05-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/05/27/Shiro/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/05/27/Shiro/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <div class="note info">
+            <p><strong>Apache Shiro™</strong> is a powerful and easy-to-use Java security framework that performs authentication, authorization, cryptography, and session management. With Shiro’s easy-to-understand API, you can quickly and easily secure any application – from the smallest mobile applications to the largest web and enterprise applications.</p><p>Welcome to <a href="http://shiro.apache.org/index.html" target="_blank" rel="noopener">Shiro!</a></p>
+          </div>
+
+<a id="more"></a>
+
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><h2 id="Features"><a href="#Features" class="headerlink" title="Features"></a><a href="http://shiro.apache.org/introduction.html#apache-shiro-features" target="_blank" rel="noopener">Features</a></h2><p>Apache Shiro is a comprehensive application security framework with many features. The following diagram shows where Shiro focuses its energy, and this reference manual will be organized similarly:</p>
+<p><img src="http://shiro.apache.org/assets/images/ShiroFeatures.png" alt="img"></p>
+<p>Shiro targets what the Shiro development team calls “the four cornerstones of application security” - Authentication, Authorization, Session Management, and Cryptography:</p>
+<ul>
+<li><strong>Authentication:</strong> Sometimes referred to as ‘login’, this is the act of proving a user is who they say they are.</li>
+<li><strong>Authorization:</strong> The process of access control, i.e. determining ‘who’ has access to ‘what’.</li>
+<li><strong>Session Management:</strong> Managing user-specific sessions, even in non-web or EJB applications.</li>
+<li><strong>Cryptography:</strong> Keeping data secure using cryptographic algorithms while still being easy to use.</li>
+</ul>
+<p>There are also additional features to support and reinforce these concerns in different application environments, especially:</p>
+<ul>
+<li>Web Support: Shiro’s web support APIs help easily secure web applications.</li>
+<li>Caching: Caching is a first-tier citizen in Apache Shiro’s API to ensure that security operations remain fast and efficient.</li>
+<li>Concurrency: Apache Shiro supports multi-threaded applications with its concurrency features.</li>
+<li>Testing: Test support exists to help you write unit and integration tests and ensure your code will be secured as expected.</li>
+<li>“Run As”: A feature that allows users to assume the identity of another user (if they are allowed), sometimes useful in administrative scenarios.</li>
+<li>“Remember Me”: Remember users’ identities across sessions so they only need to log in when mandatory.</li>
+</ul>
+<h2 id="High-Level-Overview"><a href="#High-Level-Overview" class="headerlink" title="High-Level Overview"></a>High-Level Overview</h2><p>At the highest conceptual level, Shiro’s architecture has 3 primary concepts: the <code>Subject</code>, <code>SecurityManager</code> and <code>Realms</code>. The following diagram is a high-level overview of how these components interact, and we’ll cover each concept below:</p>
+<p><img src="http://shiro.apache.org/assets/images/ShiroBasicArchitecture.png" alt="img"></p>
+<ul>
+<li><p><strong>Subject</strong>: As we’ve mentioned in our <a href="http://shiro.apache.org/tutorial.html" target="_blank" rel="noopener">Tutorial</a>, the <code>Subject</code> is essentially a security specific ‘view’ of the the currently executing user. Whereas the word ‘User’ often implies a human being, a <code>Subject</code> can be a person, but it could also represent a 3rd-party service, daemon account, cron job, or anything similar - basically anything that is currently interacting with the software.</p>
+<p><code>Subject</code> instances are all bound to (and require) a <code>SecurityManager</code>. When you interact with a <code>Subject</code>, those interactions translate to subject-specific interactions with the <code>SecurityManager</code>.</p>
+</li>
+<li><p><strong>SecurityManager</strong>: The <code>SecurityManager</code> is the heart of Shiro’s architecture and acts as a sort of ’umbrella’ object that coordinates its internal security components that together form an object graph. However, once the SecurityManager and its internal object graph is configured for an application, it is usually left alone and application developers spend almost all of their time with the <code>Subject</code> API.</p>
+<p>We will talk about the <code>SecurityManager</code> in detail later on, but it is important to realize that when you interact with a <code>Subject</code>, it is really the <code>SecurityManager</code> behind the scenes that does all the heavy lifting for any <code>Subject</code> security operation. This is reflected in the basic flow diagram above.</p>
+</li>
+<li><p><strong>Realms</strong>: Realms act as the ‘bridge’ or ‘connector’ between Shiro and your application’s security data. When it comes time to actually interact with security-related data like user accounts to perform authentication (login) and authorization (access control), Shiro looks up many of these things from one or more Realms configured for an application.</p>
+<p>In this sense a Realm is essentially a security-specific <a href="https://en.wikipedia.org/wiki/Data_access_object" target="_blank" rel="noopener">DAO</a>: it encapsulates connection details for data sources and makes the associated data available to Shiro as needed. When configuring Shiro, you must specify at least one Realm to use for authentication and/or authorization. The <code>SecurityManager</code> may be configured with multiple Realms, but at least one is required.</p>
+<p>Shiro provides out-of-the-box Realms to connect to a number of security data sources (aka directories) such as LDAP, relational databases (JDBC), text configuration sources like INI and properties files, and more. You can plug-in your own Realm implementations to represent custom data sources if the default Realms do not meet your needs.</p>
+<p>Like other internal components, the Shiro <code>SecurityManager</code> manages how Realms are used to acquire security and identity data to be represented as <code>Subject</code> instances.</p>
+</li>
+</ul>
+<h2 id="Detailed-Architecture"><a href="#Detailed-Architecture" class="headerlink" title="Detailed Architecture"></a><a href="http://shiro.apache.org/architecture.html#detailed-architecture" target="_blank" rel="noopener">Detailed Architecture</a></h2><p>The following diagram shows Shiro’s core architectural concepts followed by short summaries of each:</p>
+<p><img src="http://shiro.apache.org/assets/images/ShiroArchitecture.png" alt="img"></p>
+<ul>
+<li><strong>Subject</strong> (<a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/subject/Subject.html" target="_blank" rel="noopener"><code>org.apache.shiro.subject.Subject</code></a>)<br>A security-specific ‘view’ of the entity (user, 3rd-party service, cron job, etc) currently interacting with the software.</li>
+<li><strong>SecurityManager</strong> (<a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/mgt/SecurityManager.html" target="_blank" rel="noopener">org.apache.shiro.mgt.SecurityManager</a>)<br>As mentioned above, the <code>SecurityManager</code> is the heart of Shiro’s architecture. It is mostly an ‘umbrella’ object that coordinates its managed components to ensure they work smoothly together. It also manages Shiro’s view of every application user, so it knows how to perform security operations per user.</li>
+<li><strong>Authenticator</strong> (<a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/authc/Authenticator.html" target="_blank" rel="noopener">org.apache.shiro.authc.Authenticator</a>)<br>The <code>Authenticator</code> is the component that is responsible for executing and reacting to authentication (log-in) attempts by users. When a user tries to log-in, that logic is executed by the <code>Authenticator</code>. The <code>Authenticator</code> knows how to coordinate with one or more <code>Realms</code> that store relevant user/account information. The data obtained from these <code>Realms</code> is used to verify the user’s identity to guarantee the user really is who they say they are.<ul>
+<li><strong>Authentication Strategy</strong> (<a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/authc/pam/AuthenticationStrategy.html" target="_blank" rel="noopener">org.apache.shiro.authc.pam.AuthenticationStrategy</a>)<br>If more than one <code>Realm</code> is configured, the <code>AuthenticationStrategy</code> will coordinate the Realms to determine the conditions under which an authentication attempt succeeds or fails (for example, if one realm succeeds but others fail, is the attempt successful? Must all realms succeed? Only the first?).</li>
+</ul>
+</li>
+<li><strong>Authorizer</strong> (<a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/authz/Authorizer.html" target="_blank" rel="noopener">org.apache.shiro.authz.Authorizer</a>)<br>The <code>Authorizer</code> is the component responsible determining users’ access control in the application. It is the mechanism that ultimately says if a user is allowed to do something or not. Like the <code>Authenticator</code>, the <code>Authorizer</code> also knows how to coordinate with multiple back-end data sources to access role and permission information. The <code>Authorizer</code> uses this information to determine exactly if a user is allowed to perform a given action.</li>
+<li><strong>SessionManager</strong> (<a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/session/mgt/SessionManager.html" target="_blank" rel="noopener">org.apache.shiro.session.mgt.SessionManager</a>)<br>The <code>SessionManager</code> knows how to create and manage user <code>Session</code> lifecycles to provide a robust Session experience for users in all environments. This is a unique feature in the world of security frameworks - Shiro has the ability to natively manage user Sessions in any environment, even if there is no Web/Servlet or EJB container available. By default, Shiro will use an existing session mechanism if available, (e.g. Servlet Container), but if there isn’t one, such as in a standalone application or non-web environment, it will use its built-in enterprise session management to offer the same programming experience. The <code>SessionDAO</code> exists to allow any datasource to be used to persist sessions.<ul>
+<li><strong>SessionDAO</strong> (<a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/session/mgt/eis/SessionDAO.html" target="_blank" rel="noopener">org.apache.shiro.session.mgt.eis.SessionDAO</a>)<br>The <code>SessionDAO</code> performs <code>Session</code> persistence (CRUD) operations on behalf of the <code>SessionManager</code>. This allows any data store to be plugged in to the Session Management infrastructure.</li>
+</ul>
+</li>
+<li><strong>CacheManager</strong> (<a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/cache/CacheManager.html" target="_blank" rel="noopener">org.apache.shiro.cache.CacheManager</a>)<br>The <code>CacheManager</code> creates and manages <code>Cache</code> instance lifecycles used by other Shiro components. Because Shiro can access many back-end data sources for authentication, authorization and session management, caching has always been a first-class architectural feature in the framework to improve performance while using these data sources. Any of the modern open-source and/or enterprise caching products can be plugged in to Shiro to provide a fast and efficient user-experience.</li>
+<li><strong>Cryptography</strong> (<a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/crypto/package-summary.html" target="_blank" rel="noopener">org.apache.shiro.crypto.*</a>)<br>Cryptography is a natural addition to an enterprise security framework. Shiro’s <code>crypto</code> package contains easy-to-use and understand representations of crytographic Ciphers, Hashes (aka digests) and different codec implementations. All of the classes in this package are carefully designed to be very easy to use and easy to understand. Anyone who has used Java’s native cryptography support knows it can be a challenging animal to tame. Shiro’s crypto APIs simplify the complicated Java mechanisms and make cryptography easy to use for normal mortal human beings.</li>
+<li><strong>Realms</strong> (<a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/realm/Realm.html" target="_blank" rel="noopener">org.apache.shiro.realm.Realm</a>)<br>As mentioned above, Realms act as the ‘bridge’ or ‘connector’ between Shiro and your <strong>application’s security data</strong>. When it comes time to actually interact with security-related data like user accounts to perform authentication (login) and authorization (access control), Shiro looks up many of these things from one or more Realms configured for an application. You can configure as many <code>Realms</code> as you need (usually one per data source) and Shiro will coordinate with them as necessary for both authentication and authorization.</li>
+</ul>
+<h2 id="The-SecurityManager"><a href="#The-SecurityManager" class="headerlink" title="The SecurityManager"></a>The <code>SecurityManager</code></h2><p>Because Shiro’s API encourages a <code>Subject</code>-centric programming approach, most application developers will rarely, if ever, interact with the <code>SecurityManager</code> directly (framework developers however might sometimes find it useful). Even so, it is still important to know how the <code>SecurityManager</code> functions, especially when configuring one for an application.</p>
+<h3 id="Design"><a href="#Design" class="headerlink" title="Design"></a><a href="http://shiro.apache.org/architecture.html#design" target="_blank" rel="noopener">Design</a></h3><p>As stated previously, the application’s <code>SecurityManager</code> performs security operations and manages state for <em>all</em> application users. In Shiro’s default <code>SecurityManager</code> implementations, this includes:</p>
+<ul>
+<li>Authentication</li>
+<li>Authorization</li>
+<li>Session Management</li>
+<li>Cache Management</li>
+<li><a href="http://shiro.apache.org/realm.html" target="_blank" rel="noopener">Realm</a> coordination</li>
+<li>Event propagation</li>
+<li>“Remember Me” Services</li>
+<li>Subject creation</li>
+<li>Logout and more.</li>
+</ul>
+<p>But this is a lot of functionality to try to manage in a single component. And, making these things flexible and customizable would be very difficult if everything were lumped into a single implementation class.</p>
+<p>To simplify configuration and enable flexible configuration/pluggability, Shiro’s implementations are all highly modular in design - so modular in fact, that the SecurityManager implementation (and its class-hierarchy) does not do much at all. Instead, the <code>SecurityManager</code> implementations mostly act as a lightweight ‘container’ component, delegating almost all behavior to nested/wrapped components. This ‘wrapper’ design is reflected in the detailed architecture diagram above.</p>
+<p>While the components actually execute the logic, the <code>SecurityManager</code> implementation knows how and when to coordinate the components for the correct behavior.</p>
+<p>The <code>SecurityManager</code> implementations and the components are also JavaBeans compatible, which allows you (or a configuration mechanism) to easily customize the pluggable components via standard JavaBeans accessor/mutator methods (get<em>/set</em>). This means the Shiro’s architectural modularity can translate into very easy configuration for custom behavior.</p>
+<div class="note info">
+            <p><strong>Easy Configuration</strong></p><p>Because of JavaBeans compatibility, it is very easy to configure the <code>SecurityManager</code> with custom components via any mechanism that supports JavaBeans-style configuration, such as <a href="http://shiro.apache.org/spring.html" target="_blank" rel="noopener">Spring</a>, Guice, JBoss, etc.</p>
+          </div>
+
+<h2 id="Terminology"><a href="#Terminology" class="headerlink" title="Terminology"></a><a href="http://shiro.apache.org/terminology.html#apache-shiro-terminology" target="_blank" rel="noopener">Terminology</a></h2><ul>
+<li><strong>Authentication</strong><br>Authentication is the process of verifying a Subject’s identity - essentially proving that someone really is who they say they are. When an authentication attempt is successful the application can trust that the subject is guaranteed to be who the application expects.</li>
+</ul>
+<ul>
+<li><strong>Authorization</strong><br>Authorization, also known as Access Control, is the process of determining if a user/Subject is allowed to do something or not. It is usually accomplished by inspecting and interpreting a Subject’s roles and permissions (see below) and then allowing or denying access to a requested resource or function.</li>
+</ul>
+<ul>
+<li><p><strong>Cipher</strong></p>
+<p>A cipher is an algorithm for performing encryption or decryption. The algorithm generally relies on a piece of information called a key. And the encryption varies based on the key so decyrption is extremely difficult without it.</p>
+<p>Ciphers come in different variations. Block Ciphers work on blocks of symbols usually of a fixed size while Stream Ciphers work on a continuous stream of symbols. Symmetric Ciphers use the same key for encryption and decryption while Asymmetric Ciphers use different keys. And if a key in an asymmetric cipher cannot be derived from the other, then one can be shared publicly creating public/private key pairs.</p>
+</li>
+</ul>
+<ul>
+<li><p><strong>Credential</strong></p>
+<p>A Credential is a piece of information that verifies the identity of a user/Subject. One (or more) credentials are submitted along with Principal(s) during an authentication attempt to verify that the user/Subject submitting them is actually the associated user. Credentials are usually very secret things that only a particular user/Subject would know, such as a password or a PGP key or biometric attribute or similar mechanism.</p>
+<p>The idea is that for a principal, only one person would know the correct credential to ‘pair’ with that principal. If the current user/Subject provides the correct credential matching the one stored in the system, then the system can assume and trust that the current user/Subject is really who they say they are. <strong>The degree of trust increases with more secure credential types (e.g. biometric signature &gt; password).</strong></p>
+</li>
+</ul>
+<ul>
+<li><strong>Cryptography</strong><br>Cryptography is the practice of protecting information from undesired access by hiding it or converting it into nonsense so no one else can read it. Shiro focuses on two core elements of Cryptography: ciphers that encrypt data like email using a public or private key, and hashes (aka message digests) that irreversibly encrypt data like passwords.</li>
+</ul>
+<ul>
+<li><strong>Hash</strong><br>A Hash function is a one-way, irreversible conversion of an input source, sometimes called the message, into an encoded hash value, sometimes called the message digest. It is often used for passwords, digital fingerprints, or data with an underlying byte array.</li>
+</ul>
+<ul>
+<li><p><strong>Permission</strong></p>
+<p>A Permission, at least as Shiro interprets it, is a statement that describes raw functionality in an application and nothing more. Permissions are the lowest-level constructs in security policies. They define only “What” the application can do. They do not describe “Who” is able to perform the actions. A Permission is only a statement of behavior, nothing more.</p>
+<p>Some examples of permissions:</p>
+<ul>
+<li>Open a file</li>
+<li>View the ‘/user/list’ web page</li>
+<li>Print documents</li>
+<li>Delete the ‘jsmith’ user</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>Principal</strong></p>
+<p>A Principal is any identifying attribute of an application user (Subject). An ‘identifying attribute’ can be anything that makes sense to your application - a username, a surname, a given name, a social security number, a user ID, etc. That’s it - nothing crazy.</p>
+<p>Shiro also references something we call a <code>Subject</code>’s <em>primary</em> principal. A <em>Primary</em> principal is any principal that uniquely identifies the <code>Subject</code> across the entire application. Ideal primary principals are things like a username or a user ID that is a RDBMS user table primary key. There is only one primary principal for users (Subjects) in an application.</p>
+</li>
+</ul>
+<ul>
+<li><p><strong>Realm</strong></p>
+<p>A Realm is a component that can access application-specific security data such as users, roles, and permissions. It can be thought of as a security-specific DAO (Data Access Object). The Realm translates this application-specific data into a format that Shiro understands so Shiro can in turn provide a single easy-to-understand Subject programming API no matter how many data sources exist or how application-specific your data might be.</p>
+<p>Realms usually have a 1-to-1 correlation with a data source such as a relational database, LDAP directory, file system, or other similar resource. As such, implementations of the Realm interface use data source-specific APIs to discover authorization data (roles, permissions, etc), such as JDBC, File IO, Hibernate or JPA, or any other Data Access API.</p>
+</li>
+</ul>
+<ul>
+<li><p><strong>Role</strong></p>
+<p>The definition of a Role can vary based on who you talk to. In many applications it is a nebulous concept at best that people use to implicitly define security policies. Shiro prefers to interpret a Role as simply a named collection of Permissions. That’s it - an application unique name aggregating one or more Permission declarations.</p>
+<p>This is a more concrete definition than the implicit one used by many applications. If you choose to have your data model reflect Shiro’s assumption, you’ll find you will have much more power in controlling security policies.</p>
+</li>
+</ul>
+<ul>
+<li><p><strong>Session</strong></p>
+<p>A Session is a stateful data context associated with a single user/Subject who interacts with a software system over a period of time. Data can be added/read/removed from the Session while the subject uses the application and the application can use this data later where necessary. Sessions are terminated when the user/Subject logs out of the application or when it times out due to inactivity.</p>
+<p>For those familiar with the HttpSession, a Shiro <code>Session</code> serves the same purpose, except Shiro sessions can be used in any environment even if there is no Servlet container or EJB container available.</p>
+</li>
+</ul>
+<ul>
+<li><strong>Subject</strong><br>A <em>Subject</em> is just fancy security term that basically means a security-specific ‘view’ of an application user. A Subject does not always need to reflect a human being though - it can represent an external process calling your application, or perhaps a daemon system account that executes something intermittently over a period of time (such as a cron job). It is basically a representation of any entity that is doing something with the application.</li>
+</ul>
+<h1 id="Core"><a href="#Core" class="headerlink" title="Core"></a>Core</h1><h2 id="Authentication"><a href="#Authentication" class="headerlink" title="Authentication"></a><a href="http://shiro.apache.org/authentication.html#apache-shiro-authentication" target="_blank" rel="noopener">Authentication</a></h2><h3 id="Authenticating-Subjects"><a href="#Authenticating-Subjects" class="headerlink" title="Authenticating Subjects"></a>Authenticating Subjects</h3><ol>
+<li><p>Collect the Subject’s principals and credentials</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Example using most common scenario of username/password pair: </span></span><br><span class="line">UsernamePasswordToken token = <span class="keyword">new</span> UsernamePasswordToken(username, password);</span><br><span class="line"><span class="comment">//"Remember Me" built-in:  </span></span><br><span class="line">token.setRememberMe(<span class="keyword">true</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Submit the principals and credentials</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Subject currentUser = SecurityUtils.getSubject();</span><br><span class="line"></span><br><span class="line">currentUser.login(token);</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ol>
+<ol start="3">
+<li>Handling Success or Failure</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    currentUser.login(token);</span><br><span class="line">&#125; <span class="keyword">catch</span> ( UnknownAccountException uae ) &#123; ...</span><br><span class="line">&#125; <span class="keyword">catch</span> ( IncorrectCredentialsException ice ) &#123; ...</span><br><span class="line">&#125; <span class="keyword">catch</span> ( LockedAccountException lae ) &#123; ...</span><br><span class="line">&#125; <span class="keyword">catch</span> ( ExcessiveAttemptsException eae ) &#123; ...</span><br><span class="line">&#125; ... <span class="keyword">catch</span> your own ...</span><br><span class="line">&#125; <span class="keyword">catch</span> ( AuthenticationException ae ) &#123;</span><br><span class="line">    <span class="comment">//unexpected error?</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//No problems, continue on as expected...</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Remembered-vs-Authenticated"><a href="#Remembered-vs-Authenticated" class="headerlink" title="Remembered vs. Authenticated"></a>Remembered vs. Authenticated</h3><div class="note warning">
+            <p><strong>Mutually Exclusive</strong></p><p>Remembered and authenticated states are mutually exclusive - a <code>true</code> value for one indicates a <code>false</code> value for the other and vice versa.</p><p>Remembered记住的是登录人信息，但是实际操作人不一定是本人，所以当涉及敏感信息时，还是推荐Authenticated重新认证</p>
+          </div>
+
+<h3 id="Logging-Out"><a href="#Logging-Out" class="headerlink" title="Logging Out"></a><a href="http://shiro.apache.org/authentication.html#logging-out" target="_blank" rel="noopener">Logging Out</a></h3><p>The opposite of authenticating is releasing all known identifying state. When the <code>Subject</code> is done interacting with the application, you can call <code>subject.</code><a href="http://shiro.apache.org/static/current/apidocs/org/apache/shiro/subject/Subject.html#logout--" target="_blank" rel="noopener"><code>logout()</code></a> to relinquish all identifying information:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">currentUser.logout(); &#x2F;&#x2F;removes all identifying information and invalidates their session too.</span><br></pre></td></tr></table></figure>
+
+<p>When you call <code>logout</code>, any existing <code>Session</code> will be invalidated and any identity will be disassociated (e.g. in a web app, the RememberMe cookie will also be deleted).</p>
+<p>After a <code>Subject</code> logs-out, the <code>Subject</code> instance is considered anonymous again and, except for web applications, can be re-used for <code>login</code> again if desired.</p>
+<div class="note danger">
+            <p> <strong>Web Application Notice</strong></p><p>Because remembered identity in web applications is often persisted with cookies, and cookies can only be deleted before a Response body is committed, it is highly recommended to redirect the end-user to a new view or page immediately after calling <code>subject.logout()</code>.</p>
+          </div>
+
+<h2 id="Authorization"><a href="#Authorization" class="headerlink" title="Authorization"></a><a href="http://shiro.apache.org/authorization.html#apache-shiro-authorization" target="_blank" rel="noopener">Authorization</a></h2><blockquote>
+<p>授权是基于resources(door, file, customer, etc)和actions的 (open, read, delete, etc)</p>
+</blockquote>
+<div class="tabs" id="unique-name"><ul class="nav-tabs"><li class="tab active"><a href="#unique-name-1">编程式授权</a></li><li class="tab"><a href="#unique-name-2">注解式授权</a></li></ul><div class="tab-content"><div class="tab-pane active" id="unique-name-1"><p> 方法check会返回boolean，assertion会静默执行逻辑或抛出异常</p>
+<ol>
+<li>基于角色，简单直观</li>
+<li>基于权限，粒度更细，安全策略变化时，对源码的影响更小<ul>
+<li>基于object的，类型安全但略微笨重</li>
+<li>基于string（<a href="http://shiro.apache.org/permissions.html#wildcard-permissions" target="_blank" rel="noopener">Wildcard Permissions</a>）的，简单易读，但类型不安全</li>
+</ul>
+</li>
+</ol></div><div class="tab-pane" id="unique-name-2"><p>需要先开启AOP支持</p>
+<ol>
+<li><p><code>RequiresAuthentication</code> </p>
+</li>
+<li><p><code>RequiresGuest</code> </p>
+</li>
+<li><p><code>RequiresPermissions</code> </p>
+</li>
+<li><p><code>RequiresRoles</code></p>
+</li>
+<li><p><code>RequiresUser</code> </p>
+</li>
+</ol></div></div></div>
+
+<h2 id="Realm"><a href="#Realm" class="headerlink" title="Realm"></a><a href="http://shiro.apache.org/realm.html" target="_blank" rel="noopener">Realm</a></h2><h2 id="Session"><a href="#Session" class="headerlink" title="Session"></a><a href="http://shiro.apache.org/session-management.html#session-management" target="_blank" rel="noopener">Session</a></h2>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/auth/" rel="tag"><i class="fa fa-tag"></i> auth</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/05/22/%E9%94%AE%E7%9B%98%E6%8A%98%E8%85%BE%E5%8F%B2/" rel="prev" title="键盘折腾史">
+      <i class="fa fa-chevron-left"></i> 键盘折腾史
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/05/27/docker/" rel="next" title="docker">
+      docker <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Overview"><span class="nav-number">1.</span> <span class="nav-text">Overview</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Features"><span class="nav-number">1.1.</span> <span class="nav-text">Features</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#High-Level-Overview"><span class="nav-number">1.2.</span> <span class="nav-text">High-Level Overview</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Detailed-Architecture"><span class="nav-number">1.3.</span> <span class="nav-text">Detailed Architecture</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-SecurityManager"><span class="nav-number">1.4.</span> <span class="nav-text">The SecurityManager</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Design"><span class="nav-number">1.4.1.</span> <span class="nav-text">Design</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Terminology"><span class="nav-number">1.5.</span> <span class="nav-text">Terminology</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Core"><span class="nav-number">2.</span> <span class="nav-text">Core</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Authentication"><span class="nav-number">2.1.</span> <span class="nav-text">Authentication</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Authenticating-Subjects"><span class="nav-number">2.1.1.</span> <span class="nav-text">Authenticating Subjects</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Remembered-vs-Authenticated"><span class="nav-number">2.1.2.</span> <span class="nav-text">Remembered vs. Authenticated</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Logging-Out"><span class="nav-number">2.1.3.</span> <span class="nav-text">Logging Out</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Authorization"><span class="nav-number">2.2.</span> <span class="nav-text">Authorization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Realm"><span class="nav-number">2.3.</span> <span class="nav-text">Realm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Session"><span class="nav-number">2.4.</span> <span class="nav-text">Session</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="zhangyu"
+      src="/images/%E7%8E%8B%E4%B9%9F.jpg">
+  <p class="site-author-name" itemprop="name">zhangyu</p>
+  <div class="site-description" itemprop="description">The world is your oyster</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zystrivego/zystrivego.github.io" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zystrivego&#x2F;zystrivego.github.io" rel="noopener" target="_blank"><i class="fab iconfont icon-Ggooglelogo fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zystrivego@163.com" title="邮箱 → mailto:zystrivego@163.com" rel="noopener" target="_blank"><i class="fa iconfont icon-youxiang fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://music.163.com/m/user/home?id=15370305" title="音乐 → http:&#x2F;&#x2F;music.163.com&#x2F;m&#x2F;user&#x2F;home?id&#x3D;15370305" rel="noopener" target="_blank"><i class="fa iconfont icon-netease-cloud-music-line fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-rss fa-fw"></i></a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heartbeat"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhangyu</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    new Valine(Object.assign({
+      el         : '#valine-comments',
+      path       : location.pathname,
+    }, {"enable":true,"appId":"mMYlmXk0uIoNnOnvCApkjHSL-gzGzoHsz","appKey":"r09vC2BzfhUfyWS6IBiPSSjI","notify":false,"verify":false,"placeholder":"无需注册，支持Markdown格式","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"language":null,"visitor":false,"comment_count":true,"recordIP":false,"serverURLs":null}
+    ));
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

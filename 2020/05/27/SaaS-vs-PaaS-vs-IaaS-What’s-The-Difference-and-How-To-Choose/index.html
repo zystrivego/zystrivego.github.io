@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="zh-CN,default">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"zystrivego.github.io","root":"/","scheme":"Pisces","version":"8.0.0-rc.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="从小型企业到全球化企业，云计算都是一个热门话题，但它仍然是一个涵盖了许多在线领域的宽泛概念。 当您开始考虑将您的业务转移到云计算时，无论是为了应用程序还是基础设施部署，理解各种云服务的区别和优势比以往任何时候都更为重要。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SaaS vs PaaS vs IaaS: What’s The Difference and How To Choose">
+<meta property="og:url" content="https://zystrivego.github.io/2020/05/27/SaaS-vs-PaaS-vs-IaaS-What%E2%80%99s-The-Difference-and-How-To-Choose/index.html">
+<meta property="og:site_name" content="zystrivego">
+<meta property="og:description" content="从小型企业到全球化企业，云计算都是一个热门话题，但它仍然是一个涵盖了许多在线领域的宽泛概念。 当您开始考虑将您的业务转移到云计算时，无论是为了应用程序还是基础设施部署，理解各种云服务的区别和优势比以往任何时候都更为重要。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blogs.bmc.com/wp-content/uploads/2017/09/saas-vs-paas-vs-iaas-810x754.png">
+<meta property="article:published_time" content="2020-05-27T03:26:07.000Z">
+<meta property="article:modified_time" content="2020-05-27T07:27:19.399Z">
+<meta property="article:author" content="zhangyu">
+<meta property="article:tag" content="aaS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blogs.bmc.com/wp-content/uploads/2017/09/saas-vs-paas-vs-iaas-810x754.png">
+
+<link rel="canonical" href="https://zystrivego.github.io/2020/05/27/SaaS-vs-PaaS-vs-IaaS-What%E2%80%99s-The-Difference-and-How-To-Choose/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>SaaS vs PaaS vs IaaS: What’s The Difference and How To Choose | zystrivego</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-166280277-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-166280277-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?d80a08decb023081a8512483b9302992";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="zystrivego" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+        <span class="toggle-line toggle-line-first"></span>
+        <span class="toggle-line toggle-line-middle"></span>
+        <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">zystrivego</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://zystrivego.github.io/2020/05/27/SaaS-vs-PaaS-vs-IaaS-What%E2%80%99s-The-Difference-and-How-To-Choose/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/%E7%8E%8B%E4%B9%9F.jpg">
+      <meta itemprop="name" content="zhangyu">
+      <meta itemprop="description" content="The world is your oyster">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zystrivego">
+    </span>
+      <header class="post-header">
+        
+        <h1 class="post-title" itemprop="name headline">
+          SaaS vs PaaS vs IaaS: What’s The Difference and How To Choose
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-05-27 11:26:07 / 修改时间：15:27:19" itemprop="dateCreated datePublished" datetime="2020-05-27T11:26:07+08:00">2020-05-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%99%BE%E7%A7%91/" itemprop="url" rel="index"><span itemprop="name">百科</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/05/27/SaaS-vs-PaaS-vs-IaaS-What%E2%80%99s-The-Difference-and-How-To-Choose/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/05/27/SaaS-vs-PaaS-vs-IaaS-What%E2%80%99s-The-Difference-and-How-To-Choose/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>从小型企业到全球化企业，云计算都是一个热门话题，但它仍然是一个涵盖了许多在线领域的宽泛概念。 当您开始考虑将您的业务转移到云计算时，无论是为了应用程序还是基础设施部署，理解各种云服务的区别和优势比以往任何时候都更为重要。</p>
+<a id="more"></a>
+
+<p>通常有三种云服务模型可供比较: <strong>软件即服务(Software as a Service，SaaS)</strong>、<strong>平台即服务(Platform as a Service，PaaS)</strong>和<strong>基础设施即服务(Infrastructure as a Service，IaaS)</strong>。 这些方法都有自己的优点，也有不同之处，因此有必要了解 SaaS、 PaaS 和 IaaS 之间的差异，以便知道如何为您的组织最佳地选择其中之一。</p>
+<h2 id="主要差异摘要"><a href="#主要差异摘要" class="headerlink" title="主要差异摘要"></a>主要差异摘要</h2><p><img src="https://blogs.bmc.com/wp-content/uploads/2017/09/saas-vs-paas-vs-iaas-810x754.png" alt=""></p>
+<h2 id="Saas、-PaaS-和-IaaS-的常见例子"><a href="#Saas、-PaaS-和-IaaS-的常见例子" class="headerlink" title="Saas、 PaaS 和 IaaS 的常见例子"></a>Saas、 PaaS 和 IaaS 的常见例子</h2><table>
+<thead>
+<tr>
+<th>平台类型</th>
+<th><strong>常见例子</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>SaaS</strong></td>
+<td>Google Apps, Dropbox, Salesforce, Cisco WebEx, Concur, GoToMeeting</td>
+</tr>
+<tr>
+<td><strong>PaaS</strong></td>
+<td>AWS Elastic Beanstalk, Windows Azure, Heroku, Force.com, Google App Engine, Apache Stratos, OpenShift</td>
+</tr>
+<tr>
+<td><strong>IaaS</strong></td>
+<td>DigitalOcean, Linode, Rackspace, Amazon Web Services (AWS), Cisco Metapod, Microsoft Azure, Google Compute Engine (GCE)</td>
+</tr>
+</tbody></table>
+<h2 id="SaaS：软件即服务"><a href="#SaaS：软件即服务" class="headerlink" title="SaaS：软件即服务"></a>SaaS：软件即服务</h2><p>软件即服务，也被称为云应用服务，是云市场上最常用的商业选择。 Saas 利用互联网向用户交付由第三方供应商管理的应用程序。 大多数 SaaS 应用程序直接通过 web 浏览器运行，这意味着它们不需要在客户端进行任何下载或安装。</p>
+<h3 id="交付"><a href="#交付" class="headerlink" title="交付"></a>交付</h3><p>由于其 web 交付模式，SaaS 无需 IT 人员在每台计算机上下载和安装应用程序。 通过 SaaS，供应商可以管理所有潜在的技术问题，如数据、中间件、服务器和存储，从而简化业务的维护和支持。</p>
+<h3 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h3><p>Saas 为员工和公司提供了许多优势，因为它大大减少了安装、管理和升级软件等繁琐任务所花费的时间和金钱。 这样可以为技术人员腾出大量时间，用于处理组织内更为紧迫的事务和问题。</p>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><p>有几种方法可以帮助您确定什么时候使用 SaaS:</p>
+<ul>
+<li>从中心位置管理</li>
+<li>托管在远程服务器上</li>
+<li>可通过互联网访问</li>
+<li>用户不负责硬件或软件更新</li>
+</ul>
+<h3 id="什么时候使用"><a href="#什么时候使用" class="headerlink" title="什么时候使用"></a>什么时候使用</h3><p>在某些情况下 SaaS 可能是最有益的选择，包括:</p>
+<ul>
+<li>初创公司或小公司需要快速推出电子商务，没有时间处理服务器问题或软件</li>
+<li>需要快速、简单和负担得起的协作的短期项目</li>
+<li>不需要经常使用的应用程序，如税务软件</li>
+<li>同时需要 web 和移动访问的应用程序</li>
+</ul>
+<h3 id="局限性和担忧"><a href="#局限性和担忧" class="headerlink" title="局限性和担忧"></a>局限性和担忧</h3><ul>
+<li><strong>互操作性。</strong>如果SaaS应用程序不旨在遵循开放式集成标准，则与现有应用程序和服务的集成可能成为主要问题。在这种情况下，组织可能需要设计自己的集成系统或减少对SaaS服务的依赖性，而这并非总是可能的。</li>
+<li><strong>供应商锁定。</strong>供应商可能使加入服务变得容易，而退出服务却变得困难。例如，数据可能无法在技术上或成本效益上跨其他供应商的SaaS应用程序移植，而不会招致大量成本或内部工程返工。并非每个供应商都遵循标准的API，协议和工具，但是某些业务任务可能需要这些功能。</li>
+<li><strong>缺乏集成支持。</strong>许多组织需要与本地应用程序，数据和服务进行深度集成。SaaS供应商在这方面可能会提供有限的支持，从而迫使组织在设计和管理集成方面投入内部资源。集成的复杂性可能进一步限制SaaS应用程序或其他依赖服务的使用方式。</li>
+<li><strong>数据安全。</strong>为了执行必要的软件功能，可能必须将大量数据交换到SaaS应用程序的后端数据中心。将敏感的业务信息转移到基于公共云的SaaS服务可能会导致安全性和合规性受损，此外还需要迁移大量数据工作负载。</li>
+<li><strong>定制化。</strong>SaaS应用程序提供最少的自定义功能。由于不存在一种千篇一律的解决方案，因此用户可能仅限于供应商提供的特定功能，性能和集成。相反，一些软件开发工具包（SDK）附带的本地解决方案提供了高度的定制选项。</li>
+<li><strong>缺乏控制。</strong>SaaS解决方案涉及将控制权移交给第三方服务提供商。这些控件不仅限于软件-在版本，更新或外观方面-而且还包括数据和管理。因此，客户可能需要重新定义其数据安全性和治理模型，以适应SaaS服务的特性和功能。</li>
+<li><strong>功能限制。</strong>由于SaaS应用程序通常以标准化形式出现，因此功能的选择可能会折衷于与安全性，成本，性能或其他组织策略的权衡。此外，供应商的锁定，成本或安全性问题可能意味着将来无法切换供应商或服务来满足新功能要求。</li>
+<li><strong>性能和停机时间。</strong>由于供应商控制和管理SaaS服务，因此您的客户现在依赖供应商来维护服务的安全性和性能。尽管有适当的服务级别协议（SLA）保护，但计划内和计划外的维护，网络攻击或网络问题仍可能影响SaaS应用程序的性能。</li>
+</ul>
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><p>这些是SaaS的几个流行示例，包括：<a href="https://gsuite.google.com/" target="_blank" rel="noopener">Google GSuite</a>（应用程序），<a href="https://www.dropbox.com/" target="_blank" rel="noopener">Dropbox</a>，<a href="https://www.salesforce.com/" target="_blank" rel="noopener">Salesforce</a>，<a href="https://www.webex.com/" target="_blank" rel="noopener">Cisco WebEx</a>，<a href="https://www.concur.com/" target="_blank" rel="noopener">SAP Concur</a>和<a href="https://www.gotomeeting.com/" target="_blank" rel="noopener">GoToMeeting</a>。</p>
+<h2 id="PaaS：平台即服务"><a href="#PaaS：平台即服务" class="headerlink" title="PaaS：平台即服务"></a>PaaS：平台即服务</h2><p>云平台服务（也称为平台即服务（PaaS））为某些软件提供云组件，同时主要用于应用程序。PaaS为开发人员提供了一个框架，开发人员可以在此框架上建立并使用该框架来创建自定义应用程序。所有服务器，存储和网络都可以由企业或第三方提供商管理，而开发人员可以维护应用程序的管理。</p>
+<h3 id="交付-1"><a href="#交付-1" class="headerlink" title="交付"></a>交付</h3><p>PaaS的交付模型与SaaS相似，不同的是PaaS提供了软件创建平台，而不是通过Internet交付软件。该平台通过Web交付，使开发人员可以自由地专注于构建软件，而不必担心操作系统，软件更新，存储或基础架构。</p>
+<p>PaaS允许企业设计和创建内置于带有特殊软件组件的PaaS中的应用程序。这些应用程序有时被称为中间件，由于具有某些云特性，因此具有可伸缩性和高可用性。</p>
+<h3 id="优势-1"><a href="#优势-1" class="headerlink" title="优势"></a>优势</h3><p>无论您的公司规模大小，使用PaaS都有许多优势，包括：</p>
+<ul>
+<li>简单，经济高效的应用开发和部署</li>
+<li>可扩展</li>
+<li>高度可用</li>
+<li>开发人员可以自定义应用程序，而无需维护软件</li>
+<li>大大减少了所需的编码量</li>
+<li>商业政策自动化</li>
+<li>轻松迁移到混合模型</li>
+</ul>
+<h3 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h3><p>PaaS具有许多将其定义为云服务的特征，包括：</p>
+<ul>
+<li>建立在虚拟化技术之上，因此随着业务的变化，可以轻松地按比例放大或缩小资源</li>
+<li>提供各种服务以协助开发，测试和部署应用程序</li>
+<li>通过同一个开发应用程序可被众多用户访问</li>
+<li>集成Web服务和数据库</li>
+</ul>
+<h3 id="何时使用"><a href="#何时使用" class="headerlink" title="何时使用"></a>何时使用</h3><p>在某些情况下，使用PaaS是有益的，有时甚至是必要的。例如，当多个开发人员在同一个开发项目上工作时，PaaS可以简化工作流程。如果必须包括其他供应商，PaaS可以为整个过程提供极大的速度和灵活性。如果您需要创建定制的应用程序，则PaaS尤其有用。如果您正在快速开发或部署应用程序，则该云服务还可以大大降低成本，并且可以简化一些挑战。</p>
+<h3 id="局限性和担忧-1"><a href="#局限性和担忧-1" class="headerlink" title="局限性和担忧"></a>局限性和担忧</h3><ul>
+<li><strong>数据安全。</strong>企业可以使用PaaS解决方案来运行自己的应用程序和服务，但是驻留在第三方，由供应商控制的第三方云服务器中的数据带来了安全风险和担忧。您的安全选项可能会受到限制，因为客户可能无法使用特定的托管策略来部署服务。</li>
+<li><strong>整合。</strong>连接存储在现场数据中心或非内部云中的数据的复杂性增加，这可能会影响PaaS产品可以采用哪些应用程序和服务。特别是当并非旧IT系统的每个组件都不是为云构建的时，与现有服务和基础架构的集成可能是一个挑战。</li>
+<li><strong>供应商锁定。</strong>决定特定PaaS解决方案决策的业务和技术要求将来可能不再适用。如果供应商未设置方便的迁移策略，则在不影响业务的情况下可能无法切换到其他PaaS选项。</li>
+<li><strong>遗留系统的定制。</strong>PaaS可能不是现有遗留应用程序和服务的即插即用解决方案。相反，旧系统要与PaaS服务一起使用可能需要进行一些自定义和配置更改。最终的定制可能导致复杂的IT系统，从而可能完全限制PaaS投资的价值。</li>
+<li><strong>运行时问题。</strong>除了与特定应用程序和服务相关的限制外，PaaS解决方案可能未针对您选择的语言和框架进行优化。特定的框架版本可能不可用，或者无法与PaaS服务一起最佳地运行。客户可能无法使用该平台开发自定义依赖项。</li>
+<li><strong>操作限制。</strong>具有管理自动化工作流程的自定义云操作可能不适用于PaaS解决方案，因为该平台往往会限制最终用户的操作能力。尽管这旨在减轻最终用户的操作负担，但是操作控制的丢失可能会影响PaaS解决方案的管理，设置和操作方式。</li>
+</ul>
+<h3 id="例子-1"><a href="#例子-1" class="headerlink" title="例子"></a>例子</h3><p>PaaS的流行示例包括<a href="https://aws.amazon.com/elasticbeanstalk/" target="_blank" rel="noopener">AWS Elastic Beanstalk</a>，<a href="https://azure.microsoft.com/en-us/free/windows-server-on-azure/" target="_blank" rel="noopener">Windows Azure</a>，<a href="https://www.heroku.com/" target="_blank" rel="noopener">Heroku</a>，<a href="https://developer.salesforce.com/platform/force.com" target="_blank" rel="noopener">Force.com</a>，<a href="https://cloud.google.com/appengine/" target="_blank" rel="noopener">Google App Engine</a>和<a href="https://www.openshift.com/" target="_blank" rel="noopener">OpenShift</a>。</p>
+<h2 id="IaaS：基础架构即服务"><a href="#IaaS：基础架构即服务" class="headerlink" title="IaaS：基础架构即服务"></a>IaaS：基础架构即服务</h2><p>云基础架构服务（称为基础架构即服务（IaaS））由高度可扩展的自动化计算资源组成。IaaS是完全<a href="https://www.bmc.com/blogs/self-service-thrives-clouds/" target="_blank" rel="noopener">自助服务，</a>用于访问和监视计算机，网络，存储和其他服务。IaaS允许企业按需和按需购买资源，而不必直接购买硬件。</p>
+<h3 id="交付-2"><a href="#交付-2" class="headerlink" title="交付"></a>交付</h3><p>IaaS通过虚拟化技术提供了包括服务器，网络，操作系统和存储在内的云计算基础架构。这些云服务器通常通过仪表板或API提供给组织，从而使IaaS客户端可以完全控制整个基础架构。IaaS提供与传统数据中心相同的技术和功能，而无需物理维护或管理所有数据中心。IaaS客户端仍然可以直接访问其服务器和存储，但是它们都是通过云中的“虚拟数据中心”外包的。</p>
+<p>与SaaS或PaaS相对，IaaS客户端负责管理各个方面，例如应用程序，运行时，操作系统，中间件和数据。但是，IaaS的提供商管理服务器，硬盘驱动器，网络，虚拟化和存储。一些提供商甚至提供超出虚拟化层的更多服务，例如数据库或消息队列。</p>
+<h3 id="优势-2"><a href="#优势-2" class="headerlink" title="优势"></a>优势</h3><ul>
+<li>最灵活的云计算模型</li>
+<li>易于自动化存储、网络、服务器和处理能力的部署</li>
+<li>硬件购买可以基于消费</li>
+<li>客户端保留对其基础设施的完全控制</li>
+<li>可以根据需要购买资源</li>
+<li>高度可扩展性</li>
+</ul>
+<h3 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h3><p>定义 IaaS 的特征包括:</p>
+<ul>
+<li>资源可以作为服务使用</li>
+<li>成本取决于消费量</li>
+<li>服务是高度可扩展的</li>
+<li>一个硬件上有多个用户</li>
+<li>组织保持对基础设施的完全控制</li>
+<li>动态的和灵活的</li>
+</ul>
+<h3 id="何时使用-1"><a href="#何时使用-1" class="headerlink" title="何时使用"></a>何时使用</h3><p>就像SaaS和PaaS一样，在某些情况下IaaS最有利。</p>
+<p>初创企业和小型公司可能更喜欢IaaS，以避免花费时间和金钱来购买和创建硬件和软件。较大的公司可能希望保留对其应用程序和基础结构的完全控制权，但是他们只想购买他们实际消费或需要的东西。像IaaS的可扩展性一样，公司经历了快速的增长，随着需求的发展，他们可以轻松地更换特定的硬件和软件。每当您不确定新应用程序的需求时，IaaS都会提供足够的灵活性和可伸缩性。</p>
+<h3 id="局限性和担忧-2"><a href="#局限性和担忧-2" class="headerlink" title="局限性和担忧"></a>局限性和担忧</h3><p>与SaaS和PaaS模型相关的许多限制（例如数据安全性，成本超支，供应商锁定和自定义问题）也适用于IaaS模型。IaaS的特殊限制包括：</p>
+<ul>
+<li><strong>安全。</strong>当客户控制应用程序，数据，中间件和OS平台时，仍然可以从主机或其他虚拟机（VM）发出安全威胁。内部威胁或系统漏洞可能会将主机基础结构和VM之间的数据通信暴露给未经授权的实体。</li>
+<li><strong>在云中运行的旧系统。</strong>尽管客户可以在云中运行旧版应用程序，但基础架构可能无法设计为提供特定控件以保护旧版应用程序。在将旧版应用程序迁移到云之前，可能需要对旧版应用程序进行较小的增强，这可能会导致新的安全问题，除非对IaaS系统中的安全性和性能进行了充分的测试。</li>
+<li><strong>内部资源和培训。</strong>劳动力可能需要其他资源和培训，以学习如何有效管理基础架构。客户将负责数据安全性，备份和业务连续性。但是，由于对基础架构的控制不足，如果没有足够的内部培训和可用资源，则可能难以对资源进行监视和管理。</li>
+<li><strong>多租户安全性。</strong>由于硬件资源是在可用时在用户之间动态分配的，因此要求供应商确保其他客户不能访问以前的客户存储在存储资产中的数据。同样，客户必须依靠供应商来确保VM在多租户云体系结构中得到充分隔离。</li>
+</ul>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>IaaS的流行示例包括<a href="https://www.digitalocean.com/" target="_blank" rel="noopener">DigitalOcean</a>，<a href="https://www.linode.com/" target="_blank" rel="noopener">Linode</a>，<a href="https://www.rackspace.com/" target="_blank" rel="noopener">Rackspace</a>，<a href="https://aws.amazon.com/" target="_blank" rel="noopener">Amazon Web Services（AWS）</a>，<a href="https://www.cisco.com/c/en/us/products/cloud-systems-management/metacloud/index.html" target="_blank" rel="noopener">Cisco Metacloud</a>，<a href="https://azure.microsoft.com/en-us/" target="_blank" rel="noopener">Microsoft Azure</a>和<a href="https://cloud.google.com/compute/" target="_blank" rel="noopener">Google Compute Engine（GCE）</a>。</p>
+<h2 id="SaaS-vs-PaaS-vs-IaaS"><a href="#SaaS-vs-PaaS-vs-IaaS" class="headerlink" title="SaaS vs PaaS vs IaaS"></a>SaaS vs PaaS vs IaaS</h2><p>每个云模型都提供特定的功能，对于您的组织而言，了解差异至关重要。无论您是需要基于云的软件作为存储选项，还是需要一个平滑的平台来创建自定义的应用程序，或者无需物理维护即可完全控制整个基础架构，都可以使用云服务。无论您选择哪种选择，<a href="https://www.bmc.com/blogs/new-multi-cloud-world-means/" target="_blank" rel="noopener">迁移到云</a>都是业务和技术的未来。</p>
+<h2 id="XaaS：Everything-as-a-Service"><a href="#XaaS：Everything-as-a-Service" class="headerlink" title="XaaS：Everything as a Service"></a>XaaS：Everything as a Service</h2><p>您可能会在世界上更经常看到的一个术语是XaaS或“一切即服务”。XaaS是指完全由客户控制的高度个性化，响应迅速，数据驱动的产品和产品，以及它们通过日常物联网驱动的源（例如手机和恒温器）提供的数据。通过使用通过云生成的数据，企业可以更快地进行创新，加深他们的客户关系，并在最初购买产品之后维持销售。XaaS是<a href="https://www.bmc.com/corporate/autonomous-digital-enterprise.html" target="_blank" rel="noopener">自治数字企业</a>的关键推动者。</p>
+<blockquote>
+<p><a href="https://www.bmc.com/blogs/saas-vs-paas-vs-iaas-whats-the-difference-and-how-to-choose/" target="_blank" rel="noopener">转载地址</a></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/aaS/" rel="tag"><i class="fa fa-tag"></i> aaS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/05/27/docker/" rel="prev" title="docker">
+      <i class="fa fa-chevron-left"></i> docker
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/05/28/%E9%AB%98%E7%BA%A7%E6%90%9C%E7%B4%A2/" rel="next" title="高级搜索">
+      高级搜索 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#主要差异摘要"><span class="nav-number">1.</span> <span class="nav-text">主要差异摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Saas、-PaaS-和-IaaS-的常见例子"><span class="nav-number">2.</span> <span class="nav-text">Saas、 PaaS 和 IaaS 的常见例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SaaS：软件即服务"><span class="nav-number">3.</span> <span class="nav-text">SaaS：软件即服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#交付"><span class="nav-number">3.1.</span> <span class="nav-text">交付</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优势"><span class="nav-number">3.2.</span> <span class="nav-text">优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特点"><span class="nav-number">3.3.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#什么时候使用"><span class="nav-number">3.4.</span> <span class="nav-text">什么时候使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#局限性和担忧"><span class="nav-number">3.5.</span> <span class="nav-text">局限性和担忧</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#例子"><span class="nav-number">3.6.</span> <span class="nav-text">例子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PaaS：平台即服务"><span class="nav-number">4.</span> <span class="nav-text">PaaS：平台即服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#交付-1"><span class="nav-number">4.1.</span> <span class="nav-text">交付</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优势-1"><span class="nav-number">4.2.</span> <span class="nav-text">优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特征"><span class="nav-number">4.3.</span> <span class="nav-text">特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#何时使用"><span class="nav-number">4.4.</span> <span class="nav-text">何时使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#局限性和担忧-1"><span class="nav-number">4.5.</span> <span class="nav-text">局限性和担忧</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#例子-1"><span class="nav-number">4.6.</span> <span class="nav-text">例子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IaaS：基础架构即服务"><span class="nav-number">5.</span> <span class="nav-text">IaaS：基础架构即服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#交付-2"><span class="nav-number">5.1.</span> <span class="nav-text">交付</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优势-2"><span class="nav-number">5.2.</span> <span class="nav-text">优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特性"><span class="nav-number">5.3.</span> <span class="nav-text">特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#何时使用-1"><span class="nav-number">5.4.</span> <span class="nav-text">何时使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#局限性和担忧-2"><span class="nav-number">5.5.</span> <span class="nav-text">局限性和担忧</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#示例"><span class="nav-number">5.6.</span> <span class="nav-text">示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SaaS-vs-PaaS-vs-IaaS"><span class="nav-number">6.</span> <span class="nav-text">SaaS vs PaaS vs IaaS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XaaS：Everything-as-a-Service"><span class="nav-number">7.</span> <span class="nav-text">XaaS：Everything as a Service</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="zhangyu"
+      src="/images/%E7%8E%8B%E4%B9%9F.jpg">
+  <p class="site-author-name" itemprop="name">zhangyu</p>
+  <div class="site-description" itemprop="description">The world is your oyster</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/zystrivego/zystrivego.github.io" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;zystrivego&#x2F;zystrivego.github.io" rel="noopener" target="_blank"><i class="fab iconfont icon-Ggooglelogo fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zystrivego@163.com" title="邮箱 → mailto:zystrivego@163.com" rel="noopener" target="_blank"><i class="fa iconfont icon-youxiang fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="http://music.163.com/m/user/home?id=15370305" title="音乐 → http:&#x2F;&#x2F;music.163.com&#x2F;m&#x2F;user&#x2F;home?id&#x3D;15370305" rel="noopener" target="_blank"><i class="fa iconfont icon-netease-cloud-music-line fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fa fa-rss fa-fw"></i></a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heartbeat"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhangyu</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    new Valine(Object.assign({
+      el         : '#valine-comments',
+      path       : location.pathname,
+    }, {"enable":true,"appId":"mMYlmXk0uIoNnOnvCApkjHSL-gzGzoHsz","appKey":"r09vC2BzfhUfyWS6IBiPSSjI","notify":false,"verify":false,"placeholder":"无需注册，支持Markdown格式","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"language":null,"visitor":false,"comment_count":true,"recordIP":false,"serverURLs":null}
+    ));
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
