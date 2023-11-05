@@ -28,77 +28,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Git</title>
-    <url>/2020/09/08/Git/</url>
-    <content><![CDATA[<p>git学习</p>
-<a id="more"></a>
-
-<h1 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h1><h2 id="合并多次提交"><a href="#合并多次提交" class="headerlink" title="合并多次提交"></a>合并多次提交</h2><p>idea checkou 某一分支，选中几条记录，git squash</p>
-<h2 id="reset和revert"><a href="#reset和revert" class="headerlink" title="reset和revert"></a>reset和revert</h2><ul>
-<li><p><strong>revert</strong>是放弃指定提交的修改，但是会生成一次新的提交，需要填写提交注释，以前的历史记录都在；</p>
-</li>
-<li><p><strong>reset</strong>是指将HEAD指针指到指定提交，历史记录中不会出现放弃的提交记录。</p>
-<ol>
-<li><p>–hard 丢弃本地记录</p>
-</li>
-<li><p>–mix 默认值，unstaged状态</p>
-</li>
-<li><p>–soft add的状态</p>
-</li>
-</ol>
-</li>
-</ul>
-<h2 id="log和reflog"><a href="#log和reflog" class="headerlink" title="log和reflog"></a>log和reflog</h2><p>git log 命令可以显示所有提交过的版本信息，可以加上参数  –pretty=oneline，只会显示版本号和提交时的备注信息</p>
-<p>git reflog 可以查看所有分支的所有操作记录（包括已经被删除的 commit 记录和 reset 的操作）</p>
-<h2 id="恢复误删的提交"><a href="#恢复误删的提交" class="headerlink" title="恢复误删的提交"></a>恢复误删的提交</h2><p>git reflog 找到id，再git reset id</p>
-<h2 id="git-merge-和-git-rebase"><a href="#git-merge-和-git-rebase" class="headerlink" title="git merge 和 git rebase"></a>git merge 和 git rebase</h2><img src="/2020/09/08/Git/MergeAndRebase.png" class="" title="[git merge and git rebase]">
-
-<h1 id="git-lfs"><a href="#git-lfs" class="headerlink" title="git-lfs"></a><a href="https://git-lfs.github.com/" target="_blank" rel="noopener">git-lfs</a></h1><ol>
-<li><p><a href="https://github.com/git-lfs/git-lfs/releases/download/v2.12.1/git-lfs-windows-v2.12.1.exe" target="_blank" rel="noopener">下载</a>并安装 Git 命令行扩展。下载并安装后，通过运行以下命令为用户帐户设置 Git LFS：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git lfs install</span><br></pre></td></tr></table></figure>
-
-<p>每个用户帐户只需运行一次。</p>
-</li>
-<li><p>在要使用 Git LFS 的每个 Git 存储库中，选择要管理（或直接编辑 .gitattribute）的文件类型。您可以随时配置其他文件扩展名。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git lfs track &quot;*.psd&quot;</span><br></pre></td></tr></table></figure>
-
-<p>现在确保跟踪.gitattribute：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git add .gitattributes</span><br></pre></td></tr></table></figure>
-
-<p>请注意，定义 Git LFS 应跟踪的文件类型本身不会将任何预先存在的文件转换为 Git LFS，例如其他分支上的文件或以前的提交历史记录中的文件。为此，请使用 git <a href="https://github.com/git-lfs/git-lfs/blob/master/docs/man/git-lfs-migrate.1.ronn?utm_source=gitlfs_site&utm_medium=doc_man_migrate_link&utm_campaign=gitlfs" target="_blank" rel="noopener">lfs 迁移[1]</a>命令，该命令具有一系列选项，旨在适应各种潜在用例。</p>
-</li>
-<li><p>没有第三步。只需像通常一样提交并推送到 GitHub。</p>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git add file.psd</span><br><span class="line">git commit -m &quot;Add design file&quot;</span><br><span class="line">git push origin master</span><br></pre></td></tr></table></figure>
-<h1 id="Gerrit"><a href="#Gerrit" class="headerlink" title="Gerrit"></a>Gerrit</h1><p>最近项目用到了代码审查工具Gerrit，push代码时报错（prohibited by Gerrit），只是以前push对应的远端格式是refs/……，现在应该改为refs/for/……，可以idea 安装gerrit插件方便使用。</p>
-<p>Gerrit 是一个基于 Git 版本控制的基于 Web 的代码审查工具 。笔者在学习它的过程中发现，要使用好它，第一步就是要理解 Change-Id</p>
-<h2 id="理解-Change-Id"><a href="#理解-Change-Id" class="headerlink" title="理解 Change-Id"></a>理解 Change-Id</h2><p>要理解 Gerrit 的 Change-Id，我们就必须对“一次代码审查任务”有一个定义。通常，我们认为对一次完整的功能实现或 Bug 修复（即一次完整的变更）进行代码审查是合理的。而对一个半成品进行代码审查，得到的结论是不可靠的。因此，一次代码审查任务意味着是对一次变更进行审查。</p>
-<p>Gerrit 使用 Change-Id 来标识一次变更。Change-Id 实际上就是一串字符串，类似这样：<code>Ic8aaa0728a43936cd4c6e1ed590e01ba8f0fbf5b</code></p>
-<p>但是，一次变更通常会伴随多次 Git 提交（Commit），而且每次提交的提交是不同的 Commit Id（提交Id）。Gerrit 如何将多次提交关联到同一个 Change-Id 呢？</p>
-<p>我们需要在每次提交时，将 Change-Id 以规定的格式放在提交消息（Commit message）的Footer 部分中（最后一行）</p>
-<p>Change-Id 为避免与提交 Id 冲突，通常以大写字母<code>I</code>为前缀</p>
-<h2 id="生成-Change-Id"><a href="#生成-Change-Id" class="headerlink" title="生成 Change-Id"></a>生成 Change-Id</h2><p>Change-Id 最好是自动生成，并放到提交消息指定位置，这样才能节约开发者的时间。Gerrit 提供了标准的“commit-msg”钩子来实现。</p>
-<p>Git 提供了4个提交工作流钩子：pre-commit、prepare-commit-msg、commit-msg、post-commit。其中 commit-msg 钩子，会在我们执行 <code>git commit</code> 时被执行。</p>
-<p>本质上，commit-msg 钩子是一段脚本程序，放在 .git/hooks 目录下。commit-msg 脚本可以使用 Shell、Ruby、Python 等语言实现。</p>
-<p>Gerrit 的 commit-msg 钩子直接从 Gerrit 下载：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">## 在项目目录下</span><br><span class="line">curl -Lo .git&#x2F;hooks&#x2F;commit-msg http:&#x2F;&#x2F;&lt;gerrit服务地址&gt;&#x2F;tools&#x2F;hooks&#x2F;commit-msg</span><br><span class="line">chmod u+x .git&#x2F;hooks&#x2F;commit-msg</span><br></pre></td></tr></table></figure>
-
-<p>接下来，在我们执行 <code>git commit</code> 后，再执行 git log 就可以看到 Change-Id 了。</p>
-<p>请注意，第一次 clone 代码到本地时，需要重新安装一次 commit-msg 钩子。因为它并不会被提交到版本库中。</p>
-<p>GitLab 也有类似的 Change-Id</p>
-<p>在 GitLab 中，每个 Issue 都会有一个 Id。它是如何将 Issue Id 与 Commit Id 关联起来的呢？GitLab 的解决方案与 Gerrit 一样。只不过，GitLab 是在提交消息的第一行开始加入 Issue Id，格式如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;project name&gt;#&lt;Issue Id&gt;: &lt;commit msg&gt;</span><br></pre></td></tr></table></figure>
-
-<h1 id="difference-between-HEAD-and-HEAD"><a href="#difference-between-HEAD-and-HEAD" class="headerlink" title="difference between HEAD^ and HEAD~ "></a><a href="https://stackoverflow.com/questions/2221658/whats-the-difference-between-head-and-head-in-git" target="_blank" rel="noopener">difference between HEAD^ and HEAD~ </a></h1>]]></content>
-      <categories>
-        <category>工具</category>
-      </categories>
-      <tags>
-        <tag>git</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Centos7安装PostgreSQL10</title>
     <url>/2020/05/09/Centos7%E5%AE%89%E8%A3%85PostgreSQL10/</url>
     <content><![CDATA[<blockquote class="blockquote-center">
@@ -300,43 +229,74 @@
       </tags>
   </entry>
   <entry>
-    <title>ELK安装整合SpringBoot</title>
-    <url>/2020/05/09/ELK%E5%AE%89%E8%A3%85%E6%95%B4%E5%90%88SpringBoot/</url>
-    <content><![CDATA[<blockquote>
-<p>ELK是 elasticsearch + logstash + kibana 的简称。这套组合类似于MVC模型，其中logstash是controller层，数据首先传给它，它负责将数据进行过滤和格式化；elasticsearch是model层，负责数据的存储，建立搜索索引；kibana是view层，负责数据的展示。</p>
-</blockquote>
+    <title>Git</title>
+    <url>/2020/09/08/Git/</url>
+    <content><![CDATA[<p>git学习</p>
 <a id="more"></a>
 
-<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>系统：centos 6.10<br>软件版本：tar包安装<br>elasticsearch-6.3.1<br>logstash-6.3.1<br>kibana-6.3.1</p>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>直接tar -zxvf 解压缩即可<br>演示安装在/opt 下</p>
-<h2 id="Elasticsearch"><a href="#Elasticsearch" class="headerlink" title="Elasticsearch"></a>Elasticsearch</h2><h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>主要配置文件/etc/elasticsearch/elasticsearch.yml，修改如下内容</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Use a descriptive name for your cluster:</span></span><br><span class="line">cluster.name: tisco_es</span><br><span class="line"><span class="comment">#bootstrap.memory_lock: true 针对低版本centos的</span></span><br><span class="line">bootstrap.system_call_filter: <span class="literal">false</span></span><br><span class="line"><span class="comment"># Set the bind address to a specific IP (IPv4 or IPv6):</span></span><br><span class="line">network.host: 0.0.0.0</span><br><span class="line"><span class="comment"># Set a custom port for HTTP:</span></span><br><span class="line">http.port: 9200</span><br></pre></td></tr></table></figure>
+<h1 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h1><h2 id="合并多次提交"><a href="#合并多次提交" class="headerlink" title="合并多次提交"></a>合并多次提交</h2><p>idea checkou 某一分支，选中几条记录，git squash</p>
+<h2 id="reset和revert"><a href="#reset和revert" class="headerlink" title="reset和revert"></a>reset和revert</h2><ul>
+<li><p><strong>revert</strong>是放弃指定提交的修改，但是会生成一次新的提交，需要填写提交注释，以前的历史记录都在；</p>
+</li>
+<li><p><strong>reset</strong>是指将HEAD指针指到指定提交，历史记录中不会出现放弃的提交记录。</p>
+<ol>
+<li><p>–hard 丢弃本地记录</p>
+</li>
+<li><p>–mix 默认值，unstaged状态</p>
+</li>
+<li><p>–soft add的状态</p>
+</li>
+</ol>
+</li>
+</ul>
+<h2 id="log和reflog"><a href="#log和reflog" class="headerlink" title="log和reflog"></a>log和reflog</h2><p>git log 命令可以显示所有提交过的版本信息，可以加上参数  –pretty=oneline，只会显示版本号和提交时的备注信息</p>
+<p>git reflog 可以查看所有分支的所有操作记录（包括已经被删除的 commit 记录和 reset 的操作）</p>
+<h2 id="恢复误删的提交"><a href="#恢复误删的提交" class="headerlink" title="恢复误删的提交"></a>恢复误删的提交</h2><p>git reflog 找到id，再git reset id</p>
+<h2 id="git-merge-和-git-rebase"><a href="#git-merge-和-git-rebase" class="headerlink" title="git merge 和 git rebase"></a>git merge 和 git rebase</h2><img src="/2020/09/08/Git/MergeAndRebase.png" class="" title="[git merge and git rebase]">
 
-<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><p>命令目录：cd /opt/elasticsearch-6.3.1/bin/<br>./elasticsearch -d 后台启动<br>curl <a href="http://172.17.171.228:9200/" target="_blank" rel="noopener">http://172.17.171.228:9200/</a><br>如果有类似如下的输出则是正常启动了<br><img src="https://img-blog.csdnimg.cn/20200515201040693.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5c3RyaXZlZ28=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<h2 id="logstash"><a href="#logstash" class="headerlink" title="logstash"></a>logstash</h2><h3 id="配置-1"><a href="#配置-1" class="headerlink" title="配置"></a>配置</h3><p>/opt/logstash-6.3.1/ 下新建一个文件名为 logstash.conf，然后写入以下配置：<br><img src="https://img-blog.csdnimg.cn/20200509042727128.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5c3RyaXZlZ28=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<h3 id="启动-1"><a href="#启动-1" class="headerlink" title="启动"></a>启动</h3><p>安装目录下：<br>nohup ./bin/logstash -f ./logstash.conf &amp;<br>查看启动日志：<br>/opt/logstash-6.3.1/logs/<br>查看端口：<br><img src="https://img-blog.csdnimg.cn/20200509042829698.png" alt="在这里插入图片描述"><br>9600为程序端口，4560为监听端口</p>
-<h2 id="kibana"><a href="#kibana" class="headerlink" title="kibana"></a>kibana</h2><h3 id="配置-2"><a href="#配置-2" class="headerlink" title="配置"></a>配置</h3><p>文件：<br>/opt/kibana-6.3.1-linux-x86_64/config/ kibana.yml<br>修改内容：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Kibana is served by a back end server. This setting specifies the port to use.</span></span><br><span class="line">server.port: 5601</span><br><span class="line">server.host: <span class="string">"0.0.0.0"</span> <span class="comment">#监听任意地址</span></span><br><span class="line"><span class="comment"># The URL of the Elasticsearch instance to use for all your queries.</span></span><br><span class="line">elasticsearch.url: http://172.17.171.228:9200</span><br></pre></td></tr></table></figure>
+<h1 id="git-lfs"><a href="#git-lfs" class="headerlink" title="git-lfs"></a><a href="https://git-lfs.github.com/" target="_blank" rel="noopener">git-lfs</a></h1><ol>
+<li><p><a href="https://github.com/git-lfs/git-lfs/releases/download/v2.12.1/git-lfs-windows-v2.12.1.exe" target="_blank" rel="noopener">下载</a>并安装 Git 命令行扩展。下载并安装后，通过运行以下命令为用户帐户设置 Git LFS：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git lfs install</span><br></pre></td></tr></table></figure>
 
-<h3 id="启动-2"><a href="#启动-2" class="headerlink" title="启动"></a>启动</h3><p>/opt/kibana-6.3.1-linux-x86_64/bin/kibana</p>
-<p>访问网站：<br><a href="http://172.17.171.228:5601" target="_blank" rel="noopener">http://172.17.171.228:5601</a></p>
-<img src="/2020/05/09/ELK%E5%AE%89%E8%A3%85%E6%95%B4%E5%90%88SpringBoot/kibana%E9%A6%96%E9%A1%B5.png" class="">
+<p>每个用户帐户只需运行一次。</p>
+</li>
+<li><p>在要使用 Git LFS 的每个 Git 存储库中，选择要管理（或直接编辑 .gitattribute）的文件类型。您可以随时配置其他文件扩展名。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git lfs track &quot;*.psd&quot;</span><br></pre></td></tr></table></figure>
 
-<h2 id="整合spring-项目"><a href="#整合spring-项目" class="headerlink" title="整合spring 项目"></a>整合spring 项目</h2><p>添加依赖：<br><img src="https://img-blog.csdnimg.cn/20200509043225295.png" alt="在这里插入图片描述"><br>logback配置文件：<br><img src="https://img-blog.csdnimg.cn/20200509043238852.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5c3RyaXZlZ28=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<h2 id="演示"><a href="#演示" class="headerlink" title="演示"></a>演示</h2><p>Kibana管理界面创建Kinaba Index Patterns：</p>
-<img src="/2020/05/09/ELK%E5%AE%89%E8%A3%85%E6%95%B4%E5%90%88SpringBoot/indexPattern.png" class="">
-<p>在Index pattern里输入我们在logstash配置文件logstash.conf里output.index指定的值<br>logstash-*</p>
-<img src="/2020/05/09/ELK%E5%AE%89%E8%A3%85%E6%95%B4%E5%90%88SpringBoot/createIndex.png" class="">
-<p>点击Next Step，在下拉框里选择@timestamp：</p>
-<img src="/2020/05/09/ELK%E5%AE%89%E8%A3%85%E6%95%B4%E5%90%88SpringBoot/timestamp.png" class="">
-<p>最后点击Create Index Pattern按钮完成创建<br>在Kibana里搜索相应的logback日志：</p>
-<img src="/2020/05/09/ELK%E5%AE%89%E8%A3%85%E6%95%B4%E5%90%88SpringBoot/log.png" class="">   ]]></content>
+<p>现在确保跟踪.gitattribute：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git add .gitattributes</span><br></pre></td></tr></table></figure>
+
+<p>请注意，定义 Git LFS 应跟踪的文件类型本身不会将任何预先存在的文件转换为 Git LFS，例如其他分支上的文件或以前的提交历史记录中的文件。为此，请使用 git <a href="https://github.com/git-lfs/git-lfs/blob/master/docs/man/git-lfs-migrate.1.ronn?utm_source=gitlfs_site&utm_medium=doc_man_migrate_link&utm_campaign=gitlfs" target="_blank" rel="noopener">lfs 迁移[1]</a>命令，该命令具有一系列选项，旨在适应各种潜在用例。</p>
+</li>
+<li><p>没有第三步。只需像通常一样提交并推送到 GitHub。</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git add file.psd</span><br><span class="line">git commit -m &quot;Add design file&quot;</span><br><span class="line">git push origin master</span><br></pre></td></tr></table></figure>
+<h1 id="Gerrit"><a href="#Gerrit" class="headerlink" title="Gerrit"></a>Gerrit</h1><p>最近项目用到了代码审查工具Gerrit，push代码时报错（prohibited by Gerrit），只是以前push对应的远端格式是refs/……，现在应该改为refs/for/……，可以idea 安装gerrit插件方便使用。</p>
+<p>Gerrit 是一个基于 Git 版本控制的基于 Web 的代码审查工具 。笔者在学习它的过程中发现，要使用好它，第一步就是要理解 Change-Id</p>
+<h2 id="理解-Change-Id"><a href="#理解-Change-Id" class="headerlink" title="理解 Change-Id"></a>理解 Change-Id</h2><p>要理解 Gerrit 的 Change-Id，我们就必须对“一次代码审查任务”有一个定义。通常，我们认为对一次完整的功能实现或 Bug 修复（即一次完整的变更）进行代码审查是合理的。而对一个半成品进行代码审查，得到的结论是不可靠的。因此，一次代码审查任务意味着是对一次变更进行审查。</p>
+<p>Gerrit 使用 Change-Id 来标识一次变更。Change-Id 实际上就是一串字符串，类似这样：<code>Ic8aaa0728a43936cd4c6e1ed590e01ba8f0fbf5b</code></p>
+<p>但是，一次变更通常会伴随多次 Git 提交（Commit），而且每次提交的提交是不同的 Commit Id（提交Id）。Gerrit 如何将多次提交关联到同一个 Change-Id 呢？</p>
+<p>我们需要在每次提交时，将 Change-Id 以规定的格式放在提交消息（Commit message）的Footer 部分中（最后一行）</p>
+<p>Change-Id 为避免与提交 Id 冲突，通常以大写字母<code>I</code>为前缀</p>
+<h2 id="生成-Change-Id"><a href="#生成-Change-Id" class="headerlink" title="生成 Change-Id"></a>生成 Change-Id</h2><p>Change-Id 最好是自动生成，并放到提交消息指定位置，这样才能节约开发者的时间。Gerrit 提供了标准的“commit-msg”钩子来实现。</p>
+<p>Git 提供了4个提交工作流钩子：pre-commit、prepare-commit-msg、commit-msg、post-commit。其中 commit-msg 钩子，会在我们执行 <code>git commit</code> 时被执行。</p>
+<p>本质上，commit-msg 钩子是一段脚本程序，放在 .git/hooks 目录下。commit-msg 脚本可以使用 Shell、Ruby、Python 等语言实现。</p>
+<p>Gerrit 的 commit-msg 钩子直接从 Gerrit 下载：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">## 在项目目录下</span><br><span class="line">curl -Lo .git&#x2F;hooks&#x2F;commit-msg http:&#x2F;&#x2F;&lt;gerrit服务地址&gt;&#x2F;tools&#x2F;hooks&#x2F;commit-msg</span><br><span class="line">chmod u+x .git&#x2F;hooks&#x2F;commit-msg</span><br></pre></td></tr></table></figure>
+
+<p>接下来，在我们执行 <code>git commit</code> 后，再执行 git log 就可以看到 Change-Id 了。</p>
+<p>请注意，第一次 clone 代码到本地时，需要重新安装一次 commit-msg 钩子。因为它并不会被提交到版本库中。</p>
+<p>GitLab 也有类似的 Change-Id</p>
+<p>在 GitLab 中，每个 Issue 都会有一个 Id。它是如何将 Issue Id 与 Commit Id 关联起来的呢？GitLab 的解决方案与 Gerrit 一样。只不过，GitLab 是在提交消息的第一行开始加入 Issue Id，格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;project name&gt;#&lt;Issue Id&gt;: &lt;commit msg&gt;</span><br></pre></td></tr></table></figure>
+
+<h1 id="difference-between-HEAD-and-HEAD"><a href="#difference-between-HEAD-and-HEAD" class="headerlink" title="difference between HEAD^ and HEAD~ "></a><a href="https://stackoverflow.com/questions/2221658/whats-the-difference-between-head-and-head-in-git" target="_blank" rel="noopener">difference between HEAD^ and HEAD~ </a></h1>]]></content>
       <categories>
-        <category>linux</category>
+        <category>工具</category>
       </categories>
       <tags>
-        <tag>SpringBoot</tag>
-        <tag>ELK</tag>
+        <tag>git</tag>
       </tags>
   </entry>
   <entry>
@@ -479,176 +439,43 @@
       </tags>
   </entry>
   <entry>
-    <title>SaaS vs PaaS vs IaaS: What’s The Difference and How To Choose</title>
-    <url>/2020/05/27/SaaS-vs-PaaS-vs-IaaS-What%E2%80%99s-The-Difference-and-How-To-Choose/</url>
-    <content><![CDATA[<p>从小型企业到全球化企业，云计算都是一个热门话题，但它仍然是一个涵盖了许多在线领域的宽泛概念。 当您开始考虑将您的业务转移到云计算时，无论是为了应用程序还是基础设施部署，理解各种云服务的区别和优势比以往任何时候都更为重要。</p>
+    <title>ELK安装整合SpringBoot</title>
+    <url>/2020/05/09/ELK%E5%AE%89%E8%A3%85%E6%95%B4%E5%90%88SpringBoot/</url>
+    <content><![CDATA[<blockquote>
+<p>ELK是 elasticsearch + logstash + kibana 的简称。这套组合类似于MVC模型，其中logstash是controller层，数据首先传给它，它负责将数据进行过滤和格式化；elasticsearch是model层，负责数据的存储，建立搜索索引；kibana是view层，负责数据的展示。</p>
+</blockquote>
 <a id="more"></a>
 
-<p>通常有三种云服务模型可供比较: <strong>软件即服务(Software as a Service，SaaS)</strong>、<strong>平台即服务(Platform as a Service，PaaS)</strong>和<strong>基础设施即服务(Infrastructure as a Service，IaaS)</strong>。 这些方法都有自己的优点，也有不同之处，因此有必要了解 SaaS、 PaaS 和 IaaS 之间的差异，以便知道如何为您的组织最佳地选择其中之一。</p>
-<h2 id="主要差异摘要"><a href="#主要差异摘要" class="headerlink" title="主要差异摘要"></a>主要差异摘要</h2><p><img src="https://blogs.bmc.com/wp-content/uploads/2017/09/saas-vs-paas-vs-iaas-810x754.png" alt=""></p>
-<h2 id="Saas、-PaaS-和-IaaS-的常见例子"><a href="#Saas、-PaaS-和-IaaS-的常见例子" class="headerlink" title="Saas、 PaaS 和 IaaS 的常见例子"></a>Saas、 PaaS 和 IaaS 的常见例子</h2><table>
-<thead>
-<tr>
-<th>平台类型</th>
-<th><strong>常见例子</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>SaaS</strong></td>
-<td>Google Apps, Dropbox, Salesforce, Cisco WebEx, Concur, GoToMeeting</td>
-</tr>
-<tr>
-<td><strong>PaaS</strong></td>
-<td>AWS Elastic Beanstalk, Windows Azure, Heroku, Force.com, Google App Engine, Apache Stratos, OpenShift</td>
-</tr>
-<tr>
-<td><strong>IaaS</strong></td>
-<td>DigitalOcean, Linode, Rackspace, Amazon Web Services (AWS), Cisco Metapod, Microsoft Azure, Google Compute Engine (GCE)</td>
-</tr>
-</tbody></table>
-<h2 id="SaaS：软件即服务"><a href="#SaaS：软件即服务" class="headerlink" title="SaaS：软件即服务"></a>SaaS：软件即服务</h2><p>软件即服务，也被称为云应用服务，是云市场上最常用的商业选择。 Saas 利用互联网向用户交付由第三方供应商管理的应用程序。 大多数 SaaS 应用程序直接通过 web 浏览器运行，这意味着它们不需要在客户端进行任何下载或安装。</p>
-<h3 id="交付"><a href="#交付" class="headerlink" title="交付"></a>交付</h3><p>由于其 web 交付模式，SaaS 无需 IT 人员在每台计算机上下载和安装应用程序。 通过 SaaS，供应商可以管理所有潜在的技术问题，如数据、中间件、服务器和存储，从而简化业务的维护和支持。</p>
-<h3 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h3><p>Saas 为员工和公司提供了许多优势，因为它大大减少了安装、管理和升级软件等繁琐任务所花费的时间和金钱。 这样可以为技术人员腾出大量时间，用于处理组织内更为紧迫的事务和问题。</p>
-<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><p>有几种方法可以帮助您确定什么时候使用 SaaS:</p>
-<ul>
-<li>从中心位置管理</li>
-<li>托管在远程服务器上</li>
-<li>可通过互联网访问</li>
-<li>用户不负责硬件或软件更新</li>
-</ul>
-<h3 id="什么时候使用"><a href="#什么时候使用" class="headerlink" title="什么时候使用"></a>什么时候使用</h3><p>在某些情况下 SaaS 可能是最有益的选择，包括:</p>
-<ul>
-<li>初创公司或小公司需要快速推出电子商务，没有时间处理服务器问题或软件</li>
-<li>需要快速、简单和负担得起的协作的短期项目</li>
-<li>不需要经常使用的应用程序，如税务软件</li>
-<li>同时需要 web 和移动访问的应用程序</li>
-</ul>
-<h3 id="局限性和担忧"><a href="#局限性和担忧" class="headerlink" title="局限性和担忧"></a>局限性和担忧</h3><ul>
-<li><strong>互操作性。</strong>如果SaaS应用程序不旨在遵循开放式集成标准，则与现有应用程序和服务的集成可能成为主要问题。在这种情况下，组织可能需要设计自己的集成系统或减少对SaaS服务的依赖性，而这并非总是可能的。</li>
-<li><strong>供应商锁定。</strong>供应商可能使加入服务变得容易，而退出服务却变得困难。例如，数据可能无法在技术上或成本效益上跨其他供应商的SaaS应用程序移植，而不会招致大量成本或内部工程返工。并非每个供应商都遵循标准的API，协议和工具，但是某些业务任务可能需要这些功能。</li>
-<li><strong>缺乏集成支持。</strong>许多组织需要与本地应用程序，数据和服务进行深度集成。SaaS供应商在这方面可能会提供有限的支持，从而迫使组织在设计和管理集成方面投入内部资源。集成的复杂性可能进一步限制SaaS应用程序或其他依赖服务的使用方式。</li>
-<li><strong>数据安全。</strong>为了执行必要的软件功能，可能必须将大量数据交换到SaaS应用程序的后端数据中心。将敏感的业务信息转移到基于公共云的SaaS服务可能会导致安全性和合规性受损，此外还需要迁移大量数据工作负载。</li>
-<li><strong>定制化。</strong>SaaS应用程序提供最少的自定义功能。由于不存在一种千篇一律的解决方案，因此用户可能仅限于供应商提供的特定功能，性能和集成。相反，一些软件开发工具包（SDK）附带的本地解决方案提供了高度的定制选项。</li>
-<li><strong>缺乏控制。</strong>SaaS解决方案涉及将控制权移交给第三方服务提供商。这些控件不仅限于软件-在版本，更新或外观方面-而且还包括数据和管理。因此，客户可能需要重新定义其数据安全性和治理模型，以适应SaaS服务的特性和功能。</li>
-<li><strong>功能限制。</strong>由于SaaS应用程序通常以标准化形式出现，因此功能的选择可能会折衷于与安全性，成本，性能或其他组织策略的权衡。此外，供应商的锁定，成本或安全性问题可能意味着将来无法切换供应商或服务来满足新功能要求。</li>
-<li><strong>性能和停机时间。</strong>由于供应商控制和管理SaaS服务，因此您的客户现在依赖供应商来维护服务的安全性和性能。尽管有适当的服务级别协议（SLA）保护，但计划内和计划外的维护，网络攻击或网络问题仍可能影响SaaS应用程序的性能。</li>
-</ul>
-<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><p>这些是SaaS的几个流行示例，包括：<a href="https://gsuite.google.com/" target="_blank" rel="noopener">Google GSuite</a>（应用程序），<a href="https://www.dropbox.com/" target="_blank" rel="noopener">Dropbox</a>，<a href="https://www.salesforce.com/" target="_blank" rel="noopener">Salesforce</a>，<a href="https://www.webex.com/" target="_blank" rel="noopener">Cisco WebEx</a>，<a href="https://www.concur.com/" target="_blank" rel="noopener">SAP Concur</a>和<a href="https://www.gotomeeting.com/" target="_blank" rel="noopener">GoToMeeting</a>。</p>
-<h2 id="PaaS：平台即服务"><a href="#PaaS：平台即服务" class="headerlink" title="PaaS：平台即服务"></a>PaaS：平台即服务</h2><p>云平台服务（也称为平台即服务（PaaS））为某些软件提供云组件，同时主要用于应用程序。PaaS为开发人员提供了一个框架，开发人员可以在此框架上建立并使用该框架来创建自定义应用程序。所有服务器，存储和网络都可以由企业或第三方提供商管理，而开发人员可以维护应用程序的管理。</p>
-<h3 id="交付-1"><a href="#交付-1" class="headerlink" title="交付"></a>交付</h3><p>PaaS的交付模型与SaaS相似，不同的是PaaS提供了软件创建平台，而不是通过Internet交付软件。该平台通过Web交付，使开发人员可以自由地专注于构建软件，而不必担心操作系统，软件更新，存储或基础架构。</p>
-<p>PaaS允许企业设计和创建内置于带有特殊软件组件的PaaS中的应用程序。这些应用程序有时被称为中间件，由于具有某些云特性，因此具有可伸缩性和高可用性。</p>
-<h3 id="优势-1"><a href="#优势-1" class="headerlink" title="优势"></a>优势</h3><p>无论您的公司规模大小，使用PaaS都有许多优势，包括：</p>
-<ul>
-<li>简单，经济高效的应用开发和部署</li>
-<li>可扩展</li>
-<li>高度可用</li>
-<li>开发人员可以自定义应用程序，而无需维护软件</li>
-<li>大大减少了所需的编码量</li>
-<li>商业政策自动化</li>
-<li>轻松迁移到混合模型</li>
-</ul>
-<h3 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h3><p>PaaS具有许多将其定义为云服务的特征，包括：</p>
-<ul>
-<li>建立在虚拟化技术之上，因此随着业务的变化，可以轻松地按比例放大或缩小资源</li>
-<li>提供各种服务以协助开发，测试和部署应用程序</li>
-<li>通过同一个开发应用程序可被众多用户访问</li>
-<li>集成Web服务和数据库</li>
-</ul>
-<h3 id="何时使用"><a href="#何时使用" class="headerlink" title="何时使用"></a>何时使用</h3><p>在某些情况下，使用PaaS是有益的，有时甚至是必要的。例如，当多个开发人员在同一个开发项目上工作时，PaaS可以简化工作流程。如果必须包括其他供应商，PaaS可以为整个过程提供极大的速度和灵活性。如果您需要创建定制的应用程序，则PaaS尤其有用。如果您正在快速开发或部署应用程序，则该云服务还可以大大降低成本，并且可以简化一些挑战。</p>
-<h3 id="局限性和担忧-1"><a href="#局限性和担忧-1" class="headerlink" title="局限性和担忧"></a>局限性和担忧</h3><ul>
-<li><strong>数据安全。</strong>企业可以使用PaaS解决方案来运行自己的应用程序和服务，但是驻留在第三方，由供应商控制的第三方云服务器中的数据带来了安全风险和担忧。您的安全选项可能会受到限制，因为客户可能无法使用特定的托管策略来部署服务。</li>
-<li><strong>整合。</strong>连接存储在现场数据中心或非内部云中的数据的复杂性增加，这可能会影响PaaS产品可以采用哪些应用程序和服务。特别是当并非旧IT系统的每个组件都不是为云构建的时，与现有服务和基础架构的集成可能是一个挑战。</li>
-<li><strong>供应商锁定。</strong>决定特定PaaS解决方案决策的业务和技术要求将来可能不再适用。如果供应商未设置方便的迁移策略，则在不影响业务的情况下可能无法切换到其他PaaS选项。</li>
-<li><strong>遗留系统的定制。</strong>PaaS可能不是现有遗留应用程序和服务的即插即用解决方案。相反，旧系统要与PaaS服务一起使用可能需要进行一些自定义和配置更改。最终的定制可能导致复杂的IT系统，从而可能完全限制PaaS投资的价值。</li>
-<li><strong>运行时问题。</strong>除了与特定应用程序和服务相关的限制外，PaaS解决方案可能未针对您选择的语言和框架进行优化。特定的框架版本可能不可用，或者无法与PaaS服务一起最佳地运行。客户可能无法使用该平台开发自定义依赖项。</li>
-<li><strong>操作限制。</strong>具有管理自动化工作流程的自定义云操作可能不适用于PaaS解决方案，因为该平台往往会限制最终用户的操作能力。尽管这旨在减轻最终用户的操作负担，但是操作控制的丢失可能会影响PaaS解决方案的管理，设置和操作方式。</li>
-</ul>
-<h3 id="例子-1"><a href="#例子-1" class="headerlink" title="例子"></a>例子</h3><p>PaaS的流行示例包括<a href="https://aws.amazon.com/elasticbeanstalk/" target="_blank" rel="noopener">AWS Elastic Beanstalk</a>，<a href="https://azure.microsoft.com/en-us/free/windows-server-on-azure/" target="_blank" rel="noopener">Windows Azure</a>，<a href="https://www.heroku.com/" target="_blank" rel="noopener">Heroku</a>，<a href="https://developer.salesforce.com/platform/force.com" target="_blank" rel="noopener">Force.com</a>，<a href="https://cloud.google.com/appengine/" target="_blank" rel="noopener">Google App Engine</a>和<a href="https://www.openshift.com/" target="_blank" rel="noopener">OpenShift</a>。</p>
-<h2 id="IaaS：基础架构即服务"><a href="#IaaS：基础架构即服务" class="headerlink" title="IaaS：基础架构即服务"></a>IaaS：基础架构即服务</h2><p>云基础架构服务（称为基础架构即服务（IaaS））由高度可扩展的自动化计算资源组成。IaaS是完全<a href="https://www.bmc.com/blogs/self-service-thrives-clouds/" target="_blank" rel="noopener">自助服务，</a>用于访问和监视计算机，网络，存储和其他服务。IaaS允许企业按需和按需购买资源，而不必直接购买硬件。</p>
-<h3 id="交付-2"><a href="#交付-2" class="headerlink" title="交付"></a>交付</h3><p>IaaS通过虚拟化技术提供了包括服务器，网络，操作系统和存储在内的云计算基础架构。这些云服务器通常通过仪表板或API提供给组织，从而使IaaS客户端可以完全控制整个基础架构。IaaS提供与传统数据中心相同的技术和功能，而无需物理维护或管理所有数据中心。IaaS客户端仍然可以直接访问其服务器和存储，但是它们都是通过云中的“虚拟数据中心”外包的。</p>
-<p>与SaaS或PaaS相对，IaaS客户端负责管理各个方面，例如应用程序，运行时，操作系统，中间件和数据。但是，IaaS的提供商管理服务器，硬盘驱动器，网络，虚拟化和存储。一些提供商甚至提供超出虚拟化层的更多服务，例如数据库或消息队列。</p>
-<h3 id="优势-2"><a href="#优势-2" class="headerlink" title="优势"></a>优势</h3><ul>
-<li>最灵活的云计算模型</li>
-<li>易于自动化存储、网络、服务器和处理能力的部署</li>
-<li>硬件购买可以基于消费</li>
-<li>客户端保留对其基础设施的完全控制</li>
-<li>可以根据需要购买资源</li>
-<li>高度可扩展性</li>
-</ul>
-<h3 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h3><p>定义 IaaS 的特征包括:</p>
-<ul>
-<li>资源可以作为服务使用</li>
-<li>成本取决于消费量</li>
-<li>服务是高度可扩展的</li>
-<li>一个硬件上有多个用户</li>
-<li>组织保持对基础设施的完全控制</li>
-<li>动态的和灵活的</li>
-</ul>
-<h3 id="何时使用-1"><a href="#何时使用-1" class="headerlink" title="何时使用"></a>何时使用</h3><p>就像SaaS和PaaS一样，在某些情况下IaaS最有利。</p>
-<p>初创企业和小型公司可能更喜欢IaaS，以避免花费时间和金钱来购买和创建硬件和软件。较大的公司可能希望保留对其应用程序和基础结构的完全控制权，但是他们只想购买他们实际消费或需要的东西。像IaaS的可扩展性一样，公司经历了快速的增长，随着需求的发展，他们可以轻松地更换特定的硬件和软件。每当您不确定新应用程序的需求时，IaaS都会提供足够的灵活性和可伸缩性。</p>
-<h3 id="局限性和担忧-2"><a href="#局限性和担忧-2" class="headerlink" title="局限性和担忧"></a>局限性和担忧</h3><p>与SaaS和PaaS模型相关的许多限制（例如数据安全性，成本超支，供应商锁定和自定义问题）也适用于IaaS模型。IaaS的特殊限制包括：</p>
-<ul>
-<li><strong>安全。</strong>当客户控制应用程序，数据，中间件和OS平台时，仍然可以从主机或其他虚拟机（VM）发出安全威胁。内部威胁或系统漏洞可能会将主机基础结构和VM之间的数据通信暴露给未经授权的实体。</li>
-<li><strong>在云中运行的旧系统。</strong>尽管客户可以在云中运行旧版应用程序，但基础架构可能无法设计为提供特定控件以保护旧版应用程序。在将旧版应用程序迁移到云之前，可能需要对旧版应用程序进行较小的增强，这可能会导致新的安全问题，除非对IaaS系统中的安全性和性能进行了充分的测试。</li>
-<li><strong>内部资源和培训。</strong>劳动力可能需要其他资源和培训，以学习如何有效管理基础架构。客户将负责数据安全性，备份和业务连续性。但是，由于对基础架构的控制不足，如果没有足够的内部培训和可用资源，则可能难以对资源进行监视和管理。</li>
-<li><strong>多租户安全性。</strong>由于硬件资源是在可用时在用户之间动态分配的，因此要求供应商确保其他客户不能访问以前的客户存储在存储资产中的数据。同样，客户必须依靠供应商来确保VM在多租户云体系结构中得到充分隔离。</li>
-</ul>
-<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>IaaS的流行示例包括<a href="https://www.digitalocean.com/" target="_blank" rel="noopener">DigitalOcean</a>，<a href="https://www.linode.com/" target="_blank" rel="noopener">Linode</a>，<a href="https://www.rackspace.com/" target="_blank" rel="noopener">Rackspace</a>，<a href="https://aws.amazon.com/" target="_blank" rel="noopener">Amazon Web Services（AWS）</a>，<a href="https://www.cisco.com/c/en/us/products/cloud-systems-management/metacloud/index.html" target="_blank" rel="noopener">Cisco Metacloud</a>，<a href="https://azure.microsoft.com/en-us/" target="_blank" rel="noopener">Microsoft Azure</a>和<a href="https://cloud.google.com/compute/" target="_blank" rel="noopener">Google Compute Engine（GCE）</a>。</p>
-<h2 id="SaaS-vs-PaaS-vs-IaaS"><a href="#SaaS-vs-PaaS-vs-IaaS" class="headerlink" title="SaaS vs PaaS vs IaaS"></a>SaaS vs PaaS vs IaaS</h2><p>每个云模型都提供特定的功能，对于您的组织而言，了解差异至关重要。无论您是需要基于云的软件作为存储选项，还是需要一个平滑的平台来创建自定义的应用程序，或者无需物理维护即可完全控制整个基础架构，都可以使用云服务。无论您选择哪种选择，<a href="https://www.bmc.com/blogs/new-multi-cloud-world-means/" target="_blank" rel="noopener">迁移到云</a>都是业务和技术的未来。</p>
-<h2 id="XaaS：Everything-as-a-Service"><a href="#XaaS：Everything-as-a-Service" class="headerlink" title="XaaS：Everything as a Service"></a>XaaS：Everything as a Service</h2><p>您可能会在世界上更经常看到的一个术语是XaaS或“一切即服务”。XaaS是指完全由客户控制的高度个性化，响应迅速，数据驱动的产品和产品，以及它们通过日常物联网驱动的源（例如手机和恒温器）提供的数据。通过使用通过云生成的数据，企业可以更快地进行创新，加深他们的客户关系，并在最初购买产品之后维持销售。XaaS是<a href="https://www.bmc.com/corporate/autonomous-digital-enterprise.html" target="_blank" rel="noopener">自治数字企业</a>的关键推动者。</p>
-<blockquote>
-<p><a href="https://www.bmc.com/blogs/saas-vs-paas-vs-iaas-whats-the-difference-and-how-to-choose/" target="_blank" rel="noopener">转载地址</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>百科</category>
-      </categories>
-      <tags>
-        <tag>aaS</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>VMware的网络模式和NAT下centos7配置静态ip</title>
-    <url>/2020/05/11/VMware%E7%9A%84%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F%E5%92%8CNAT%E4%B8%8Bcentos7%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81ip/</url>
-    <content><![CDATA[<blockquote class="blockquote-center">
-            <i class="fa fa-quote-left"></i>
-            <p>我这个是新装的虚拟机，其实要改的东西不多，关键对新手可能很多概念不清楚，所以要多看多练</p>
+<h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>系统：centos 6.10<br>软件版本：tar包安装<br>elasticsearch-6.3.1<br>logstash-6.3.1<br>kibana-6.3.1</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>直接tar -zxvf 解压缩即可<br>演示安装在/opt 下</p>
+<h2 id="Elasticsearch"><a href="#Elasticsearch" class="headerlink" title="Elasticsearch"></a>Elasticsearch</h2><h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>主要配置文件/etc/elasticsearch/elasticsearch.yml，修改如下内容</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Use a descriptive name for your cluster:</span></span><br><span class="line">cluster.name: tisco_es</span><br><span class="line"><span class="comment">#bootstrap.memory_lock: true 针对低版本centos的</span></span><br><span class="line">bootstrap.system_call_filter: <span class="literal">false</span></span><br><span class="line"><span class="comment"># Set the bind address to a specific IP (IPv4 or IPv6):</span></span><br><span class="line">network.host: 0.0.0.0</span><br><span class="line"><span class="comment"># Set a custom port for HTTP:</span></span><br><span class="line">http.port: 9200</span><br></pre></td></tr></table></figure>
 
-            <i class="fa fa-quote-right"></i>
-          </blockquote>
+<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><p>命令目录：cd /opt/elasticsearch-6.3.1/bin/<br>./elasticsearch -d 后台启动<br>curl <a href="http://172.17.171.228:9200/" target="_blank" rel="noopener">http://172.17.171.228:9200/</a><br>如果有类似如下的输出则是正常启动了<br><img src="https://img-blog.csdnimg.cn/20200515201040693.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5c3RyaXZlZ28=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="logstash"><a href="#logstash" class="headerlink" title="logstash"></a>logstash</h2><h3 id="配置-1"><a href="#配置-1" class="headerlink" title="配置"></a>配置</h3><p>/opt/logstash-6.3.1/ 下新建一个文件名为 logstash.conf，然后写入以下配置：<br><img src="https://img-blog.csdnimg.cn/20200509042727128.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5c3RyaXZlZ28=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="启动-1"><a href="#启动-1" class="headerlink" title="启动"></a>启动</h3><p>安装目录下：<br>nohup ./bin/logstash -f ./logstash.conf &amp;<br>查看启动日志：<br>/opt/logstash-6.3.1/logs/<br>查看端口：<br><img src="https://img-blog.csdnimg.cn/20200509042829698.png" alt="在这里插入图片描述"><br>9600为程序端口，4560为监听端口</p>
+<h2 id="kibana"><a href="#kibana" class="headerlink" title="kibana"></a>kibana</h2><h3 id="配置-2"><a href="#配置-2" class="headerlink" title="配置"></a>配置</h3><p>文件：<br>/opt/kibana-6.3.1-linux-x86_64/config/ kibana.yml<br>修改内容：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Kibana is served by a back end server. This setting specifies the port to use.</span></span><br><span class="line">server.port: 5601</span><br><span class="line">server.host: <span class="string">"0.0.0.0"</span> <span class="comment">#监听任意地址</span></span><br><span class="line"><span class="comment"># The URL of the Elasticsearch instance to use for all your queries.</span></span><br><span class="line">elasticsearch.url: http://172.17.171.228:9200</span><br></pre></td></tr></table></figure>
 
-<a id="more"></a>
+<h3 id="启动-2"><a href="#启动-2" class="headerlink" title="启动"></a>启动</h3><p>/opt/kibana-6.3.1-linux-x86_64/bin/kibana</p>
+<p>访问网站：<br><a href="http://172.17.171.228:5601" target="_blank" rel="noopener">http://172.17.171.228:5601</a></p>
+<img src="/2020/05/09/ELK%E5%AE%89%E8%A3%85%E6%95%B4%E5%90%88SpringBoot/kibana%E9%A6%96%E9%A1%B5.png" class="">
 
-<h1 id="配置网络连接"><a href="#配置网络连接" class="headerlink" title="配置网络连接"></a><a href="https://docs.vmware.com/cn/VMware-Workstation-Pro/15.0/com.vmware.ws.using.doc/GUID-0CE1AE01-7E79-41BB-9EA8-4F839BE40E1A.html" target="_blank" rel="noopener">配置网络连接</a></h1><p>我的理解：</p>
-<ol>
-<li><p>Host-only: 虚拟机连不上外网，只能和宿主机沟通</p>
-</li>
-<li><p>NAT: 自己学习用这种模式最好，可以通过宿主机连外网，wifi没网也能和宿主机沟通，设置静态ip后，电脑从公司带到家里也不用换ip了，宿主机下的各虚拟机能够互通，就是和其它宿主机互通要通过端口转发的方式<img src="https://img-blog.csdnimg.cn/20200511010138144.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5c3RyaXZlZ28=,size_16,color_FFFFFF,t_70" alt="端口转发"></p>
-</li>
-<li><p>桥接模式：虚拟机就相当于局域网内一台独立的主机，ip和主机是一个网段的，互通很方便，缺点就是没wifi和主机无法沟通，而且换了地方ip就跟着变，所以如果不是固定地点没必要设置静态ip</p>
-<h1 id="nat设置静态ip"><a href="#nat设置静态ip" class="headerlink" title="nat设置静态ip"></a>nat设置静态ip</h1></li>
-</ol>
-<blockquote>
-<p>CentOS Linux release 7.8.2003 (Core)</p>
-</blockquote>
-<h2 id="ens33修改"><a href="#ens33修改" class="headerlink" title="ens33修改"></a>ens33修改</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">vi &#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;ifcfg-ens33</span><br></pre></td></tr></table></figure>
-
-<p>这里的DNS1其实是指VMnet8的网关</p>
-<img src="/2020/05/11/VMware%E7%9A%84%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F%E5%92%8CNAT%E4%B8%8Bcentos7%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81ip/ens33%E8%AE%BE%E7%BD%AE.png" class="">
-
-<h2 id="network修改"><a href="#network修改" class="headerlink" title="network修改"></a>network修改</h2><p><code>vi /etc/sysconfig/network</code></p>
-<p>这里不改会ping不通主机</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Created by anaconda</span></span><br><span class="line">NETWORKING=yes</span><br><span class="line">HOSTNAME=alpha</span><br><span class="line">GATEWAY=192.168.178.2   <span class="comment"># 这个是网关,根据自己的设置修改</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="重启网络"><a href="#重启网络" class="headerlink" title="重启网络"></a>重启网络</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">service network restart</span><br></pre></td></tr></table></figure>
-
-]]></content>
+<h2 id="整合spring-项目"><a href="#整合spring-项目" class="headerlink" title="整合spring 项目"></a>整合spring 项目</h2><p>添加依赖：<br><img src="https://img-blog.csdnimg.cn/20200509043225295.png" alt="在这里插入图片描述"><br>logback配置文件：<br><img src="https://img-blog.csdnimg.cn/20200509043238852.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5c3RyaXZlZ28=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="演示"><a href="#演示" class="headerlink" title="演示"></a>演示</h2><p>Kibana管理界面创建Kinaba Index Patterns：</p>
+<img src="/2020/05/09/ELK%E5%AE%89%E8%A3%85%E6%95%B4%E5%90%88SpringBoot/indexPattern.png" class="">
+<p>在Index pattern里输入我们在logstash配置文件logstash.conf里output.index指定的值<br>logstash-*</p>
+<img src="/2020/05/09/ELK%E5%AE%89%E8%A3%85%E6%95%B4%E5%90%88SpringBoot/createIndex.png" class="">
+<p>点击Next Step，在下拉框里选择@timestamp：</p>
+<img src="/2020/05/09/ELK%E5%AE%89%E8%A3%85%E6%95%B4%E5%90%88SpringBoot/timestamp.png" class="">
+<p>最后点击Create Index Pattern按钮完成创建<br>在Kibana里搜索相应的logback日志：</p>
+<img src="/2020/05/09/ELK%E5%AE%89%E8%A3%85%E6%95%B4%E5%90%88SpringBoot/log.png" class="">   ]]></content>
       <categories>
         <category>linux</category>
       </categories>
       <tags>
-        <tag>VMware</tag>
-        <tag>NAT</tag>
+        <tag>SpringBoot</tag>
+        <tag>ELK</tag>
       </tags>
   </entry>
   <entry>
@@ -1044,6 +871,210 @@
       </tags>
   </entry>
   <entry>
+    <title>SaaS vs PaaS vs IaaS: What’s The Difference and How To Choose</title>
+    <url>/2020/05/27/SaaS-vs-PaaS-vs-IaaS-What%E2%80%99s-The-Difference-and-How-To-Choose/</url>
+    <content><![CDATA[<p>从小型企业到全球化企业，云计算都是一个热门话题，但它仍然是一个涵盖了许多在线领域的宽泛概念。 当您开始考虑将您的业务转移到云计算时，无论是为了应用程序还是基础设施部署，理解各种云服务的区别和优势比以往任何时候都更为重要。</p>
+<a id="more"></a>
+
+<p>通常有三种云服务模型可供比较: <strong>软件即服务(Software as a Service，SaaS)</strong>、<strong>平台即服务(Platform as a Service，PaaS)</strong>和<strong>基础设施即服务(Infrastructure as a Service，IaaS)</strong>。 这些方法都有自己的优点，也有不同之处，因此有必要了解 SaaS、 PaaS 和 IaaS 之间的差异，以便知道如何为您的组织最佳地选择其中之一。</p>
+<h2 id="主要差异摘要"><a href="#主要差异摘要" class="headerlink" title="主要差异摘要"></a>主要差异摘要</h2><p><img src="https://blogs.bmc.com/wp-content/uploads/2017/09/saas-vs-paas-vs-iaas-810x754.png" alt=""></p>
+<h2 id="Saas、-PaaS-和-IaaS-的常见例子"><a href="#Saas、-PaaS-和-IaaS-的常见例子" class="headerlink" title="Saas、 PaaS 和 IaaS 的常见例子"></a>Saas、 PaaS 和 IaaS 的常见例子</h2><table>
+<thead>
+<tr>
+<th>平台类型</th>
+<th><strong>常见例子</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>SaaS</strong></td>
+<td>Google Apps, Dropbox, Salesforce, Cisco WebEx, Concur, GoToMeeting</td>
+</tr>
+<tr>
+<td><strong>PaaS</strong></td>
+<td>AWS Elastic Beanstalk, Windows Azure, Heroku, Force.com, Google App Engine, Apache Stratos, OpenShift</td>
+</tr>
+<tr>
+<td><strong>IaaS</strong></td>
+<td>DigitalOcean, Linode, Rackspace, Amazon Web Services (AWS), Cisco Metapod, Microsoft Azure, Google Compute Engine (GCE)</td>
+</tr>
+</tbody></table>
+<h2 id="SaaS：软件即服务"><a href="#SaaS：软件即服务" class="headerlink" title="SaaS：软件即服务"></a>SaaS：软件即服务</h2><p>软件即服务，也被称为云应用服务，是云市场上最常用的商业选择。 Saas 利用互联网向用户交付由第三方供应商管理的应用程序。 大多数 SaaS 应用程序直接通过 web 浏览器运行，这意味着它们不需要在客户端进行任何下载或安装。</p>
+<h3 id="交付"><a href="#交付" class="headerlink" title="交付"></a>交付</h3><p>由于其 web 交付模式，SaaS 无需 IT 人员在每台计算机上下载和安装应用程序。 通过 SaaS，供应商可以管理所有潜在的技术问题，如数据、中间件、服务器和存储，从而简化业务的维护和支持。</p>
+<h3 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h3><p>Saas 为员工和公司提供了许多优势，因为它大大减少了安装、管理和升级软件等繁琐任务所花费的时间和金钱。 这样可以为技术人员腾出大量时间，用于处理组织内更为紧迫的事务和问题。</p>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><p>有几种方法可以帮助您确定什么时候使用 SaaS:</p>
+<ul>
+<li>从中心位置管理</li>
+<li>托管在远程服务器上</li>
+<li>可通过互联网访问</li>
+<li>用户不负责硬件或软件更新</li>
+</ul>
+<h3 id="什么时候使用"><a href="#什么时候使用" class="headerlink" title="什么时候使用"></a>什么时候使用</h3><p>在某些情况下 SaaS 可能是最有益的选择，包括:</p>
+<ul>
+<li>初创公司或小公司需要快速推出电子商务，没有时间处理服务器问题或软件</li>
+<li>需要快速、简单和负担得起的协作的短期项目</li>
+<li>不需要经常使用的应用程序，如税务软件</li>
+<li>同时需要 web 和移动访问的应用程序</li>
+</ul>
+<h3 id="局限性和担忧"><a href="#局限性和担忧" class="headerlink" title="局限性和担忧"></a>局限性和担忧</h3><ul>
+<li><strong>互操作性。</strong>如果SaaS应用程序不旨在遵循开放式集成标准，则与现有应用程序和服务的集成可能成为主要问题。在这种情况下，组织可能需要设计自己的集成系统或减少对SaaS服务的依赖性，而这并非总是可能的。</li>
+<li><strong>供应商锁定。</strong>供应商可能使加入服务变得容易，而退出服务却变得困难。例如，数据可能无法在技术上或成本效益上跨其他供应商的SaaS应用程序移植，而不会招致大量成本或内部工程返工。并非每个供应商都遵循标准的API，协议和工具，但是某些业务任务可能需要这些功能。</li>
+<li><strong>缺乏集成支持。</strong>许多组织需要与本地应用程序，数据和服务进行深度集成。SaaS供应商在这方面可能会提供有限的支持，从而迫使组织在设计和管理集成方面投入内部资源。集成的复杂性可能进一步限制SaaS应用程序或其他依赖服务的使用方式。</li>
+<li><strong>数据安全。</strong>为了执行必要的软件功能，可能必须将大量数据交换到SaaS应用程序的后端数据中心。将敏感的业务信息转移到基于公共云的SaaS服务可能会导致安全性和合规性受损，此外还需要迁移大量数据工作负载。</li>
+<li><strong>定制化。</strong>SaaS应用程序提供最少的自定义功能。由于不存在一种千篇一律的解决方案，因此用户可能仅限于供应商提供的特定功能，性能和集成。相反，一些软件开发工具包（SDK）附带的本地解决方案提供了高度的定制选项。</li>
+<li><strong>缺乏控制。</strong>SaaS解决方案涉及将控制权移交给第三方服务提供商。这些控件不仅限于软件-在版本，更新或外观方面-而且还包括数据和管理。因此，客户可能需要重新定义其数据安全性和治理模型，以适应SaaS服务的特性和功能。</li>
+<li><strong>功能限制。</strong>由于SaaS应用程序通常以标准化形式出现，因此功能的选择可能会折衷于与安全性，成本，性能或其他组织策略的权衡。此外，供应商的锁定，成本或安全性问题可能意味着将来无法切换供应商或服务来满足新功能要求。</li>
+<li><strong>性能和停机时间。</strong>由于供应商控制和管理SaaS服务，因此您的客户现在依赖供应商来维护服务的安全性和性能。尽管有适当的服务级别协议（SLA）保护，但计划内和计划外的维护，网络攻击或网络问题仍可能影响SaaS应用程序的性能。</li>
+</ul>
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><p>这些是SaaS的几个流行示例，包括：<a href="https://gsuite.google.com/" target="_blank" rel="noopener">Google GSuite</a>（应用程序），<a href="https://www.dropbox.com/" target="_blank" rel="noopener">Dropbox</a>，<a href="https://www.salesforce.com/" target="_blank" rel="noopener">Salesforce</a>，<a href="https://www.webex.com/" target="_blank" rel="noopener">Cisco WebEx</a>，<a href="https://www.concur.com/" target="_blank" rel="noopener">SAP Concur</a>和<a href="https://www.gotomeeting.com/" target="_blank" rel="noopener">GoToMeeting</a>。</p>
+<h2 id="PaaS：平台即服务"><a href="#PaaS：平台即服务" class="headerlink" title="PaaS：平台即服务"></a>PaaS：平台即服务</h2><p>云平台服务（也称为平台即服务（PaaS））为某些软件提供云组件，同时主要用于应用程序。PaaS为开发人员提供了一个框架，开发人员可以在此框架上建立并使用该框架来创建自定义应用程序。所有服务器，存储和网络都可以由企业或第三方提供商管理，而开发人员可以维护应用程序的管理。</p>
+<h3 id="交付-1"><a href="#交付-1" class="headerlink" title="交付"></a>交付</h3><p>PaaS的交付模型与SaaS相似，不同的是PaaS提供了软件创建平台，而不是通过Internet交付软件。该平台通过Web交付，使开发人员可以自由地专注于构建软件，而不必担心操作系统，软件更新，存储或基础架构。</p>
+<p>PaaS允许企业设计和创建内置于带有特殊软件组件的PaaS中的应用程序。这些应用程序有时被称为中间件，由于具有某些云特性，因此具有可伸缩性和高可用性。</p>
+<h3 id="优势-1"><a href="#优势-1" class="headerlink" title="优势"></a>优势</h3><p>无论您的公司规模大小，使用PaaS都有许多优势，包括：</p>
+<ul>
+<li>简单，经济高效的应用开发和部署</li>
+<li>可扩展</li>
+<li>高度可用</li>
+<li>开发人员可以自定义应用程序，而无需维护软件</li>
+<li>大大减少了所需的编码量</li>
+<li>商业政策自动化</li>
+<li>轻松迁移到混合模型</li>
+</ul>
+<h3 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h3><p>PaaS具有许多将其定义为云服务的特征，包括：</p>
+<ul>
+<li>建立在虚拟化技术之上，因此随着业务的变化，可以轻松地按比例放大或缩小资源</li>
+<li>提供各种服务以协助开发，测试和部署应用程序</li>
+<li>通过同一个开发应用程序可被众多用户访问</li>
+<li>集成Web服务和数据库</li>
+</ul>
+<h3 id="何时使用"><a href="#何时使用" class="headerlink" title="何时使用"></a>何时使用</h3><p>在某些情况下，使用PaaS是有益的，有时甚至是必要的。例如，当多个开发人员在同一个开发项目上工作时，PaaS可以简化工作流程。如果必须包括其他供应商，PaaS可以为整个过程提供极大的速度和灵活性。如果您需要创建定制的应用程序，则PaaS尤其有用。如果您正在快速开发或部署应用程序，则该云服务还可以大大降低成本，并且可以简化一些挑战。</p>
+<h3 id="局限性和担忧-1"><a href="#局限性和担忧-1" class="headerlink" title="局限性和担忧"></a>局限性和担忧</h3><ul>
+<li><strong>数据安全。</strong>企业可以使用PaaS解决方案来运行自己的应用程序和服务，但是驻留在第三方，由供应商控制的第三方云服务器中的数据带来了安全风险和担忧。您的安全选项可能会受到限制，因为客户可能无法使用特定的托管策略来部署服务。</li>
+<li><strong>整合。</strong>连接存储在现场数据中心或非内部云中的数据的复杂性增加，这可能会影响PaaS产品可以采用哪些应用程序和服务。特别是当并非旧IT系统的每个组件都不是为云构建的时，与现有服务和基础架构的集成可能是一个挑战。</li>
+<li><strong>供应商锁定。</strong>决定特定PaaS解决方案决策的业务和技术要求将来可能不再适用。如果供应商未设置方便的迁移策略，则在不影响业务的情况下可能无法切换到其他PaaS选项。</li>
+<li><strong>遗留系统的定制。</strong>PaaS可能不是现有遗留应用程序和服务的即插即用解决方案。相反，旧系统要与PaaS服务一起使用可能需要进行一些自定义和配置更改。最终的定制可能导致复杂的IT系统，从而可能完全限制PaaS投资的价值。</li>
+<li><strong>运行时问题。</strong>除了与特定应用程序和服务相关的限制外，PaaS解决方案可能未针对您选择的语言和框架进行优化。特定的框架版本可能不可用，或者无法与PaaS服务一起最佳地运行。客户可能无法使用该平台开发自定义依赖项。</li>
+<li><strong>操作限制。</strong>具有管理自动化工作流程的自定义云操作可能不适用于PaaS解决方案，因为该平台往往会限制最终用户的操作能力。尽管这旨在减轻最终用户的操作负担，但是操作控制的丢失可能会影响PaaS解决方案的管理，设置和操作方式。</li>
+</ul>
+<h3 id="例子-1"><a href="#例子-1" class="headerlink" title="例子"></a>例子</h3><p>PaaS的流行示例包括<a href="https://aws.amazon.com/elasticbeanstalk/" target="_blank" rel="noopener">AWS Elastic Beanstalk</a>，<a href="https://azure.microsoft.com/en-us/free/windows-server-on-azure/" target="_blank" rel="noopener">Windows Azure</a>，<a href="https://www.heroku.com/" target="_blank" rel="noopener">Heroku</a>，<a href="https://developer.salesforce.com/platform/force.com" target="_blank" rel="noopener">Force.com</a>，<a href="https://cloud.google.com/appengine/" target="_blank" rel="noopener">Google App Engine</a>和<a href="https://www.openshift.com/" target="_blank" rel="noopener">OpenShift</a>。</p>
+<h2 id="IaaS：基础架构即服务"><a href="#IaaS：基础架构即服务" class="headerlink" title="IaaS：基础架构即服务"></a>IaaS：基础架构即服务</h2><p>云基础架构服务（称为基础架构即服务（IaaS））由高度可扩展的自动化计算资源组成。IaaS是完全<a href="https://www.bmc.com/blogs/self-service-thrives-clouds/" target="_blank" rel="noopener">自助服务，</a>用于访问和监视计算机，网络，存储和其他服务。IaaS允许企业按需和按需购买资源，而不必直接购买硬件。</p>
+<h3 id="交付-2"><a href="#交付-2" class="headerlink" title="交付"></a>交付</h3><p>IaaS通过虚拟化技术提供了包括服务器，网络，操作系统和存储在内的云计算基础架构。这些云服务器通常通过仪表板或API提供给组织，从而使IaaS客户端可以完全控制整个基础架构。IaaS提供与传统数据中心相同的技术和功能，而无需物理维护或管理所有数据中心。IaaS客户端仍然可以直接访问其服务器和存储，但是它们都是通过云中的“虚拟数据中心”外包的。</p>
+<p>与SaaS或PaaS相对，IaaS客户端负责管理各个方面，例如应用程序，运行时，操作系统，中间件和数据。但是，IaaS的提供商管理服务器，硬盘驱动器，网络，虚拟化和存储。一些提供商甚至提供超出虚拟化层的更多服务，例如数据库或消息队列。</p>
+<h3 id="优势-2"><a href="#优势-2" class="headerlink" title="优势"></a>优势</h3><ul>
+<li>最灵活的云计算模型</li>
+<li>易于自动化存储、网络、服务器和处理能力的部署</li>
+<li>硬件购买可以基于消费</li>
+<li>客户端保留对其基础设施的完全控制</li>
+<li>可以根据需要购买资源</li>
+<li>高度可扩展性</li>
+</ul>
+<h3 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h3><p>定义 IaaS 的特征包括:</p>
+<ul>
+<li>资源可以作为服务使用</li>
+<li>成本取决于消费量</li>
+<li>服务是高度可扩展的</li>
+<li>一个硬件上有多个用户</li>
+<li>组织保持对基础设施的完全控制</li>
+<li>动态的和灵活的</li>
+</ul>
+<h3 id="何时使用-1"><a href="#何时使用-1" class="headerlink" title="何时使用"></a>何时使用</h3><p>就像SaaS和PaaS一样，在某些情况下IaaS最有利。</p>
+<p>初创企业和小型公司可能更喜欢IaaS，以避免花费时间和金钱来购买和创建硬件和软件。较大的公司可能希望保留对其应用程序和基础结构的完全控制权，但是他们只想购买他们实际消费或需要的东西。像IaaS的可扩展性一样，公司经历了快速的增长，随着需求的发展，他们可以轻松地更换特定的硬件和软件。每当您不确定新应用程序的需求时，IaaS都会提供足够的灵活性和可伸缩性。</p>
+<h3 id="局限性和担忧-2"><a href="#局限性和担忧-2" class="headerlink" title="局限性和担忧"></a>局限性和担忧</h3><p>与SaaS和PaaS模型相关的许多限制（例如数据安全性，成本超支，供应商锁定和自定义问题）也适用于IaaS模型。IaaS的特殊限制包括：</p>
+<ul>
+<li><strong>安全。</strong>当客户控制应用程序，数据，中间件和OS平台时，仍然可以从主机或其他虚拟机（VM）发出安全威胁。内部威胁或系统漏洞可能会将主机基础结构和VM之间的数据通信暴露给未经授权的实体。</li>
+<li><strong>在云中运行的旧系统。</strong>尽管客户可以在云中运行旧版应用程序，但基础架构可能无法设计为提供特定控件以保护旧版应用程序。在将旧版应用程序迁移到云之前，可能需要对旧版应用程序进行较小的增强，这可能会导致新的安全问题，除非对IaaS系统中的安全性和性能进行了充分的测试。</li>
+<li><strong>内部资源和培训。</strong>劳动力可能需要其他资源和培训，以学习如何有效管理基础架构。客户将负责数据安全性，备份和业务连续性。但是，由于对基础架构的控制不足，如果没有足够的内部培训和可用资源，则可能难以对资源进行监视和管理。</li>
+<li><strong>多租户安全性。</strong>由于硬件资源是在可用时在用户之间动态分配的，因此要求供应商确保其他客户不能访问以前的客户存储在存储资产中的数据。同样，客户必须依靠供应商来确保VM在多租户云体系结构中得到充分隔离。</li>
+</ul>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>IaaS的流行示例包括<a href="https://www.digitalocean.com/" target="_blank" rel="noopener">DigitalOcean</a>，<a href="https://www.linode.com/" target="_blank" rel="noopener">Linode</a>，<a href="https://www.rackspace.com/" target="_blank" rel="noopener">Rackspace</a>，<a href="https://aws.amazon.com/" target="_blank" rel="noopener">Amazon Web Services（AWS）</a>，<a href="https://www.cisco.com/c/en/us/products/cloud-systems-management/metacloud/index.html" target="_blank" rel="noopener">Cisco Metacloud</a>，<a href="https://azure.microsoft.com/en-us/" target="_blank" rel="noopener">Microsoft Azure</a>和<a href="https://cloud.google.com/compute/" target="_blank" rel="noopener">Google Compute Engine（GCE）</a>。</p>
+<h2 id="SaaS-vs-PaaS-vs-IaaS"><a href="#SaaS-vs-PaaS-vs-IaaS" class="headerlink" title="SaaS vs PaaS vs IaaS"></a>SaaS vs PaaS vs IaaS</h2><p>每个云模型都提供特定的功能，对于您的组织而言，了解差异至关重要。无论您是需要基于云的软件作为存储选项，还是需要一个平滑的平台来创建自定义的应用程序，或者无需物理维护即可完全控制整个基础架构，都可以使用云服务。无论您选择哪种选择，<a href="https://www.bmc.com/blogs/new-multi-cloud-world-means/" target="_blank" rel="noopener">迁移到云</a>都是业务和技术的未来。</p>
+<h2 id="XaaS：Everything-as-a-Service"><a href="#XaaS：Everything-as-a-Service" class="headerlink" title="XaaS：Everything as a Service"></a>XaaS：Everything as a Service</h2><p>您可能会在世界上更经常看到的一个术语是XaaS或“一切即服务”。XaaS是指完全由客户控制的高度个性化，响应迅速，数据驱动的产品和产品，以及它们通过日常物联网驱动的源（例如手机和恒温器）提供的数据。通过使用通过云生成的数据，企业可以更快地进行创新，加深他们的客户关系，并在最初购买产品之后维持销售。XaaS是<a href="https://www.bmc.com/corporate/autonomous-digital-enterprise.html" target="_blank" rel="noopener">自治数字企业</a>的关键推动者。</p>
+<blockquote>
+<p><a href="https://www.bmc.com/blogs/saas-vs-paas-vs-iaas-whats-the-difference-and-how-to-choose/" target="_blank" rel="noopener">转载地址</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>百科</category>
+      </categories>
+      <tags>
+        <tag>aaS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Tips</title>
+    <url>/2019/08/15/Tips/</url>
+    <content><![CDATA[<blockquote class="blockquote-center">
+            <i class="fa fa-quote-left"></i>
+            <p>单条备忘，大杂烩</p>
+
+            <i class="fa fa-quote-right"></i>
+          </blockquote>
+
+<a id="more"></a>
+
+<h1 id="typora搜索引擎"><a href="#typora搜索引擎" class="headerlink" title="typora搜索引擎"></a>typora搜索引擎</h1><p>偏好设置➡打开高级设置➡<code>conf.user.json</code></p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">"searchService": [</span><br><span class="line">    ["Search with baidu", "http://www.baidu.com.cn/s?wd=%s"],</span><br><span class="line">    ["Search with Bing", "https://bing.com/search?q=%s"],</span><br><span class="line">    [<span class="string">"Search with Google"</span>, <span class="string">"https://google.com/search?q=%s"</span>]</span><br><span class="line">  ]</span><br></pre></td></tr></table></figure>
+
+<h1 id="文件批量重命名"><a href="#文件批量重命名" class="headerlink" title="文件批量重命名"></a>文件批量重命名</h1><blockquote>
+<p>有时网上下载的资源，层级目录特别多，找东西很不方便，写个小程序，递归的把某一目录下的所有文件重命名(之间的父级目录下划线相连)</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> util;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.commons.io.FileUtils;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.util.Iterator;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 递归的把某一目录下的所有文件重命名(之间的父级目录下划线相连)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RenameFileByDir</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        File file = <span class="keyword">new</span> File(<span class="string">"D:\\CS\\牛逼的面试辅导视频"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取根目录下所有文件对象</span></span><br><span class="line">        File[] files = file.listFiles();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(files!=<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; files.length; i++) &#123;</span><br><span class="line">                String path = files[i].getAbsolutePath();</span><br><span class="line">                <span class="keyword">int</span> len = path.length();</span><br><span class="line">                <span class="comment">//如果文件是目录则递归遍历</span></span><br><span class="line">                <span class="keyword">if</span> (files[i].isDirectory())&#123;</span><br><span class="line">                    Iterator&lt;File&gt; fileIterator = FileUtils.iterateFiles(files[i], <span class="keyword">null</span>, <span class="keyword">true</span>);</span><br><span class="line">                    <span class="keyword">while</span> (fileIterator.hasNext())&#123;</span><br><span class="line">                        File next = fileIterator.next();</span><br><span class="line">                        <span class="keyword">if</span>(!next.isDirectory())&#123;</span><br><span class="line">                            String absolutePath = next.getAbsolutePath();</span><br><span class="line">                            String subString = absolutePath.substring(len);</span><br><span class="line">                            String replacedString = subString.replace(<span class="string">'\\'</span>, <span class="string">'_'</span>);</span><br><span class="line">                            String newPath = path+replacedString;</span><br><span class="line">                            next.renameTo(<span class="keyword">new</span> File(newPath));</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="ping-win10主机超时"><a href="#ping-win10主机超时" class="headerlink" title="ping win10主机超时"></a>ping win10主机超时</h1><img src="/2019/08/15/Tips/pingWin10timeout.png" class="">
+
+<h1 id="浏览器截长屏"><a href="#浏览器截长屏" class="headerlink" title="浏览器截长屏"></a>浏览器截长屏</h1><p>Chrome-&gt;F12-&gt;Ctrl+Shift+P-&gt;Capture full size screenshot</p>
+]]></content>
+      <categories>
+        <category>misc</category>
+      </categories>
+      <tags>
+        <tag>tips</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>VMware的网络模式和NAT下centos7配置静态ip</title>
+    <url>/2020/05/11/VMware%E7%9A%84%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F%E5%92%8CNAT%E4%B8%8Bcentos7%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81ip/</url>
+    <content><![CDATA[<blockquote class="blockquote-center">
+            <i class="fa fa-quote-left"></i>
+            <p>我这个是新装的虚拟机，其实要改的东西不多，关键对新手可能很多概念不清楚，所以要多看多练</p>
+
+            <i class="fa fa-quote-right"></i>
+          </blockquote>
+
+<a id="more"></a>
+
+<h1 id="配置网络连接"><a href="#配置网络连接" class="headerlink" title="配置网络连接"></a><a href="https://docs.vmware.com/cn/VMware-Workstation-Pro/15.0/com.vmware.ws.using.doc/GUID-0CE1AE01-7E79-41BB-9EA8-4F839BE40E1A.html" target="_blank" rel="noopener">配置网络连接</a></h1><p>我的理解：</p>
+<ol>
+<li><p>Host-only: 虚拟机连不上外网，只能和宿主机沟通</p>
+</li>
+<li><p>NAT: 自己学习用这种模式最好，可以通过宿主机连外网，wifi没网也能和宿主机沟通，设置静态ip后，电脑从公司带到家里也不用换ip了，宿主机下的各虚拟机能够互通，就是和其它宿主机互通要通过端口转发的方式<img src="https://img-blog.csdnimg.cn/20200511010138144.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5c3RyaXZlZ28=,size_16,color_FFFFFF,t_70" alt="端口转发"></p>
+</li>
+<li><p>桥接模式：虚拟机就相当于局域网内一台独立的主机，ip和主机是一个网段的，互通很方便，缺点就是没wifi和主机无法沟通，而且换了地方ip就跟着变，所以如果不是固定地点没必要设置静态ip</p>
+<h1 id="nat设置静态ip"><a href="#nat设置静态ip" class="headerlink" title="nat设置静态ip"></a>nat设置静态ip</h1></li>
+</ol>
+<blockquote>
+<p>CentOS Linux release 7.8.2003 (Core)</p>
+</blockquote>
+<h2 id="ens33修改"><a href="#ens33修改" class="headerlink" title="ens33修改"></a>ens33修改</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">vi &#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;ifcfg-ens33</span><br></pre></td></tr></table></figure>
+
+<p>这里的DNS1其实是指VMnet8的网关</p>
+<img src="/2020/05/11/VMware%E7%9A%84%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F%E5%92%8CNAT%E4%B8%8Bcentos7%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81ip/ens33%E8%AE%BE%E7%BD%AE.png" class="">
+
+<h2 id="network修改"><a href="#network修改" class="headerlink" title="network修改"></a>network修改</h2><p><code>vi /etc/sysconfig/network</code></p>
+<p>这里不改会ping不通主机</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Created by anaconda</span></span><br><span class="line">NETWORKING=yes</span><br><span class="line">HOSTNAME=alpha</span><br><span class="line">GATEWAY=192.168.178.2   <span class="comment"># 这个是网关,根据自己的设置修改</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="重启网络"><a href="#重启网络" class="headerlink" title="重启网络"></a>重启网络</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">service network restart</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+      <tags>
+        <tag>VMware</tag>
+        <tag>NAT</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Shiro</title>
     <url>/2020/05/27/Shiro/</url>
     <content><![CDATA[<div class="note info">
@@ -1250,37 +1281,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Tips</title>
-    <url>/2019/08/15/Tips/</url>
-    <content><![CDATA[<blockquote class="blockquote-center">
-            <i class="fa fa-quote-left"></i>
-            <p>单条备忘，大杂烩</p>
-
-            <i class="fa fa-quote-right"></i>
-          </blockquote>
-
-<a id="more"></a>
-
-<h1 id="typora搜索引擎"><a href="#typora搜索引擎" class="headerlink" title="typora搜索引擎"></a>typora搜索引擎</h1><p>偏好设置➡打开高级设置➡<code>conf.user.json</code></p>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line">"searchService": [</span><br><span class="line">    ["Search with baidu", "http://www.baidu.com.cn/s?wd=%s"],</span><br><span class="line">    ["Search with Bing", "https://bing.com/search?q=%s"],</span><br><span class="line">    [<span class="string">"Search with Google"</span>, <span class="string">"https://google.com/search?q=%s"</span>]</span><br><span class="line">  ]</span><br></pre></td></tr></table></figure>
-
-<h1 id="文件批量重命名"><a href="#文件批量重命名" class="headerlink" title="文件批量重命名"></a>文件批量重命名</h1><blockquote>
-<p>有时网上下载的资源，层级目录特别多，找东西很不方便，写个小程序，递归的把某一目录下的所有文件重命名(之间的父级目录下划线相连)</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> util;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.commons.io.FileUtils;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.util.Iterator;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 递归的把某一目录下的所有文件重命名(之间的父级目录下划线相连)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RenameFileByDir</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        File file = <span class="keyword">new</span> File(<span class="string">"D:\\CS\\牛逼的面试辅导视频"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取根目录下所有文件对象</span></span><br><span class="line">        File[] files = file.listFiles();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(files!=<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; files.length; i++) &#123;</span><br><span class="line">                String path = files[i].getAbsolutePath();</span><br><span class="line">                <span class="keyword">int</span> len = path.length();</span><br><span class="line">                <span class="comment">//如果文件是目录则递归遍历</span></span><br><span class="line">                <span class="keyword">if</span> (files[i].isDirectory())&#123;</span><br><span class="line">                    Iterator&lt;File&gt; fileIterator = FileUtils.iterateFiles(files[i], <span class="keyword">null</span>, <span class="keyword">true</span>);</span><br><span class="line">                    <span class="keyword">while</span> (fileIterator.hasNext())&#123;</span><br><span class="line">                        File next = fileIterator.next();</span><br><span class="line">                        <span class="keyword">if</span>(!next.isDirectory())&#123;</span><br><span class="line">                            String absolutePath = next.getAbsolutePath();</span><br><span class="line">                            String subString = absolutePath.substring(len);</span><br><span class="line">                            String replacedString = subString.replace(<span class="string">'\\'</span>, <span class="string">'_'</span>);</span><br><span class="line">                            String newPath = path+replacedString;</span><br><span class="line">                            next.renameTo(<span class="keyword">new</span> File(newPath));</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="ping-win10主机超时"><a href="#ping-win10主机超时" class="headerlink" title="ping win10主机超时"></a>ping win10主机超时</h1><img src="/2019/08/15/Tips/pingWin10timeout.png" class="">
-
-<h1 id="浏览器截长屏"><a href="#浏览器截长屏" class="headerlink" title="浏览器截长屏"></a>浏览器截长屏</h1><p>Chrome-&gt;F12-&gt;Ctrl+Shift+P-&gt;Capture full size screenshot</p>
-]]></content>
-      <categories>
-        <category>misc</category>
-      </categories>
-      <tags>
-        <tag>tips</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>algorithm</title>
     <url>/2020/12/09/algorithm/</url>
     <content><![CDATA[<p>算法学习</p>
@@ -1431,36 +1431,6 @@
       </tags>
   </entry>
   <entry>
-    <title>sqlite</title>
-    <url>/2021/09/16/sqlite/</url>
-    <content><![CDATA[<p>sqlite学习笔记</p>
-<a id="more"></a>
-
-<h1 id="判断表的某一列是否存在"><a href="#判断表的某一列是否存在" class="headerlink" title="判断表的某一列是否存在"></a>判断表的某一列是否存在</h1><p>sqlite里面有一种特殊的语法<strong>pragma</strong>，其用法如下，摘自<a href="https://www.sqlite.org/pragma.html" target="_blank" rel="noopener">官方文档</a></p>
-<p>PRAGMAs that return results and that have no side-effects can be accessed from ordinary <a href="lang_select.html">SELECT</a> statements as <a href="vtab.html#tabfunc2">table-valued functions</a>. For each participating PRAGMA, the corresponding table-valued function has the same name as the PRAGMA with a 7-character “pragma_” prefix. The PRAGMA argument and schema, if any, are passed as arguments to the table-valued function.</p>
-<p>For example, information about the columns in an index can be read using the <a href="pragma.html#pragma_index_info">index_info pragma</a> as follows:</p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">PRAGMA index_info(&#39;idx52&#39;);</span><br></pre></td></tr></table></figure>
-</blockquote>
-<p>Or, the same content can be read using:</p>
-<blockquote>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT * FROM pragma_index_info(&#39;idx52&#39;);</span><br></pre></td></tr></table></figure>
-</blockquote>
-<p><strong>PRAGMA</strong> <em>schema.**</em>table_info(**table-name);</p>
-<p>This pragma returns one row for each column in the named table. Columns in the result set include the <strong>column name</strong>, data type, whether or not the column can be NULL, and the default value for the column. The “pk” column in the result set is zero for columns that are not part of the primary key, and is the index of the column in the primary key for columns that are part of the primary key.</p>
-<p>The table named in the table_info pragma can also be a view.</p>
-<p><strong>eg:</strong></p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">cid         name        type        notnull     dflt_value  pk        </span><br><span class="line"><span class="comment">----------  ----------  ----------  ----------  ----------  ----------</span></span><br><span class="line">0           id          integer     0                       1         </span><br><span class="line">1           name        text        0                       0</span><br></pre></td></tr></table></figure>
-
-<p>上面这个表的name就是列名，则下面这个语句name不为null就可以判断该列存在了。</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">name</span> <span class="keyword">FROM</span> PRAGMA_TABLE_INFO(<span class="keyword">table</span>-<span class="keyword">name</span>) <span class="keyword">WHERE</span> <span class="keyword">name</span>=[columnName];</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>sql</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>fastjson</title>
     <url>/2020/09/11/fastjson/</url>
     <content><![CDATA[<h1 id="fastjson反序列化机制"><a href="#fastjson反序列化机制" class="headerlink" title="fastjson反序列化机制"></a>fastjson反序列化机制</h1><p>fastjson提供了智能匹配的规则，下面写法会自动映射</p>
@@ -1495,6 +1465,36 @@
       </categories>
       <tags>
         <tag>json</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>sqlite</title>
+    <url>/2021/09/16/sqlite/</url>
+    <content><![CDATA[<p>sqlite学习笔记</p>
+<a id="more"></a>
+
+<h1 id="判断表的某一列是否存在"><a href="#判断表的某一列是否存在" class="headerlink" title="判断表的某一列是否存在"></a>判断表的某一列是否存在</h1><p>sqlite里面有一种特殊的语法<strong>pragma</strong>，其用法如下，摘自<a href="https://www.sqlite.org/pragma.html" target="_blank" rel="noopener">官方文档</a></p>
+<p>PRAGMAs that return results and that have no side-effects can be accessed from ordinary <a href="lang_select.html">SELECT</a> statements as <a href="vtab.html#tabfunc2">table-valued functions</a>. For each participating PRAGMA, the corresponding table-valued function has the same name as the PRAGMA with a 7-character “pragma_” prefix. The PRAGMA argument and schema, if any, are passed as arguments to the table-valued function.</p>
+<p>For example, information about the columns in an index can be read using the <a href="pragma.html#pragma_index_info">index_info pragma</a> as follows:</p>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">PRAGMA index_info(&#39;idx52&#39;);</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>Or, the same content can be read using:</p>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT * FROM pragma_index_info(&#39;idx52&#39;);</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p><strong>PRAGMA</strong> <em>schema.**</em>table_info(**table-name);</p>
+<p>This pragma returns one row for each column in the named table. Columns in the result set include the <strong>column name</strong>, data type, whether or not the column can be NULL, and the default value for the column. The “pk” column in the result set is zero for columns that are not part of the primary key, and is the index of the column in the primary key for columns that are part of the primary key.</p>
+<p>The table named in the table_info pragma can also be a view.</p>
+<p><strong>eg:</strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">cid         name        type        notnull     dflt_value  pk        </span><br><span class="line"><span class="comment">----------  ----------  ----------  ----------  ----------  ----------</span></span><br><span class="line">0           id          integer     0                       1         </span><br><span class="line">1           name        text        0                       0</span><br></pre></td></tr></table></figure>
+
+<p>上面这个表的name就是列名，则下面这个语句name不为null就可以判断该列存在了。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">name</span> <span class="keyword">FROM</span> PRAGMA_TABLE_INFO(<span class="keyword">table</span>-<span class="keyword">name</span>) <span class="keyword">WHERE</span> <span class="keyword">name</span>=[columnName];</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>sql</tag>
       </tags>
   </entry>
   <entry>
@@ -1860,146 +1860,94 @@
       </tags>
   </entry>
   <entry>
-    <title>理解RESTful架构</title>
-    <url>/2020/09/20/%E7%90%86%E8%A7%A3RESTful%E6%9E%B6%E6%9E%84/</url>
-    <content><![CDATA[<p>越来越多的人开始意识到，<strong>网站即软件</strong>，而且是一种新型的软件。</p>
-<p>这种”互联网软件”采用客户端/服务器模式，建立在分布式体系上，通过互联网通信，具有高延时（high latency）、高并发等特点。</p>
-<p>网站开发，完全可以采用软件开发的模式。但是传统上，软件和网络是两个不同的领域，很少有交集；软件开发主要针对单机环境，网络则主要研究系统之间的通信。互联网的兴起，使得这两个领域开始融合，<strong>现在我们必须考虑，如何开发在互联网环境中使用的软件。</strong></p>
+    <title>redis</title>
+    <url>/2023/11/04/redis/</url>
+    <content><![CDATA[<p>redis学习</p>
 <a id="more"></a>
 
-<p><img src="http://www.ruanyifeng.com/blogimg/asset/201109/bg2011091202.jpg" alt="img"></p>
-<p>RESTful架构，就是目前最流行的一种互联网软件架构。它结构清晰、符合标准、易于理解、扩展方便，所以正得到越来越多网站的采用。</p>
-<p>但是，到底什么是RESTful架构，并不是一个容易说清楚的问题。下面，我就谈谈我理解的RESTful架构。</p>
-<p><strong>一、起源</strong></p>
-<p>REST这个词，是<a href="http://en.wikipedia.org/wiki/Roy_Fielding" target="_blank" rel="noopener">Roy Thomas Fielding</a>在他2000年的<a href="http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm" target="_blank" rel="noopener">博士论文</a>中提出的。</p>
-<p><img src="http://www.ruanyifeng.com/blogimg/asset/201109/bg2011091201.jpg" alt="img"></p>
-<p>Fielding是一个非常重要的人，他是HTTP协议（1.0版和1.1版）的主要设计者、Apache服务器软件的作者之一、Apache基金会的第一任主席。所以，他的这篇论文一经发表，就引起了关注，并且立即对互联网开发产生了深远的影响。</p>
-<p>他这样介绍论文的写作目的：</p>
-<blockquote>
-<p>“本文研究计算机科学两大前沿—-软件和网络—-的交叉点。长期以来，软件研究主要关注软件设计的分类、设计方法的演化，很少客观地评估不同的设计选择对系统行为的影响。而相反地，网络研究主要关注系统之间通信行为的细节、如何改进特定通信机制的表现，常常忽视了一个事实，那就是改变应用程序的互动风格比改变互动协议，对整体表现有更大的影响。<strong>我这篇文章的写作目的，就是想在符合架构原理的前提下，理解和评估以网络为基础的应用软件的架构设计，得到一个功能强、性能好、适宜通信的架构。</strong>“</p>
-<p>(This dissertation explores a junction on the frontiers of two research disciplines in computer science: software and networking. Software research has long been concerned with the categorization of software designs and the development of design methodologies, but has rarely been able to objectively evaluate the impact of various design choices on system behavior. Networking research, in contrast, is focused on the details of generic communication behavior between systems and improving the performance of particular communication techniques, often ignoring the fact that changing the interaction style of an application can have more impact on performance than the communication protocols used for that interaction. My work is motivated by the desire to understand and evaluate the architectural design of network-based application software through principled use of architectural constraints, thereby obtaining the functional, performance, and social properties desired of an architecture. )</p>
-</blockquote>
-<p><strong>二、名称</strong></p>
-<p>Fielding将他对互联网软件的架构原则，定名为REST，即Representational State Transfer的缩写。我对这个词组的翻译是”表现层状态转化”。</p>
-<p>如果一个架构符合REST原则，就称它为RESTful架构。</p>
-<p><strong>要理解RESTful架构，最好的方法就是去理解Representational State Transfer这个词组到底是什么意思，它的每一个词代表了什么涵义。</strong>如果你把这个名称搞懂了，也就不难体会REST是一种什么样的设计。</p>
-<p><strong>三、资源（Resources）</strong></p>
-<p>REST的名称”表现层状态转化”中，省略了主语。”表现层”其实指的是”资源”（Resources）的”表现层”。</p>
-<p><strong>所谓”资源”，就是网络上的一个实体，或者说是网络上的一个具体信息。</strong>它可以是一段文本、一张图片、一首歌曲、一种服务，总之就是一个具体的实在。你可以用一个URI（统一资源定位符）指向它，每种资源对应一个特定的URI。要获取这个资源，访问它的URI就可以，因此URI就成了每一个资源的地址或独一无二的识别符。</p>
-<p>所谓”上网”，就是与互联网上一系列的”资源”互动，调用它的URI。</p>
-<p><strong>四、表现层（Representation）</strong></p>
-<p>“资源”是一种信息实体，它可以有多种外在表现形式。<strong>我们把”资源”具体呈现出来的形式，叫做它的”表现层”（Representation）。</strong></p>
-<p>比如，文本可以用txt格式表现，也可以用HTML格式、XML格式、JSON格式表现，甚至可以采用二进制格式；图片可以用JPG格式表现，也可以用PNG格式表现。</p>
-<p>URI只代表资源的实体，不代表它的形式。严格地说，有些网址最后的”.html”后缀名是不必要的，因为这个后缀名表示格式，属于”表现层”范畴，而URI应该只代表”资源”的位置。它的具体表现形式，应该在HTTP请求的头信息中用Accept和Content-Type字段指定，这两个字段才是对”表现层”的描述。</p>
-<p><strong>五、状态转化（State Transfer）</strong></p>
-<p>访问一个网站，就代表了客户端和服务器的一个互动过程。在这个过程中，势必涉及到数据和状态的变化。</p>
-<p>互联网通信协议HTTP协议，是一个无状态协议。这意味着，所有的状态都保存在服务器端。因此，<strong>如果客户端想要操作服务器，必须通过某种手段，让服务器端发生”状态转化”（State Transfer）。而这种转化是建立在表现层之上的，所以就是”表现层状态转化”。</strong></p>
-<p>客户端用到的手段，只能是HTTP协议。具体来说，就是HTTP协议里面，四个表示操作方式的动词：GET、POST、PUT、DELETE。它们分别对应四种基本操作：<strong>GET用来获取资源，POST用来新建资源（也可以用于更新资源），PUT用来更新资源，DELETE用来删除资源。</strong></p>
-<p><strong>六、综述</strong></p>
-<p>综合上面的解释，我们总结一下什么是RESTful架构：</p>
-<p>　　（1）每一个URI代表一种资源；</p>
-<p>　　（2）客户端和服务器之间，传递这种资源的某种表现层；</p>
-<p>　　（3）客户端通过四个HTTP动词，对服务器端资源进行操作，实现”表现层状态转化”。</p>
-<p><strong>七、误区</strong></p>
-<p>RESTful架构有一些典型的设计误区。</p>
-<p><strong>最常见的一种设计错误，就是URI包含动词。</strong>因为”资源”表示一种实体，所以应该是名词，URI不应该有动词，动词应该放在HTTP协议中。</p>
-<p>举例来说，某个URI是/posts/show/1，其中show是动词，这个URI就设计错了，正确的写法应该是/posts/1，然后用GET方法表示show。</p>
-<p>如果某些动作是HTTP动词表示不了的，你就应该把动作做成一种资源。比如网上汇款，从账户1向账户2汇款500元，错误的URI是：</p>
-<blockquote>
-<p>　　POST /accounts/1/transfer/500/to/2</p>
-</blockquote>
-<p>正确的写法是把动词transfer改成名词transaction，资源不能是动词，但是可以是一种服务：</p>
-<blockquote>
-<p>　　POST /transaction HTTP/1.1<br>　　Host: 127.0.0.1<br>　　<br>　　from=1&amp;to=2&amp;amount=500.00</p>
-</blockquote>
-<p><strong>另一个设计误区，就是在URI中加入版本号</strong>：</p>
-<blockquote>
-<p>　　<a href="http://www.example.com/app/1.0/foo" target="_blank" rel="noopener">http://www.example.com/app/1.0/foo</a></p>
-<p>　　<a href="http://www.example.com/app/1.1/foo" target="_blank" rel="noopener">http://www.example.com/app/1.1/foo</a></p>
-<p>　　<a href="http://www.example.com/app/2.0/foo" target="_blank" rel="noopener">http://www.example.com/app/2.0/foo</a></p>
-</blockquote>
-<p>因为不同的版本，可以理解成同一种资源的不同表现形式，所以应该采用同一个URI。版本号可以在HTTP请求头信息的Accept字段中进行区分（参见<a href="http://www.informit.com/articles/article.aspx?p=1566460" target="_blank" rel="noopener">Versioning REST Services</a>）：</p>
-<blockquote>
-<p>　　Accept: vnd.example-com.foo+json; version=1.0</p>
-<p>　　Accept: vnd.example-com.foo+json; version=1.1</p>
-<p>　　Accept: vnd.example-com.foo+json; version=2.0</p>
-</blockquote>
-<p><a href="http://www.ruanyifeng.com/blog/2011/09/restful.html" target="_blank" rel="noopener">转载地址</a></p>
-]]></content>
-      <tags>
-        <tag>web</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>键盘折腾史</title>
-    <url>/2020/05/22/%E9%94%AE%E7%9B%98%E6%8A%98%E8%85%BE%E5%8F%B2/</url>
-    <content><![CDATA[<img src="/2020/05/22/%E9%94%AE%E7%9B%98%E6%8A%98%E8%85%BE%E5%8F%B2/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200522022330.jpg" class="">
-
-<blockquote>
-<p>为了手腕着想，键盘厚度超过20mm就要考虑配掌托了，不想折腾的推荐ThinkPad小红点键盘。</p>
-</blockquote>
-<a id="more"></a>
-
-<h1 id="IKBC-C104"><a href="#IKBC-C104" class="headerlink" title="IKBC C104"></a>IKBC C104</h1><p>初入机械键盘的坑，本着不折腾，一把就退烧的想法买了红轴，确实和薄膜不一样，但也没有很惊艳，最后搬家前闲鱼出手。</p>
-<h1 id="IKBC-E412"><a href="#IKBC-E412" class="headerlink" title="IKBC E412"></a>IKBC E412</h1><p>又是红轴，这一款是带掌托的，用了一年左右，总感觉键盘太大，使用鼠标手肘移动距离过长，半价出给了同事。</p>
-<h1 id="罗技K580"><a href="#罗技K580" class="headerlink" title="罗技K580"></a>罗技K580</h1><blockquote>
-<p>对于不确实会长期持有的东西最好在闲鱼买，最后出掉也不会亏多少，甚至还有赚的可能</p>
-</blockquote>
-<p>闲鱼入了把K580，作为无线键盘很好，长续航，重量轻，罗技黑科技也都有：优联很好，蓝牙切换也很快，flow功能很鸡肋，因为延迟很大。键盘手感很差，还不如我的笔记本键盘，最后闲鱼出掉。</p>
-<h1 id="NIZ68"><a href="#NIZ68" class="headerlink" title="NIZ68"></a>NIZ68</h1><p>宁芝静电容68双模，网上都说静电容退烧，我信了，买回来晚上同事敲了下，他说80块都不要，而我800买的，静电容确实很小众，键盘手感特别软，感觉键帽下面是空心一样，而且这款退格键设计的有问题，不容易够到，故第二天退掉。</p>
-<h1 id="小红点USB键盘"><a href="#小红点USB键盘" class="headerlink" title="小红点USB键盘"></a>小红点USB键盘</h1><p>ThinkPad的键盘网上口碑很好，而且公司发的联想昭阳k22-80的键盘就是类ThinkPad的，打字很舒服，就在闲鱼上买了一把，卖家很好心，知道我是武汉的还退了10块给我。</p>
-<p>键盘布局非常好，打字很流畅长时间也不吃力，由于不到10mm的厚度，也不需要掌托。感觉ThinkPad的老用户有很多守旧的人不喜欢巧克力设计，可能是我先入为主，我是很喜欢的，美观而且厚度薄对手腕友好，这把键盘应该会长期持有。</p>
-<p>槽点：Fn和CTRL的位置是反的，不过慢慢也习惯了，开始觉得小红点不实用，用了一个月后觉得真香。</p>
-<p>期待：二代无线小红点键盘<a href="https://www.lenovo.com/us/en/accessories-and-monitors/new-arrivals/KBD-BO-TrackPoint-KBD-US-Eng/p/4Y40X49493" target="_blank" rel="noopener">ThinkPad TrackPoint Keyboard II</a></p>
-<h1 id="黑爵K680T"><a href="#黑爵K680T" class="headerlink" title="黑爵K680T"></a>黑爵K680T</h1><p>体验了把青轴，不是我的菜，那把白色的就是，布局还是很好的</p>
-<img src="/2020/05/22/%E9%94%AE%E7%9B%98%E6%8A%98%E8%85%BE%E5%8F%B2/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200522022316.jpg" class="">
-
-<h1 id="京东京造-K1-87"><a href="#京东京造-K1-87" class="headerlink" title="京东京造 K1/87"></a>京东京造 K1/87</h1><img src="/2020/05/22/%E9%94%AE%E7%9B%98%E6%8A%98%E8%85%BE%E5%8F%B2/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200522031118.jpg" class="">
-
-<img src="/2020/05/22/%E9%94%AE%E7%9B%98%E6%8A%98%E8%85%BE%E5%8F%B2/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200522022334.jpg" class="">
-
-<div class="note info">
-            <p>佳达隆定制矮红轴，对应产品 <a href="https://www.keychron.com/products/keychron-k1-wireless-mechanical-keyboard" target="_blank" rel="noopener">keychron k1 v3</a>  </p><p>主输入区非常静音，手感红轴偏薄膜吧，触发很迅速，大键都是用的平衡杆，触感声响各异，可玩性不错，但还是要配掌托，且个人感觉长时间输入还是不如小红点键盘舒服。</p><img src="/2020/05/22/%E9%94%AE%E7%9B%98%E6%8A%98%E8%85%BE%E5%8F%B2/k1gateron.png" class="">
-          </div>
-
-<h1 id="GS87D"><a href="#GS87D" class="headerlink" title="GS87D"></a>GS87D</h1><div class="note info">
-            <p>蓝牙5.0有线双模，TypeC键线分离，干电池，热升华键帽，87键cherry红轴，339，配置很残暴，但做工确实一般，大键晃动严重，手感没有上面那把好，而且键盘太高。立个flag，除非机械键盘做到薄膜键盘一样的高度，否则不再折腾机械键盘。</p><img src="/2020/05/22/%E9%94%AE%E7%9B%98%E6%8A%98%E8%85%BE%E5%8F%B2/gs87d.jpg" class="">
-          </div>
-
-<h1 id="Keychron-K1v4"><a href="#Keychron-K1v4" class="headerlink" title="Keychron K1v4"></a>Keychron K1v4</h1><div class="note info">
-            <p>这款手托不好找，11mm的黑爵塑料手托是我能找到的最合适的了，目前长时间输入也不累，触发压力要比上一代大，不知道是不是换了曲面键帽的缘故，背光开着比较美观，关闭情况下相当于一把无刻键盘<br><img src="https://gitee.com/zystrivego/misc/raw/master/k1v4%20palm%20rest.jpg" alt="k1v4 palm rest"></p><p><img src="https://gitee.com/zystrivego/misc/raw/master/k1v4%20quick%20start.jpg" alt="k1v4 quick start"></p>
-          </div>]]></content>
-      <categories>
-        <category>外设</category>
-      </categories>
-      <tags>
-        <tag>键盘</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>软件测试了解</title>
-    <url>/2020/05/12/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95%E4%BA%86%E8%A7%A3/</url>
-    <content><![CDATA[<blockquote class="blockquote-center">
-            <i class="fa fa-quote-left"></i>
-            <p><a href="https://blog.csdn.net/sinat_41392571/article/details/81514521" target="_blank" rel="noopener">软件测试工作基本流程</a></p>
-
-            <i class="fa fa-quote-right"></i>
-          </blockquote>
-
-<a id="more"></a>
-
-<p>我的简单了解：</p>
-<ol>
-<li>流程：编写测试计划-测试用例-执行测试用例-跟踪bug-回归bug<br>工具：性能测试工具jmeter</li>
-<li>单元测试一般是由开发完成的，测试人员主要负责三个部分：功能测试，性能测试，自动化测试</li>
-<li>自动化测试也分接口自动化，ui自动化等，接口自动化是可以用jmeter做的，ui自动化用的selenium</li>
+<h2 id="部署方式"><a href="#部署方式" class="headerlink" title="部署方式"></a>部署方式</h2><h3 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h3><p>Redis的主从复制是一种数据复制机制，它将一台Redis服务器的数据复制到其他的Redis服务器。其中，前者称为主节点（master），后者称为从节点（slave）。数据的复制是单向的，只能由主节点到从节点。默认情况下，每台Redis服务器都是主节点，且一个主节点可以有多个从节点（或没有从节点），但一个从节点只能有一个主节点。主从复制的作用主要包括：</p>
+<ul>
+<li>数据冗余：主从复制实现了数据的热备份，是持久化之外的一种数据冗余方式。</li>
+<li>故障恢复：当主节点出现问题时，可以由从节点提供服务，实现快速的故障恢复；实际上是一种服务的冗余。</li>
+<li>负载均衡：在主从复制的基础上，配合读写分离，可以由主节点提供写服务，由从节点提供读服务（即写Redis数据时应用连接主节点，读Redis数据时应用连接从节点），分担服务器负载；尤其是在写少读多的场景下，通过多个从节点分担读负载，可以大大提高Redis服务器的并发量。</li>
+<li>高可用基石：主从复制还是哨兵和集群能够实施的基础，因此说主从复制是Redis高可用的基础。</li>
+</ul>
+<p>缺点：主节点挂掉后，不可用。</p>
+<h3 id="哨兵模式"><a href="#哨兵模式" class="headerlink" title="哨兵模式"></a>哨兵模式</h3><p>基于主从复制，它可以自动感知系统故障、自动故障转移，具备以下能力：</p>
+<ul>
+<li>监控（Monitoring）：持续监控Redis主节点、从节点是否处于预期的工作状态。</li>
+<li>通知（Notification）：哨兵可以把Redis实例的运行故障信息通过API通知监控系统或者其他应用程序。</li>
+<li>自动故障恢复（Automatic failover）：当主节点运行故障时，哨兵会启动自动故障恢复流程：某个从节点会升级为主节点，其他从节点会使用新的主节点进行主从复制，通知客户端使用新的主节点进行。</li>
+<li>配置中心（Configuration provider）：哨兵可以作为客户端服务发现的授权源，客户端连接到哨兵请求给定服务的Redis主节点地址。如果发生故障转移，哨兵会通知新的地址。</li>
+</ul>
+<h3 id="集群模式"><a href="#集群模式" class="headerlink" title="集群模式"></a>集群模式</h3><p>Redis集群使用数据分片（sharding）而非一致性哈希（consistency hashing）来实现：一个Redis集群包含16384个哈希槽（hash slot），数据库中的每个键都属于这16384个哈希槽的其中一个，集群使用公式CRC16(key) % 16384来计算键key属于哪个槽，其中CRC16(key)语句用于计算键key的CRC16校验和。集群中的每个节点负责处理一部分哈希槽。这种将哈希槽分布到不同节点的做法使得用户可以很容易地向集群中添加或者删除节点。</p>
+<p>至少需要3个节点（选举半数需要），一个节点包含一个主节点，多个从节点（主从复制）</p>
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><h3 id="redis和数据库的数据一致性"><a href="#redis和数据库的数据一致性" class="headerlink" title="redis和数据库的数据一致性"></a>redis和数据库的数据一致性</h3><h4 id="读数据"><a href="#读数据" class="headerlink" title="读数据"></a>读数据</h4><p>先从redis读取数据，没有再从数据库读数据，并写入到redis中</p>
+<h4 id="写数据"><a href="#写数据" class="headerlink" title="写数据"></a>写数据</h4><ol>
+<li>双删方案</li>
 </ol>
+<p>先删除redis，再写数据库，随机一小段时间，再删一次redis</p>
+<ol start="2">
+<li>先写数据库，再删除redis</li>
+</ol>
+<p>其它方案，高并发场景可能读到旧数据，或者写入旧数据库到缓存</p>
+<h4 id="一致性"><a href="#一致性" class="headerlink" title="一致性"></a>一致性</h4><p>因为不是原子性操作，高并发场景可能有删除失败的情况，数据同步推荐3种方式</p>
+<ol>
+<li>业务代码定时任务删除失败的数据</li>
+<li>mq</li>
+<li>binlog</li>
+</ol>
+<h3 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h3><p>定义：大量key同时失效，请求打向数据库。</p>
+<p>原因及解决措施：</p>
+<ol>
+<li>key的过期时间设置的一样了，解决措施：每次设置过期时间，加上一个小点的随机数</li>
+<li>redis服务挂了，解决措施：高可用方案，集群。</li>
+</ol>
+<h3 id="缓存击穿"><a href="#缓存击穿" class="headerlink" title="缓存击穿"></a>缓存击穿</h3><p>定义：热点key失效，请求打向数据库。</p>
+<p>解决措施：热点key不设置过期时间</p>
+<h3 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h3><p>定义：key在redis和数据库中都不存在</p>
+<p>原因：误删或恶意攻击</p>
+<p>解决措施：</p>
+<ol>
+<li>前端参数校验</li>
+<li>把不存在的key缓存起来，并返回空对象，设置一个短的过期时间</li>
+<li>布隆过滤器（准确快速的判断某个数据是否在大数据量集合中，并且不占用内存），常用实现</li>
+</ol>
+<ul>
+<li><p>redisson</p>
+</li>
+<li><p>lettuce</p>
+</li>
+<li><p>guava</p>
+</li>
+</ul>
+<h3 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h3><ol>
+<li>避免big-key，hash更均匀</li>
+<li>避免keys*，scan操作，影响性能</li>
+</ol>
+<h2 id="持久化"><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h2><h3 id="RDB-redis-database"><a href="#RDB-redis-database" class="headerlink" title="RDB(redis database)"></a>RDB(redis database)</h3><p>生成指定时间间隔内的Redis内存中<strong>数据快照</strong>，是一个<strong>二进制文件dump.rdb</strong>。RDB持久化是指在指定的时间间隔内将内存中的数据集快照写入磁盘。RDB文件紧凑，全量备份，非常适合用于进行备份和灾难恢复。RDB在恢复大数据集时的速度比AOF的恢复<strong>速度要快</strong>。RDB快照是一次全量备份，存储的是内存数据的二进制序列化形式，存储上非常紧凑。RDB机制是通过把某个时刻的所有数据生成一个快照来保存，提供了三种触发机制：<strong>save、bgsave、自动化</strong>。<strong>推荐使用，凌晨定时任务执行，每次关闭启动的时候执行下bgsave，这样对性能比较好。</strong></p>
+<h3 id="AOF-append-only-file"><a href="#AOF-append-only-file" class="headerlink" title="AOF(append only file)"></a>AOF(append only file)</h3><p>记录Redis除了查询以外的所有<strong>写命令</strong>，并在Redis服务启动时，通过重新执行这些命令来还原数据。AOF日志文件没有任何磁盘寻址的开销，写入性能非常高，文件不容易破损。AOF日志文件的命令通过非常可读的方式进行记录，这个特性非常适合做灾难性的误删除的紧急恢复。AOF可以更好的保护数据不丢失，一般AOF会每隔1秒，通过一个后台线程执行一次fsync操作，最多丢失1秒钟的数据。根据所使用的fsync策略，AOF的速度可能会比RDB慢。通常fsync设置为每秒一次就能获得比较高的性能，而关闭fsync可以让AOF的速度和RDB一样快。AOF日志文件的大小一般会比RDB文件大。AOF机制也有三种触发机制：每修改同步always、每秒同步everysec、不同步no。</p>
+<h2 id="Java客户端"><a href="#Java客户端" class="headerlink" title="Java客户端"></a>Java客户端</h2><ul>
+<li><p>Jedis是一个比较纯粹的Redis客户端，几乎没有提供什么高级功能。它的性能比较差，所以如果您不需要使用Redis的高级功能，建议使用Lettuce。Jedis客户端实例不是线程安全的，所以需要通过连接池来使用Jedis。</p>
+</li>
+<li><p>Lettuce是一个线程安全的Redis客户端，它满足了大多数场景需求。所有Redis用户的操作是单线程执行的，使用多连接并不能改善一个应用的性能。使用阻塞操作的通常与获得专用连接的工作线程结合在一起。使用Redis事务是使用动态连接池的典型场景，因为需要专用连接的线程数趋于动态，也就是说动态连接池的需求是有限的。</p>
+</li>
+<li><p>Redisson提供了很多开箱即用的Redis高级功能，如果您的应用中需要使用到Redis的高级功能，建议使用Redisson。Redisson支持分布式锁、分布式集合、分布式对象、分布式限流等功能，可以很方便地实现分布式应用。Redisson的缺点是它的性能比较差，所以不适合对性能要求比较高的场景。</p>
+</li>
+<li><p>spring boot date redis</p>
+</li>
+</ul>
+<p>基于lettuce，Spring RedisTemplate封装方法，调用方便。</p>
+<h2 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h2><h3 id="事务"><a href="#事务" class="headerlink" title="事务"></a><a href="https://redis.io/docs/interact/transactions/" target="_blank" rel="noopener">事务</a></h3><p> <a href="https://redis.io/commands/multi" target="_blank" rel="noopener"><code>MULTI</code></a>, <a href="https://redis.io/commands/exec" target="_blank" rel="noopener"><code>EXEC</code></a>, <a href="https://redis.io/commands/discard" target="_blank" rel="noopener"><code>DISCARD</code></a> and <a href="https://redis.io/commands/watch" target="_blank" rel="noopener"><code>WATCH</code></a></p>
+<h3 id="SETNX（SET-IF-NOT-EXIST）"><a href="#SETNX（SET-IF-NOT-EXIST）" class="headerlink" title="SETNX（SET IF NOT EXIST）"></a>SETNX（SET IF NOT EXIST）</h3><p>Redis是一个单线程模型，它通过队列来实现多个客户端的请求排队执行。这意味着，在Redis中执行的每个命令都是原子性的，不会存在线程安全问题。Redis提供了多个命令可以实现原子性的操作，如SETNX、GETSET等，它们都是通过Redis的事务机制以及WATCH命令来实现的。在分布式锁的实现中，我们可以使用SETNX命令来实现锁的获取，使用DEL命令来实现锁的释放。</p>
+<img src="/2023/11/04/redis/setnx.png" class="">
+
+<p>对应Spring RedisTemplate中的setIfAbsent()方法</p>
+<h3 id="redisson"><a href="#redisson" class="headerlink" title="redisson"></a>redisson</h3><p>上述方案在高并发场景会出现死锁问题，redisson的redlock搭配集群模式可实现高可用的分布式锁。</p>
 ]]></content>
-      <categories>
-        <category>misc</category>
-      </categories>
       <tags>
-        <tag>测试</tag>
+        <tag>缓存</tag>
+        <tag>中间件</tag>
       </tags>
   </entry>
   <entry>
@@ -3059,6 +3007,123 @@
       </tags>
   </entry>
   <entry>
+    <title>理解RESTful架构</title>
+    <url>/2020/09/20/%E7%90%86%E8%A7%A3RESTful%E6%9E%B6%E6%9E%84/</url>
+    <content><![CDATA[<p>越来越多的人开始意识到，<strong>网站即软件</strong>，而且是一种新型的软件。</p>
+<p>这种”互联网软件”采用客户端/服务器模式，建立在分布式体系上，通过互联网通信，具有高延时（high latency）、高并发等特点。</p>
+<p>网站开发，完全可以采用软件开发的模式。但是传统上，软件和网络是两个不同的领域，很少有交集；软件开发主要针对单机环境，网络则主要研究系统之间的通信。互联网的兴起，使得这两个领域开始融合，<strong>现在我们必须考虑，如何开发在互联网环境中使用的软件。</strong></p>
+<a id="more"></a>
+
+<p><img src="http://www.ruanyifeng.com/blogimg/asset/201109/bg2011091202.jpg" alt="img"></p>
+<p>RESTful架构，就是目前最流行的一种互联网软件架构。它结构清晰、符合标准、易于理解、扩展方便，所以正得到越来越多网站的采用。</p>
+<p>但是，到底什么是RESTful架构，并不是一个容易说清楚的问题。下面，我就谈谈我理解的RESTful架构。</p>
+<p><strong>一、起源</strong></p>
+<p>REST这个词，是<a href="http://en.wikipedia.org/wiki/Roy_Fielding" target="_blank" rel="noopener">Roy Thomas Fielding</a>在他2000年的<a href="http://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm" target="_blank" rel="noopener">博士论文</a>中提出的。</p>
+<p><img src="http://www.ruanyifeng.com/blogimg/asset/201109/bg2011091201.jpg" alt="img"></p>
+<p>Fielding是一个非常重要的人，他是HTTP协议（1.0版和1.1版）的主要设计者、Apache服务器软件的作者之一、Apache基金会的第一任主席。所以，他的这篇论文一经发表，就引起了关注，并且立即对互联网开发产生了深远的影响。</p>
+<p>他这样介绍论文的写作目的：</p>
+<blockquote>
+<p>“本文研究计算机科学两大前沿—-软件和网络—-的交叉点。长期以来，软件研究主要关注软件设计的分类、设计方法的演化，很少客观地评估不同的设计选择对系统行为的影响。而相反地，网络研究主要关注系统之间通信行为的细节、如何改进特定通信机制的表现，常常忽视了一个事实，那就是改变应用程序的互动风格比改变互动协议，对整体表现有更大的影响。<strong>我这篇文章的写作目的，就是想在符合架构原理的前提下，理解和评估以网络为基础的应用软件的架构设计，得到一个功能强、性能好、适宜通信的架构。</strong>“</p>
+<p>(This dissertation explores a junction on the frontiers of two research disciplines in computer science: software and networking. Software research has long been concerned with the categorization of software designs and the development of design methodologies, but has rarely been able to objectively evaluate the impact of various design choices on system behavior. Networking research, in contrast, is focused on the details of generic communication behavior between systems and improving the performance of particular communication techniques, often ignoring the fact that changing the interaction style of an application can have more impact on performance than the communication protocols used for that interaction. My work is motivated by the desire to understand and evaluate the architectural design of network-based application software through principled use of architectural constraints, thereby obtaining the functional, performance, and social properties desired of an architecture. )</p>
+</blockquote>
+<p><strong>二、名称</strong></p>
+<p>Fielding将他对互联网软件的架构原则，定名为REST，即Representational State Transfer的缩写。我对这个词组的翻译是”表现层状态转化”。</p>
+<p>如果一个架构符合REST原则，就称它为RESTful架构。</p>
+<p><strong>要理解RESTful架构，最好的方法就是去理解Representational State Transfer这个词组到底是什么意思，它的每一个词代表了什么涵义。</strong>如果你把这个名称搞懂了，也就不难体会REST是一种什么样的设计。</p>
+<p><strong>三、资源（Resources）</strong></p>
+<p>REST的名称”表现层状态转化”中，省略了主语。”表现层”其实指的是”资源”（Resources）的”表现层”。</p>
+<p><strong>所谓”资源”，就是网络上的一个实体，或者说是网络上的一个具体信息。</strong>它可以是一段文本、一张图片、一首歌曲、一种服务，总之就是一个具体的实在。你可以用一个URI（统一资源定位符）指向它，每种资源对应一个特定的URI。要获取这个资源，访问它的URI就可以，因此URI就成了每一个资源的地址或独一无二的识别符。</p>
+<p>所谓”上网”，就是与互联网上一系列的”资源”互动，调用它的URI。</p>
+<p><strong>四、表现层（Representation）</strong></p>
+<p>“资源”是一种信息实体，它可以有多种外在表现形式。<strong>我们把”资源”具体呈现出来的形式，叫做它的”表现层”（Representation）。</strong></p>
+<p>比如，文本可以用txt格式表现，也可以用HTML格式、XML格式、JSON格式表现，甚至可以采用二进制格式；图片可以用JPG格式表现，也可以用PNG格式表现。</p>
+<p>URI只代表资源的实体，不代表它的形式。严格地说，有些网址最后的”.html”后缀名是不必要的，因为这个后缀名表示格式，属于”表现层”范畴，而URI应该只代表”资源”的位置。它的具体表现形式，应该在HTTP请求的头信息中用Accept和Content-Type字段指定，这两个字段才是对”表现层”的描述。</p>
+<p><strong>五、状态转化（State Transfer）</strong></p>
+<p>访问一个网站，就代表了客户端和服务器的一个互动过程。在这个过程中，势必涉及到数据和状态的变化。</p>
+<p>互联网通信协议HTTP协议，是一个无状态协议。这意味着，所有的状态都保存在服务器端。因此，<strong>如果客户端想要操作服务器，必须通过某种手段，让服务器端发生”状态转化”（State Transfer）。而这种转化是建立在表现层之上的，所以就是”表现层状态转化”。</strong></p>
+<p>客户端用到的手段，只能是HTTP协议。具体来说，就是HTTP协议里面，四个表示操作方式的动词：GET、POST、PUT、DELETE。它们分别对应四种基本操作：<strong>GET用来获取资源，POST用来新建资源（也可以用于更新资源），PUT用来更新资源，DELETE用来删除资源。</strong></p>
+<p><strong>六、综述</strong></p>
+<p>综合上面的解释，我们总结一下什么是RESTful架构：</p>
+<p>　　（1）每一个URI代表一种资源；</p>
+<p>　　（2）客户端和服务器之间，传递这种资源的某种表现层；</p>
+<p>　　（3）客户端通过四个HTTP动词，对服务器端资源进行操作，实现”表现层状态转化”。</p>
+<p><strong>七、误区</strong></p>
+<p>RESTful架构有一些典型的设计误区。</p>
+<p><strong>最常见的一种设计错误，就是URI包含动词。</strong>因为”资源”表示一种实体，所以应该是名词，URI不应该有动词，动词应该放在HTTP协议中。</p>
+<p>举例来说，某个URI是/posts/show/1，其中show是动词，这个URI就设计错了，正确的写法应该是/posts/1，然后用GET方法表示show。</p>
+<p>如果某些动作是HTTP动词表示不了的，你就应该把动作做成一种资源。比如网上汇款，从账户1向账户2汇款500元，错误的URI是：</p>
+<blockquote>
+<p>　　POST /accounts/1/transfer/500/to/2</p>
+</blockquote>
+<p>正确的写法是把动词transfer改成名词transaction，资源不能是动词，但是可以是一种服务：</p>
+<blockquote>
+<p>　　POST /transaction HTTP/1.1<br>　　Host: 127.0.0.1<br>　　<br>　　from=1&amp;to=2&amp;amount=500.00</p>
+</blockquote>
+<p><strong>另一个设计误区，就是在URI中加入版本号</strong>：</p>
+<blockquote>
+<p>　　<a href="http://www.example.com/app/1.0/foo" target="_blank" rel="noopener">http://www.example.com/app/1.0/foo</a></p>
+<p>　　<a href="http://www.example.com/app/1.1/foo" target="_blank" rel="noopener">http://www.example.com/app/1.1/foo</a></p>
+<p>　　<a href="http://www.example.com/app/2.0/foo" target="_blank" rel="noopener">http://www.example.com/app/2.0/foo</a></p>
+</blockquote>
+<p>因为不同的版本，可以理解成同一种资源的不同表现形式，所以应该采用同一个URI。版本号可以在HTTP请求头信息的Accept字段中进行区分（参见<a href="http://www.informit.com/articles/article.aspx?p=1566460" target="_blank" rel="noopener">Versioning REST Services</a>）：</p>
+<blockquote>
+<p>　　Accept: vnd.example-com.foo+json; version=1.0</p>
+<p>　　Accept: vnd.example-com.foo+json; version=1.1</p>
+<p>　　Accept: vnd.example-com.foo+json; version=2.0</p>
+</blockquote>
+<p><a href="http://www.ruanyifeng.com/blog/2011/09/restful.html" target="_blank" rel="noopener">转载地址</a></p>
+]]></content>
+      <tags>
+        <tag>web</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>键盘折腾史</title>
+    <url>/2020/05/22/%E9%94%AE%E7%9B%98%E6%8A%98%E8%85%BE%E5%8F%B2/</url>
+    <content><![CDATA[<img src="/2020/05/22/%E9%94%AE%E7%9B%98%E6%8A%98%E8%85%BE%E5%8F%B2/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200522022330.jpg" class="">
+
+<blockquote>
+<p>为了手腕着想，键盘厚度超过20mm就要考虑配掌托了，不想折腾的推荐ThinkPad小红点键盘。</p>
+</blockquote>
+<a id="more"></a>
+
+<h1 id="IKBC-C104"><a href="#IKBC-C104" class="headerlink" title="IKBC C104"></a>IKBC C104</h1><p>初入机械键盘的坑，本着不折腾，一把就退烧的想法买了红轴，确实和薄膜不一样，但也没有很惊艳，最后搬家前闲鱼出手。</p>
+<h1 id="IKBC-E412"><a href="#IKBC-E412" class="headerlink" title="IKBC E412"></a>IKBC E412</h1><p>又是红轴，这一款是带掌托的，用了一年左右，总感觉键盘太大，使用鼠标手肘移动距离过长，半价出给了同事。</p>
+<h1 id="罗技K580"><a href="#罗技K580" class="headerlink" title="罗技K580"></a>罗技K580</h1><blockquote>
+<p>对于不确实会长期持有的东西最好在闲鱼买，最后出掉也不会亏多少，甚至还有赚的可能</p>
+</blockquote>
+<p>闲鱼入了把K580，作为无线键盘很好，长续航，重量轻，罗技黑科技也都有：优联很好，蓝牙切换也很快，flow功能很鸡肋，因为延迟很大。键盘手感很差，还不如我的笔记本键盘，最后闲鱼出掉。</p>
+<h1 id="NIZ68"><a href="#NIZ68" class="headerlink" title="NIZ68"></a>NIZ68</h1><p>宁芝静电容68双模，网上都说静电容退烧，我信了，买回来晚上同事敲了下，他说80块都不要，而我800买的，静电容确实很小众，键盘手感特别软，感觉键帽下面是空心一样，而且这款退格键设计的有问题，不容易够到，故第二天退掉。</p>
+<h1 id="小红点USB键盘"><a href="#小红点USB键盘" class="headerlink" title="小红点USB键盘"></a>小红点USB键盘</h1><p>ThinkPad的键盘网上口碑很好，而且公司发的联想昭阳k22-80的键盘就是类ThinkPad的，打字很舒服，就在闲鱼上买了一把，卖家很好心，知道我是武汉的还退了10块给我。</p>
+<p>键盘布局非常好，打字很流畅长时间也不吃力，由于不到10mm的厚度，也不需要掌托。感觉ThinkPad的老用户有很多守旧的人不喜欢巧克力设计，可能是我先入为主，我是很喜欢的，美观而且厚度薄对手腕友好，这把键盘应该会长期持有。</p>
+<p>槽点：Fn和CTRL的位置是反的，不过慢慢也习惯了，开始觉得小红点不实用，用了一个月后觉得真香。</p>
+<p>期待：二代无线小红点键盘<a href="https://www.lenovo.com/us/en/accessories-and-monitors/new-arrivals/KBD-BO-TrackPoint-KBD-US-Eng/p/4Y40X49493" target="_blank" rel="noopener">ThinkPad TrackPoint Keyboard II</a></p>
+<h1 id="黑爵K680T"><a href="#黑爵K680T" class="headerlink" title="黑爵K680T"></a>黑爵K680T</h1><p>体验了把青轴，不是我的菜，那把白色的就是，布局还是很好的</p>
+<img src="/2020/05/22/%E9%94%AE%E7%9B%98%E6%8A%98%E8%85%BE%E5%8F%B2/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200522022316.jpg" class="">
+
+<h1 id="京东京造-K1-87"><a href="#京东京造-K1-87" class="headerlink" title="京东京造 K1/87"></a>京东京造 K1/87</h1><img src="/2020/05/22/%E9%94%AE%E7%9B%98%E6%8A%98%E8%85%BE%E5%8F%B2/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200522031118.jpg" class="">
+
+<img src="/2020/05/22/%E9%94%AE%E7%9B%98%E6%8A%98%E8%85%BE%E5%8F%B2/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20200522022334.jpg" class="">
+
+<div class="note info">
+            <p>佳达隆定制矮红轴，对应产品 <a href="https://www.keychron.com/products/keychron-k1-wireless-mechanical-keyboard" target="_blank" rel="noopener">keychron k1 v3</a>  </p><p>主输入区非常静音，手感红轴偏薄膜吧，触发很迅速，大键都是用的平衡杆，触感声响各异，可玩性不错，但还是要配掌托，且个人感觉长时间输入还是不如小红点键盘舒服。</p><img src="/2020/05/22/%E9%94%AE%E7%9B%98%E6%8A%98%E8%85%BE%E5%8F%B2/k1gateron.png" class="">
+          </div>
+
+<h1 id="GS87D"><a href="#GS87D" class="headerlink" title="GS87D"></a>GS87D</h1><div class="note info">
+            <p>蓝牙5.0有线双模，TypeC键线分离，干电池，热升华键帽，87键cherry红轴，339，配置很残暴，但做工确实一般，大键晃动严重，手感没有上面那把好，而且键盘太高。立个flag，除非机械键盘做到薄膜键盘一样的高度，否则不再折腾机械键盘。</p><img src="/2020/05/22/%E9%94%AE%E7%9B%98%E6%8A%98%E8%85%BE%E5%8F%B2/gs87d.jpg" class="">
+          </div>
+
+<h1 id="Keychron-K1v4"><a href="#Keychron-K1v4" class="headerlink" title="Keychron K1v4"></a>Keychron K1v4</h1><div class="note info">
+            <p>这款手托不好找，11mm的黑爵塑料手托是我能找到的最合适的了，目前长时间输入也不累，触发压力要比上一代大，不知道是不是换了曲面键帽的缘故，背光开着比较美观，关闭情况下相当于一把无刻键盘<br><img src="https://gitee.com/zystrivego/misc/raw/master/k1v4%20palm%20rest.jpg" alt="k1v4 palm rest"></p><p><img src="https://gitee.com/zystrivego/misc/raw/master/k1v4%20quick%20start.jpg" alt="k1v4 quick start"></p>
+          </div>]]></content>
+      <categories>
+        <category>外设</category>
+      </categories>
+      <tags>
+        <tag>键盘</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>高级搜索</title>
     <url>/2020/05/28/%E9%AB%98%E7%BA%A7%E6%90%9C%E7%B4%A2/</url>
     <content><![CDATA[<p>Google搜索运算符是特殊字符和命令（有时称为“高级运算符”），它们扩展了常规文本搜索的功能。搜索运算符对于从内容研究到技术SEO审核的所有工作都非常有用。</p>
@@ -3159,6 +3224,32 @@
       </categories>
       <tags>
         <tag>seo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>软件测试了解</title>
+    <url>/2020/05/12/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95%E4%BA%86%E8%A7%A3/</url>
+    <content><![CDATA[<blockquote class="blockquote-center">
+            <i class="fa fa-quote-left"></i>
+            <p><a href="https://blog.csdn.net/sinat_41392571/article/details/81514521" target="_blank" rel="noopener">软件测试工作基本流程</a></p>
+
+            <i class="fa fa-quote-right"></i>
+          </blockquote>
+
+<a id="more"></a>
+
+<p>我的简单了解：</p>
+<ol>
+<li>流程：编写测试计划-测试用例-执行测试用例-跟踪bug-回归bug<br>工具：性能测试工具jmeter</li>
+<li>单元测试一般是由开发完成的，测试人员主要负责三个部分：功能测试，性能测试，自动化测试</li>
+<li>自动化测试也分接口自动化，ui自动化等，接口自动化是可以用jmeter做的，ui自动化用的selenium</li>
+</ol>
+]]></content>
+      <categories>
+        <category>misc</category>
+      </categories>
+      <tags>
+        <tag>测试</tag>
       </tags>
   </entry>
 </search>
