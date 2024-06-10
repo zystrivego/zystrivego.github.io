@@ -1,6 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Mybatis</title>
+    <url>/2024/06/10/Mybatis/</url>
+    <content><![CDATA[<blockquote class="blockquote-center">
+            <i class="fa fa-quote-left"></i>
+            <p>Mybatis备忘</p>
+
+            <i class="fa fa-quote-right"></i>
+          </blockquote>
+
+<a id="more"></a>
+
+<h2 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h2><h3 id="默认缓存设置"><a href="#默认缓存设置" class="headerlink" title="默认缓存设置"></a>默认缓存设置</h3><p>在MyBatis中，关于缓存设置的参数一共有2个：localCacheScope，cacheEnabled。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;!-- 有效值: true|false，默认值为true --&gt;</span><br><span class="line">&lt;setting name&#x3D;&quot;cacheEnabled&quot; value&#x3D;&quot;true&quot; &#x2F;&gt;</span><br><span class="line">&lt;!-- 有效值：SESSION|STATEMENT，默认值为SESSION --&gt;</span><br><span class="line">&lt;setting name&#x3D;&quot;localCacheScope&quot; value&#x3D;&quot;SESSION&quot; &#x2F;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>那么这两个参数分别在什么地方使用呢？不妨先走读一下MyBatis的相关源码。</p>
+<p>首先，来看看参数cacheEnabled的应用。</p>
+<ul>
+<li>org.apache.ibatis.session.defaults.DefaultSqlSessionFactory</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 在应用程序中通过sqlSessionFactory获取一个SqlSession对象执行CRUD操作</span></span><br><span class="line">SqlSession sqlSession = sqlSessionFactory.openSession(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在DefaultSqlSessionFactory中获取SqlSession对象</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> SqlSession <span class="title">openSession</span><span class="params">(<span class="keyword">boolean</span> autoCommit)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> openSessionFromDataSource(configuration.getDefaultExecutorType(), <span class="keyword">null</span>, autoCommit);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 通过MyBatis配置参数构建SqlSession对象</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> SqlSession <span class="title">openSessionFromDataSource</span><span class="params">(ExecutorType execType, TransactionIsolationLevel level, <span class="keyword">boolean</span> autoCommit)</span> </span>&#123;</span><br><span class="line">    Transaction tx = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">final</span> Environment environment = configuration.getEnvironment();</span><br><span class="line">        <span class="keyword">final</span> TransactionFactory transactionFactory = getTransactionFactoryFromEnvironment(environment);</span><br><span class="line">        tx = transactionFactory.newTransaction(environment.getDataSource(), level, autoCommit);</span><br><span class="line">        <span class="comment">// 根据配置的Executor类型装配具体的实现类</span></span><br><span class="line">        <span class="keyword">final</span> Executor executor = configuration.newExecutor(tx, execType);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> DefaultSqlSession(configuration, executor, autoCommit);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        closeTransaction(tx); <span class="comment">// may have fetched a connection so lets call close()</span></span><br><span class="line">        <span class="keyword">throw</span> ExceptionFactory.wrapException(<span class="string">"Error opening session.  Cause: "</span> + e, e);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        ErrorContext.instance().reset();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>org.apache.ibatis.session.Configuration</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 在Configuration中根据不同的defaultExecutorType参数值装配具体的Executor实现</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Executor <span class="title">newExecutor</span><span class="params">(Transaction transaction, ExecutorType executorType)</span> </span>&#123;</span><br><span class="line">    executorType = executorType == <span class="keyword">null</span> ? defaultExecutorType : executorType;</span><br><span class="line">    executorType = executorType == <span class="keyword">null</span> ? ExecutorType.SIMPLE : executorType;</span><br><span class="line">    <span class="comment">// 根据不同的defaultExecutorType参数值装配具体的Executor实现</span></span><br><span class="line">    Executor executor;</span><br><span class="line">    <span class="keyword">if</span> (ExecutorType.BATCH == executorType) &#123;</span><br><span class="line">    	<span class="comment">// 当defaultExecutorType值为BATCH时，使用BatchExecutor</span></span><br><span class="line">        executor = <span class="keyword">new</span> BatchExecutor(<span class="keyword">this</span>, transaction);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (ExecutorType.REUSE == executorType) &#123;</span><br><span class="line">    	<span class="comment">// 当defaultExecutorType值为REUSE时，使用ReuseExecutor</span></span><br><span class="line">        executor = <span class="keyword">new</span> ReuseExecutor(<span class="keyword">this</span>, transaction);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    	<span class="comment">// 默认情况下使用SimpleExecutor</span></span><br><span class="line">        executor = <span class="keyword">new</span> SimpleExecutor(<span class="keyword">this</span>, transaction);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 如果设置cacheEnabled参数值为true,将使用CachingExecutor</span></span><br><span class="line">    <span class="keyword">if</span> (cacheEnabled) &#123;</span><br><span class="line">        executor = <span class="keyword">new</span> CachingExecutor(executor);</span><br><span class="line">    &#125;</span><br><span class="line">    executor = (Executor) interceptorChain.pluginAll(executor);</span><br><span class="line">    <span class="keyword">return</span> executor;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>从上述源码中可以看到，MyBatis会根据配置参数defaultExecutorType的值使用不同的执行器：BatchExecutor，ReuseExecutor，SimpleExecutor。此外，当参数cacheEnabled值为true时，会使用一个特别的执行器：CachingExecutor。那么，不同的执行器有什么不同呢？他们有什么联系吗？下图为MyBatis中执行器的类图。</p>
+<img src="/2024/06/10/Mybatis/mybatis%E6%89%A7%E8%A1%8C%E5%99%A8.png" class="">
+
+<p>OK，到这里我们就可以对MyBatis中控制缓存的2个参数做一个浅显的总结：<br><strong>（1）参数cacheEnabled控制MyBatis使用的执行器类型</strong><br><strong>（2）参数localCacheScope控制的是BaseExecutor内部的缓存策略</strong></p>
+<h3 id="缓存实现原理分析"><a href="#缓存实现原理分析" class="headerlink" title="缓存实现原理分析"></a>缓存实现原理分析</h3><h4 id="参数localCacheScope控制的缓存策略"><a href="#参数localCacheScope控制的缓存策略" class="headerlink" title="参数localCacheScope控制的缓存策略"></a>参数localCacheScope控制的缓存策略</h4><p>在相同的SqlSession中查询同一条数据时都会命中BaseExecutor的本地缓存。也就是说通过参数localCacheScope控制的缓存策略只能在相同SqlSession内有效，因为BaseExecutor的本地缓存对象localCache是实例属性，在不同的执行器实例中都保存一个独立的本地缓存，而在不同的SqlSession中使用的是不同的执行器实例。这个关系可以通过下图描述：</p>
+<img src="/2024/06/10/Mybatis/localCacheScope.png" class="">
+
+<p>那么，到底是不是这样的呢？我们需要进行验证。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">&lt;!-- 为了验证BaseExecutor内的缓存策略，需要设置cacheEnabled参数为<span class="keyword">false</span>，默认值为<span class="keyword">true</span> --&gt;</span><br><span class="line">&lt;setting name=<span class="string">"cacheEnabled"</span> value=<span class="string">"false"</span>/&gt;</span><br><span class="line">&lt;setting name=<span class="string">"localCacheScope"</span> value=<span class="string">"SESSION"</span>/&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 在相同Session中查询同一条数据</span></span><br><span class="line">SqlSession sqlSession = sqlSessionFactory.openSession(<span class="keyword">true</span>);</span><br><span class="line">Student student = sqlSession.getMapper(StudentMapper<span class="class">.<span class="keyword">class</span>).<span class="title">getStudentById</span>(1)</span>;</span><br><span class="line">System.out.println(student);</span><br><span class="line">student = sqlSession.getMapper(StudentMapper<span class="class">.<span class="keyword">class</span>).<span class="title">getStudentById</span>(1)</span>;</span><br><span class="line">System.out.println(student);</span><br><span class="line">sqlSession.close();</span><br></pre></td></tr></table></figure>
+
+<p>对应MyBatis输出日志如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">method: query</span><br><span class="line">DEBUG [main] - Opening JDBC Connection</span><br><span class="line">DEBUG [main] - Created connection <span class="number">1131184547</span>.</span><br><span class="line">DEBUG [main] - ==&gt;  Preparing: select * from student where id = ? </span><br><span class="line">DEBUG [main] - ==&gt; Parameters: <span class="number">1</span>(Long)</span><br><span class="line">DEBUG [main] - &lt;==      Total: <span class="number">1</span></span><br><span class="line">Student&#123;id=<span class="number">1</span>, name=<span class="string">'张三'</span>, age=<span class="number">23</span>, sex=<span class="number">0</span>&#125;</span><br><span class="line">method: query</span><br><span class="line">Student&#123;id=<span class="number">1</span>, name=<span class="string">'张三'</span>, age=<span class="number">23</span>, sex=<span class="number">0</span>&#125;</span><br><span class="line">DEBUG [main] - Closing JDBC Connection [com.mysql.cj.jdbc.ConnectionImpl@<span class="number">436</span>c81a3]</span><br><span class="line">DEBUG [main] - Returned connection <span class="number">1131184547</span> to pool.</span><br></pre></td></tr></table></figure>
+
+<p>显然，从输出日志中可以很确定地知道：在相同Session中查询同一条数据时，只有第一次会真正从数据库中查询，后续的查询都会直接从Session内的缓存中获取。而且，我们从上述相关源码中知道，只要SqlSession存在，该缓存是永远存在，不会失效。</p>
+<h4 id="参数cacheEnabled控制的缓存策略"><a href="#参数cacheEnabled控制的缓存策略" class="headerlink" title="参数cacheEnabled控制的缓存策略"></a>参数cacheEnabled控制的缓存策略</h4><p>在了解了参数localCacheScope控制的缓存策略之后，还需要继续研究参数cacheEnabled所控制的缓存策略。从上述源码分析中已经知道，当参数cacheEnabled值为true时，MyBatis将使用CachingExecutor执行器，下面通过源码解读一下CachingExecutor到底与其他Executor实现类有什么不同。</p>
+<ul>
+<li>org.apache.ibatis.executor.CachingExecutor</li>
+</ul>
+<p>在不同的Session中查询同一条数据时都会从这个全局缓存中查询，下面通过实例来进行验证。</p>
+<ul>
+<li>打开全局缓存开关</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 打开全局缓存开关 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">setting</span> <span class="attr">name</span>=<span class="string">"cacheEnabled"</span> <span class="attr">value</span>=<span class="string">"true"</span>/&gt;</span></span><br><span class="line"><span class="comment">&lt;!--  为了验证全局缓存，在这里把Session缓存关闭 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">setting</span> <span class="attr">name</span>=<span class="string">"localCacheScope"</span> <span class="attr">value</span>=<span class="string">"STATEMENT"</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>定义全局缓存实例</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">// 在xml映射器中定义全局缓存</span><br><span class="line"><span class="comment">&lt;!-- 在xml映射器中配置全局缓存 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">cache</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在xml映射器中配置全局缓存很简单，只需要在xml映射器中简单添加一个<code>&lt;cache /&gt;</code>节点即可，这里为了演示全局缓存的效果，所以不用配置详细参数，使用默认值即可。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 在接口映射器中定义全局缓存</span></span><br><span class="line"><span class="meta">@CacheNamespace</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">StudentMapper</span> </span>&#123;</span><br></pre></td></tr></table></figure>
+
+<p>在接口映射器中配置全局缓存通过注解<code>@CacheNamespace</code>实现，其效果与在xml映射器中通过节点<code>&lt;cache /&gt;</code>配置是一样的。</p>
+<ul>
+<li>验证全局缓存的作用</li>
+</ul>
+<p>通过参数cacheEnabled控制的缓存是全局的，所以在多个Session中使用相同SQL语句查询同一条数据时，只在第一次查询时直接查询数据库，之后的查询都会从这个全局缓存中读取数据。如下以通过xml映射器查询为例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 在不同Session中查询同一条数据</span></span><br><span class="line">SqlSession sqlSession1 = sqlSessionFactory.openSession(<span class="keyword">true</span>);</span><br><span class="line">Student student = sqlSession1.selectOne(<span class="string">"org.chench.test.mybatis.mapper.getStudentById"</span>, <span class="number">1</span>);</span><br><span class="line">System.out.println(student);</span><br><span class="line">sqlSession1.close();</span><br><span class="line"></span><br><span class="line">SqlSession sqlSession2 = sqlSessionFactory.openSession(<span class="keyword">true</span>);</span><br><span class="line">student = sqlSession2.selectOne(<span class="string">"org.chench.test.mybatis.mapper.getStudentById"</span>, <span class="number">1</span>);</span><br><span class="line">System.out.println(student);</span><br><span class="line">sqlSession2.close();</span><br></pre></td></tr></table></figure>
+
+<p>查看MyBatis的输出日志：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">method: query</span><br><span class="line">DEBUG [main] - Cache Hit Ratio [org.chench.test.mybatis.mapper]: 0.0</span><br><span class="line">DEBUG [main] - Opening JDBC Connection</span><br><span class="line">DEBUG [main] - Created connection 1463355115.</span><br><span class="line">DEBUG [main] - &#x3D;&#x3D;&gt;  Preparing: select * from test where id &#x3D; ? </span><br><span class="line">DEBUG [main] - &#x3D;&#x3D;&gt; Parameters: 1(Integer)</span><br><span class="line">DEBUG [main] - &lt;&#x3D;&#x3D;      Total: 1</span><br><span class="line">Student&#123;id&#x3D;1, name&#x3D;&#39;1509690042107_haha_update_update&#39;, age&#x3D;0, sex&#x3D;0&#125;</span><br><span class="line">DEBUG [main] - Closing JDBC Connection [com.mysql.cj.jdbc.ConnectionImpl@573906eb]</span><br><span class="line">DEBUG [main] - Returned connection 1463355115 to pool.</span><br><span class="line">method: query</span><br><span class="line">DEBUG [main] - Cache Hit Ratio [org.chench.test.mybatis.mapper]: 0.5</span><br><span class="line">Student&#123;id&#x3D;1, name&#x3D;&#39;1509690042107_haha_update_update&#39;, age&#x3D;0, sex&#x3D;0&#125;</span><br></pre></td></tr></table></figure>
+
+<p>显然，从日志中很明显看到第一次查询时缓存命中率为0，第二次查询时缓存命中率为0.5，直接从缓存中取得了数据。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>MyBatis的缓存功能同时受到localCacheScope和cacheEnabled这2个运行时参数的控制。那么我们不禁要问：为什么需要使用2个参数进行控制而不是直接使用1个参数更加简洁？实际上，2个参数控制的缓存策略是不一样，<strong>localCacheScope参数控制的缓存是Session范围内的，称为一级缓存；而cacheEnabled参数控制的缓存是全局的，称为二级缓存，这对应于不同的应用需求。</strong></p>
+<p>显然，<strong>MyBatis的默认配置是同时开启了Session缓存和全局缓存</strong>。另外请注意：cacheEnabled参数仅仅是打开了全局缓存开关，但这并不意味着默认情况下MyBatis就会进行全局缓存。实际上，如果需要使用全局缓存，还必须在<strong>映射器中配置全局缓存实例</strong>。</p>
+<p>【参考】<br><a href="https://www.cnblogs.com/nuccch/p/9107880.html" target="_blank" rel="noopener">深入浅出mybatis之缓存机制</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>SpringBoot</title>
+    <url>/2024/06/10/SpringBoot/</url>
+    <content><![CDATA[<blockquote class="blockquote-center">
+            <i class="fa fa-quote-left"></i>
+            <p>SpringBoot备忘</p>
+
+            <i class="fa fa-quote-right"></i>
+          </blockquote>
+
+<a id="more"></a>
+
+<h2 id="Json"><a href="#Json" class="headerlink" title="Json"></a>Json</h2><p>Jackson序列化默认按的GMT标准时间</p>
+]]></content>
+  </entry>
+  <entry>
     <title>数据库设计基础</title>
     <url>/2024/05/19/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E5%9F%BA%E7%A1%80/</url>
     <content><![CDATA[<p>数据库设计方法-新奥尔良(New Orleans)方法的四个阶段:</p>
@@ -329,7 +421,7 @@
 <h2 id="非常用操作"><a href="#非常用操作" class="headerlink" title="非常用操作"></a>非常用操作</h2><ol>
 <li>主要是Collectors类里的各种收集结果的约简操作</li>
 <li>基本类型流</li>
-<li>并行流</li>
+<li>并行流（在多CPU，使用并发流效率最高）</li>
 </ol>
 <h1 id="try-with-resources"><a href="#try-with-resources" class="headerlink" title="try-with-resources"></a>try-with-resources</h1><p><a href="https://juejin.cn/post/6844903446185951240" target="_blank" rel="noopener">深入理解 Java try-with-resource 语法糖</a></p>
 <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>众所周知，所有被打开的系统资源，比如流、文件或者Socket连接等，都需要被开发者手动关闭，否则随着程序的不断运行，资源泄露将会累积成重大的生产事故。</p>
@@ -388,6 +480,7 @@
 <h1 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h1><ol>
 <li>阿里-SeaTa</li>
 <li>hmily-tcc</li>
+<li>rocketmq的事务消息</li>
 </ol>
 <h1 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h1><h2 id="基于数据库表记录的方式"><a href="#基于数据库表记录的方式" class="headerlink" title="基于数据库表记录的方式"></a>基于数据库表记录的方式</h2><p>适用于单库多服务实例的场景</p>
 <p>表名：distributed_lock_t</p>
@@ -398,6 +491,180 @@
 <li>请求上下文信息(req_info)，记录获取线程的类和方法</li>
 <li>锁获取时间(lock_acquired_time)</li>
 <li>锁过期时间(lock_expired_time)，防止因为异常锁未释放。</li>
+</ol>
+<h2 id="基于redis"><a href="#基于redis" class="headerlink" title="基于redis"></a>基于redis</h2><p>详见<a href="https://zystrivego.github.io/2023/11/04/redis/#more">redis博客</a></p>
+<h1 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h1><h2 id="常量池"><a href="#常量池" class="headerlink" title="常量池"></a>常量池</h2><ul>
+<li>JDK1.7之前</li>
+</ul>
+<p>  在jdk1.7之前，常量池是存放在方法区中的。<br><img src="https://img-blog.csdnimg.cn/20201126173632432.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0FuZHlhX25ldA==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<ul>
+<li>JDK1.7</li>
+</ul>
+<p>  在jdk1.7中，字符串常量池移到了堆中，运行时常量池还在方法区中。<br><img src="https://img-blog.csdnimg.cn/20201126173618236.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0FuZHlhX25ldA==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<ul>
+<li>JDK1.8</li>
+</ul>
+<p>  jdk1.8删除了永久代，方法区这个概念还是保留的，但是方法区的实现变成了<code>元空间</code>，常量池沿用jdk1.7，还是放在了堆中。这样的效果就变成了：常量池和静态变量存储到了堆中，类的元数据及运行时常量池存储到元空间中。<br><img src="https://img-blog.csdnimg.cn/20201126172724596.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0FuZHlhX25ldA==,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>  为啥要把方法区从JVM内存（永久代）移到直接内存（元空间）？主要有两个原因：</p>
+<ol>
+<li>直接内存属于本地系统的IO操作，具有更高的一个IO操作性能，而JVM的堆内存这种，如果有IO操作，也是先复制到直接内存，然后再去进行本地IO操作。经过了一系列的中间流程，性能就会差一些。非直接内存操作：<code>本地IO操作——&gt;直接内存操作——&gt;非直接内存操作——&gt;直接内存操作——&gt;本地IO操作</code>，而直接内存操作：<code>本地IO操作——&gt;直接内存操作——&gt;本地IO操作</code>。</li>
+<li>永久代有一个无法调整更改的JVM固定大小上限，回收不完全时，会出现<code>OutOfMemoryError</code>问题；而直接内存（元空间）是受到本地机器内存的限制，不会有这种问题。</li>
+</ol>
+<ul>
+<li>变化</li>
+</ul>
+<ol>
+<li>在JDK1.7前，运行时常量池+字符串常量池是存放在方法区中，HotSpot VM对方法区的实现称为永久代。</li>
+<li>在JDK1.7中，字符串常量池从方法区移到堆中，运行时常量池保留在方法区中。</li>
+<li>在JDK1.8中，HotSpot移除永久代，使用元空间代替，此时字符串常量池保留在堆中，运行时常量池保留在方法区中，只是实现不一样了，JVM内存变成了直接内存。</li>
+</ol>
+<p>【参考】<br><a href="https://www.cnblogs.com/Andya/p/14067618.html" target="_blank" rel="noopener">JVM——字符串常量池详解 - Andya_net - 博客园 (cnblogs.com)</a></p>
+<p>​    </p>
+<h1 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h1><h2 id="性能瓶颈"><a href="#性能瓶颈" class="headerlink" title="性能瓶颈"></a>性能瓶颈</h2><ul>
+<li><p>慢查询，低效业务代码(方案)</p>
+</li>
+<li><p>数据库查询太多</p>
+</li>
+<li><p>并发问题</p>
+</li>
+<li><p>内存溢出</p>
+</li>
+<li><p>程序配置</p>
+</li>
+<li><p>数据库慢(不应该用关系型)</p>
+</li>
+<li><p>GC停顿</p>
+</li>
+</ul>
+<h2 id="PDCA循环"><a href="#PDCA循环" class="headerlink" title="PDCA循环"></a>PDCA循环</h2><ul>
+<li>Plan</li>
+</ul>
+<p>通过工具分析CPU，IO，GC，时间消耗等分析性能优化关键点。指定相应方案。</p>
+<ul>
+<li>Do </li>
+</ul>
+<p>建立当前优化前程序的性能指标CPU，IO，GC，IOPS等，根据指定的方案，优化方案，编码，数据库，JVM等。</p>
+<ul>
+<li>Check </li>
+</ul>
+<p>通过工具，日志，度量出改进后的程序运行情况。通过指标对比确认优化效果。</p>
+<ul>
+<li>Act<br>分析当前优化的关键点，持续改进和优化，方便导入下轮plan</li>
+</ul>
+<h2 id="部署调优"><a href="#部署调优" class="headerlink" title="部署调优"></a>部署调优</h2><blockquote>
+<p>-X:传递一些信息给JVM</p>
+</blockquote>
+<blockquote>
+<p>-XX:设置JVM的一些高级属性</p>
+</blockquote>
+<ol>
+<li><p>根据实际情况设置xms，xmx，避免使用默认值。xms默认为物理内存的1/64，xmx则是1/4，很多微服务最大堆内存都用不到1G。Jvm占用的物理内存总大小大概为2.5倍的xmx。</p>
+</li>
+<li><p>建议xms和xmx设置成一样值</p>
+</li>
+</ol>
+<p>如果不一样，堆内存发生变化时，会扩堆或缩堆，如果xms设置过小，就会频繁GC。环境内存不富余，所有进程内存占用最大值叠加超过了物理内存最大值，则不建议。</p>
+<ol start="3">
+<li>建议按实际情况设置xss值</li>
+</ol>
+<p>每当启动一个新线程，JVM会在虚拟机栈为它分配个线程栈。线程栈用来保存函数地址，参数，返回值信息，调用层次越深，参数，返回值越大，所需的线程栈也越大。默认值为1024KB，一般情况256KB就够了，如果内存富余不建议调整该参数。</p>
+<h2 id="JDK工具"><a href="#JDK工具" class="headerlink" title="JDK工具"></a>JDK工具</h2><ol>
+<li><p>jps 查看Java进程ID</p>
+</li>
+<li><p>jstat 监控JVM情况</p>
+</li>
+<li><p>jstack 查看栈信息</p>
+</li>
+<li><p>jmap 导出jvm堆栈信息</p>
+</li>
+<li><p>jhat 分析导出的堆栈信息</p>
+</li>
+<li><p>jinfo 查询或设置JVM属性</p>
+</li>
+<li><p>jcmd 向jvm发送命令</p>
+</li>
+</ol>
+<h2 id="Linux-常用命令"><a href="#Linux-常用命令" class="headerlink" title="Linux 常用命令"></a>Linux 常用命令</h2><ul>
+<li><p>top </p>
+</li>
+<li><p>sar </p>
+</li>
+<li><p>pidstat</p>
+</li>
+<li><p>vmstat </p>
+</li>
+<li><p>iostat</p>
+</li>
+<li><p><strong>mat</strong> eclipse的内存分析工具</p>
+</li>
+<li><p>pmap</p>
+</li>
+</ul>
+<h2 id="Java监测工具"><a href="#Java监测工具" class="headerlink" title="Java监测工具"></a>Java监测工具</h2><p>jprofiler(收费)，jvisualvm（jdk）， jconslole (jdk)本地性能分析</p>
+<p>asyncprofiler:idea绑定的profiler</p>
+<p>arthas 线上分析</p>
+<p>BTrace 线上分析，弱于arthas</p>
+<h2 id="JVM优化案例"><a href="#JVM优化案例" class="headerlink" title="JVM优化案例"></a>JVM优化案例</h2><h3 id="堆内存问题"><a href="#堆内存问题" class="headerlink" title="堆内存问题"></a>堆内存问题</h3><p>问题高发区</p>
+<p>jmap -heap pid</p>
+<p>看老年区问题 一般都是这里溢出</p>
+<p>jstat -gcutil pid 1000</p>
+<p>每隔一秒打印gc快照，分析fgc和fgct是不是异常</p>
+<p>jmap -histo pid 看哪个对象的实例最多</p>
+<h3 id="元空间内存溢出问题"><a href="#元空间内存溢出问题" class="headerlink" title="元空间内存溢出问题"></a>元空间内存溢出问题</h3><p>引入第三方开源包可能会导致元空间不够</p>
+<p>一个类定义在元空间中平均是4K大小，建议配置大于256M</p>
+<h3 id="堆外内存问题"><a href="#堆外内存问题" class="headerlink" title="堆外内存问题"></a>堆外内存问题</h3><p>64M块问题 malloc_arena_max</p>
+<p>pmap分析内存-gdb分析堆外内存-找内存信息dump</p>
+<h3 id="GC速度慢"><a href="#GC速度慢" class="headerlink" title="GC速度慢"></a>GC速度慢</h3><p>看磁盘看CPU，看swap看文件锁，看cgroup</p>
+<p>young gc和cms gc容易受swap虚拟内存影响</p>
+<p>看cgroup是否限制了内存使用，把JVM的内存限制到虚拟内存上了。</p>
+<h1 id="高性能编码"><a href="#高性能编码" class="headerlink" title="高性能编码"></a>高性能编码</h1><h2 id="测试工具"><a href="#测试工具" class="headerlink" title="测试工具"></a>测试工具</h2><ol>
+<li><p>http web压测工具 ApacheBench，JMeter</p>
+</li>
+<li><p>JMH jdk9自带，代码微基准测试工具</p>
+</li>
+<li><p>单元测试:Junit5+Mockito</p>
+</li>
+</ol>
+<h2 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h2><ol>
+<li><p>避免循环中使用string#match，会创建新的pattern对象。</p>
+</li>
+<li><p>Java8及以前的string.replace相关和split会创建新的pattern对象，避免循环调用。</p>
+</li>
+<li><p>避免在循环中使用string#format或message#format，使用string加号拼接或者stringbuilder</p>
+</li>
+</ol>
+<h2 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h2><p>ArrayList和linkedlist，头部的增删是linkedlist效率高，其它则是ArrayList(在不考虑扩容的情况下)</p>
+<ol>
+<li>避免循环中用linklist带index的方法用ArrayList代替</li>
+<li>循环中remove带index的元素建议使用list#sublist#clear，避免重复拷贝</li>
+<li>不变集合可以使用guava的immutablemap或immutablelist等</li>
+<li>知道确定元素个数时，集合初始化大小，list即所需大小，map为（所需大小/0.75)+1，避免频繁动态扩容，建议使用工具类，如Guava</li>
+<li>避免创建小集合，1-4个元素的集合，建议创建数组，数组占用16字节，ArrayList24，hashmap48</li>
+<li>避免创建稀疏的集合，ArrayList的trimtosize可以节省空间</li>
+<li>避免循环中使用list#contain(obj)，indexOf等相关方法，复杂度是O(m*n)，善用set，hash效率更高，list的contain是比较equals方法，set的则是先比较hashcode，再比较equals方法</li>
+<li>system.arraycopy更高效</li>
+</ol>
+<h2 id="JUC"><a href="#JUC" class="headerlink" title="JUC"></a>JUC</h2><ol>
+<li>countdownlatch await锁主线程，实时系统多并发场景</li>
+<li>cyclicbarrier await锁子线程，批处理系统实现任务顺序协调</li>
+<li>semaphore，控制多线程访问有限特定资源，适合令牌节流，资源池共享</li>
+<li>copy-on-write模式缺点:占用内存，最终一致性，适合多读少些场景。</li>
+<li>优雅关闭线程池</li>
+</ol>
+<p>关闭线程池有两种方式：shutdown() 和 shutdownNow()，二者最大的区别是 shutdown() 只是把空闲的 woker 置为中断，不影响正在运行的woker，并且会继续把待执行的任务给处理完。shutdonwNow() 则是把所有的 woker 都置为中断，待执行的任务全部抽出并返回，日常工作中更多是使用 shutdown()。</p>
+<p>最后，单纯的使用 shutdown() 也不靠谱，还得使用 awaitTermination() 和 JVM 的钩子，才算优雅的关闭线程池。</p>
+<ol start="6">
+<li>IO密集性重写线程池，借鉴Tomcat，dubbo，taskqueue，threadpoolexecutor</li>
+</ol>
+<p>jdk的线程池是coreSize–&gt;queue–&gt;maxSize</p>
+<p>改造后：coreSize–&gt;maxSize–&gt;queue</p>
+<h2 id="JVM-1"><a href="#JVM-1" class="headerlink" title="JVM"></a>JVM</h2><ol>
+<li>字符串优化，-XX：+useG1GC +usestringdeduplication</li>
+<li>编译和运行时优化:内联优化，useappcds</li>
+</ol>
+<h2 id="web容器"><a href="#web容器" class="headerlink" title="web容器"></a>web容器</h2><ol>
+<li>Tomcat启动优化:跳过扫描tld文件</li>
+<li>返回数据Gzip压缩</li>
+<li>从httpresponse获取的InputStream直接转成Java对象，不要先转string再转对象，容易造成内存占用</li>
 </ol>
 ]]></content>
       <tags>
